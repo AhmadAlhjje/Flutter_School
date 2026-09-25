@@ -9,14 +9,18 @@ final sharedPreferencesProvider = Provider<SharedPreferences>(
 
 const supportedLocales = [Locale('ar'), Locale('en')];
 
-/// UI language (Arabic by default, English available). Persisted across launches.
+/// First release: Arabic only — the language choice is hidden and a saved English choice is
+/// ignored. The English translations stay; set this to true to offer English again.
+const englishEnabled = false;
+
+/// UI language (Arabic by default, English when enabled and chosen). Persisted across launches.
 class LocaleController extends Notifier<Locale> {
   static const _key = 'app.locale';
 
   @override
   Locale build() {
     final saved = ref.watch(sharedPreferencesProvider).getString(_key);
-    return saved == 'en' ? const Locale('en') : const Locale('ar');
+    return englishEnabled && saved == 'en' ? const Locale('en') : const Locale('ar');
   }
 
   Future<void> setLocale(Locale locale) async {

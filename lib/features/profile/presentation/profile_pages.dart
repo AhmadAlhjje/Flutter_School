@@ -19,7 +19,7 @@ import '../domain/profile_entities.dart';
 
 final _packageInfoProvider = FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
 
-/// Profile: name, phone and grade, language, change password, logout.
+/// Profile: name, phone and grade, language (when English is enabled), change password, logout.
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
@@ -58,16 +58,19 @@ class ProfilePage extends ConsumerWidget {
               onRetry: () => ref.invalidate(profileProvider),
               data: (data) => _ProfileDetails(profile: data),
             ),
-            SectionTitle(l10n.language),
-            SegmentedButton<String>(
-              segments: [
-                ButtonSegment(value: 'ar', label: Text(l10n.arabic)),
-                ButtonSegment(value: 'en', label: Text(l10n.english)),
-              ],
-              selected: {locale.languageCode},
-              onSelectionChanged: (selection) =>
-                  ref.read(localeControllerProvider.notifier).setLocale(Locale(selection.first)),
-            ),
+            // Language choice: hidden while English is turned off (first release).
+            if (englishEnabled) ...[
+              SectionTitle(l10n.language),
+              SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(value: 'ar', label: Text(l10n.arabic)),
+                  ButtonSegment(value: 'en', label: Text(l10n.english)),
+                ],
+                selected: {locale.languageCode},
+                onSelectionChanged: (selection) =>
+                    ref.read(localeControllerProvider.notifier).setLocale(Locale(selection.first)),
+              ),
+            ],
             const SizedBox(height: 20),
             ContentTile(
               title: l10n.changePassword,

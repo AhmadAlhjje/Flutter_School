@@ -58,12 +58,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorPhoneTaken => 'رقم الهاتف مستخدم مسبقاً';
 
   @override
-  String get errorRegistrationDisabled =>
-      'التسجيل غير متاح حالياً، تواصل مع إدارة المعهد';
+  String get errorRegistrationDisabled => 'التسجيل غير متاح حالياً، تواصل مع إدارة المعهد';
 
   @override
-  String get errorWeakPassword =>
-      'كلمة المرور ضعيفة: 8 أحرف على الأقل وتحتوي على حروف وأرقام';
+  String get errorWeakPassword => 'كلمة المرور ضعيفة: 8 أحرف على الأقل وتحتوي على حروف وأرقام';
 
   @override
   String get errorInvalidCurrentPassword => 'كلمة المرور الحالية غير صحيحة';
@@ -141,8 +139,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountDisabledTitle => 'الحساب معطّل';
 
   @override
-  String get accountDisabledBody =>
-      'تم تعطيل حسابك. يرجى التواصل مع إدارة المعهد.';
+  String get accountDisabledBody => 'تم تعطيل حسابك. يرجى التواصل مع إدارة المعهد.';
 
   @override
   String get backToLogin => 'العودة لتسجيل الدخول';
@@ -240,8 +237,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get lockedTitle => 'المحتوى مقفل';
 
   @override
-  String get lockedBody =>
-      'هذا المحتوى غير متاح لك حالياً. تواصل مع إدارة المعهد لفتحه.';
+  String get lockedBody => 'هذا المحتوى غير متاح لك حالياً. تواصل مع إدارة المعهد لفتحه.';
 
   @override
   String get teachers => 'المدرسين';
@@ -276,8 +272,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get playerError => 'تعذر تشغيل الفيديو';
 
   @override
-  String get captureBlocked =>
-      'لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.';
+  String get captureBlocked => 'لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.';
 
   @override
   String get downloadOffline => 'تحميل للمشاهدة دون إنترنت';
@@ -395,8 +390,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exitFullscreen => 'الخروج من ملء الشاشة';
 
   @override
-  String get deleteDownloadConfirm =>
-      'سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.';
+  String get deleteDownloadConfirm => 'سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.';
 
   @override
   String appVersion(String version) {
@@ -416,15 +410,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fileTooLargeToPreview => 'لا يمكن عرض هذا الملف داخل التطبيق';
 
   @override
-  String get noAppToOpenFile =>
-      'لا يوجد تطبيق على جهازك يفتح هذا النوع من الملفات';
+  String get noAppToOpenFile => 'لا يوجد تطبيق على جهازك يفتح هذا النوع من الملفات';
 
   @override
   String get downloadingFile => 'جاري تحميل الملف...';
 
   @override
-  String get screenshotDetected =>
-      'تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.';
+  String get screenshotDetected => 'تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.';
 
   @override
   String get noVideos => 'لا توجد فيديوهات بعد';
@@ -457,15 +449,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get otherSubjects => 'مواد أخرى';
 
   @override
-  String get otherSubjectsHint =>
-      'هذه المواد مقفلة حالياً، تواصل مع إدارة المعهد لفتحها';
+  String get otherSubjectsHint => 'هذه المواد مقفلة حالياً، تواصل مع إدارة المعهد لفتحها';
 
   @override
   String get noSubjectsTitle => 'حسابك جاهز! لا توجد مواد مفتوحة لك بعد';
 
   @override
-  String get noSubjectsBody =>
-      'عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.';
+  String get noSubjectsBody => 'عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.';
 
   @override
   String contactInstitute(String phone) {
@@ -485,8 +475,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hintChooseSession => 'اختر الجلسة لمشاهدة فيديوهاتها وملفاتها';
 
   @override
-  String get hintVideos =>
-      'اضغط على الفيديو لمشاهدته، أو على «تحميل» لمشاهدته لاحقاً بدون إنترنت';
+  String get hintVideos => 'اضغط على الفيديو لمشاهدته، أو على «تحميل» لمشاهدته لاحقاً بدون إنترنت';
 
   @override
   String get hintFiles => 'اضغط على الملف لفتحه';
