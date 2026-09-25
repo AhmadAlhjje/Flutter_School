@@ -1,0 +1,480 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get appTitle => 'Educational Institute';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get errorLoading => 'Something went wrong while loading';
+
+  @override
+  String get errorNetwork =>
+      'Cannot reach the server, check your internet connection';
+
+  @override
+  String get errorGeneric => 'Something went wrong, please try again';
+
+  @override
+  String get errorInvalidCredentials => 'Invalid phone number or password';
+
+  @override
+  String get errorSessionExpired => 'Your session ended, please sign in again';
+
+  @override
+  String get errorAccessDenied => 'This content is locked';
+
+  @override
+  String get errorNotFound => 'This content no longer exists';
+
+  @override
+  String get errorVideoNotReady => 'The video is not ready yet';
+
+  @override
+  String get errorRateLimited => 'Too many attempts, please wait a moment';
+
+  @override
+  String get errorPhoneTaken => 'This phone number is already registered';
+
+  @override
+  String get errorRegistrationDisabled =>
+      'Registration is not available, contact the institute';
+
+  @override
+  String get errorWeakPassword =>
+      'Weak password: at least 8 characters with letters and digits';
+
+  @override
+  String get errorInvalidCurrentPassword => 'Current password is incorrect';
+
+  @override
+  String get errorOfflineDisabled => 'Offline downloads are not available';
+
+  @override
+  String get errorValidation => 'Invalid input';
+
+  @override
+  String get fieldRequired => 'This field is required';
+
+  @override
+  String get invalidPhone => 'Invalid phone number';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordHint => 'At least 8 characters with letters and digits';
+
+  @override
+  String get loginTitle => 'Sign in';
+
+  @override
+  String loginSubtitle(String institute) {
+    return 'Welcome to $institute';
+  }
+
+  @override
+  String get phone => 'Phone number';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get login => 'Sign in';
+
+  @override
+  String get noAccount => 'No account yet?';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get registerTitle => 'Create a new account';
+
+  @override
+  String get fullName => 'Full name';
+
+  @override
+  String get confirmPassword => 'Confirm password';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get haveAccount => 'Already registered?';
+
+  @override
+  String get deviceNotice =>
+      'Your account will be linked to this device on first sign-in.';
+
+  @override
+  String get logout => 'Sign out';
+
+  @override
+  String get logoutConfirm => 'Do you want to sign out?';
+
+  @override
+  String get deviceErrorTitle => 'Account linked to another device';
+
+  @override
+  String get deviceErrorBody =>
+      'This account can only be used on its linked device. To change the device, please contact the institute.';
+
+  @override
+  String get accountDisabledTitle => 'Account disabled';
+
+  @override
+  String get accountDisabledBody =>
+      'Your account has been disabled. Please contact the institute.';
+
+  @override
+  String get backToLogin => 'Back to sign in';
+
+  @override
+  String helloName(String name) {
+    return 'Hello $name 👋';
+  }
+
+  @override
+  String get yourSubjects => 'Your subjects';
+
+  @override
+  String get browseGrades => 'Browse grades';
+
+  @override
+  String get noSubjects => 'No subjects yet';
+
+  @override
+  String get grades => 'Grades';
+
+  @override
+  String get noGrades => 'No grades';
+
+  @override
+  String subjectsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subjects',
+      one: '1 subject',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teachersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count teachers',
+      one: '1 teacher',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String topicsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lessons',
+      one: '1 lesson',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String sessionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '1 session',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String videosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count videos',
+      one: '1 video',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String filesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count files',
+      one: '1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get locked => 'Locked';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get lockedTitle => 'Content locked';
+
+  @override
+  String get lockedBody =>
+      'This content is not available to you yet. Contact the institute to unlock it.';
+
+  @override
+  String get teachers => 'Teachers';
+
+  @override
+  String get noTeachers => 'No teachers in this subject';
+
+  @override
+  String get subjectFiles => 'Subject files';
+
+  @override
+  String teacherTitle(String name) {
+    return 'Teacher $name';
+  }
+
+  @override
+  String get lessons => 'Lessons';
+
+  @override
+  String get noLessons => 'No lessons yet';
+
+  @override
+  String get teacherFiles => 'Teacher files';
+
+  @override
+  String get sessions => 'Sessions';
+
+  @override
+  String get noSessions => 'No sessions yet';
+
+  @override
+  String get topicFiles => 'Lesson files';
+
+  @override
+  String get videos => 'Videos';
+
+  @override
+  String get files => 'Files';
+
+  @override
+  String get noSessionContent => 'No content in this session yet';
+
+  @override
+  String get playerError => 'Could not play the video';
+
+  @override
+  String get captureBlocked =>
+      'The video cannot be shown while the screen is being recorded or shared';
+
+  @override
+  String get downloadOffline => 'Download for offline viewing';
+
+  @override
+  String downloadingPercent(int percent) {
+    return 'Downloading $percent%';
+  }
+
+  @override
+  String get downloaded => 'Downloaded';
+
+  @override
+  String get downloadFailed => 'Download failed';
+
+  @override
+  String get deleteDownload => 'Delete download';
+
+  @override
+  String get downloads => 'Downloads';
+
+  @override
+  String get noDownloads => 'No downloads';
+
+  @override
+  String availableUntil(String date) {
+    return 'Available until $date';
+  }
+
+  @override
+  String get downloadExpired => 'Download expired, go online to renew it';
+
+  @override
+  String get openFile => 'Open file';
+
+  @override
+  String get fileOpensExternally =>
+      'This file opens in another app on your device';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmNewPassword => 'Confirm new password';
+
+  @override
+  String get passwordChanged => 'Password changed successfully';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get linkedDevice => 'Linked device';
+
+  @override
+  String linkedSince(String date) {
+    return 'Linked since $date';
+  }
+
+  @override
+  String get openedContent => 'Unlocked content';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get noNotifications => 'No notifications';
+
+  @override
+  String get markAllRead => 'Mark all as read';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchHint => 'Search for a lesson...';
+
+  @override
+  String get searchMinChars => 'Type at least 2 characters';
+
+  @override
+  String get searchNoResults => 'No results';
+
+  @override
+  String get searchSubjects => 'Subjects';
+
+  @override
+  String get searchTeachers => 'Teachers';
+
+  @override
+  String get searchLessons => 'Lessons';
+
+  @override
+  String get searchSessions => 'Sessions';
+
+  @override
+  String get searchVideos => 'Videos';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get rewind10 => 'Back 10 seconds';
+
+  @override
+  String get forward10 => 'Forward 10 seconds';
+
+  @override
+  String get fullscreen => 'Fullscreen';
+
+  @override
+  String get exitFullscreen => 'Exit fullscreen';
+
+  @override
+  String get deleteDownloadConfirm =>
+      'This video will be removed from your device. You can download it again later.';
+
+  @override
+  String get downloadsInProgress => 'In progress';
+
+  @override
+  String get downloadsNote =>
+      'Downloaded videos are encrypted and only play inside this app on this device.';
+
+  @override
+  String get playOffline => 'Play';
+
+  @override
+  String appVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get noLinkedDevice => 'No linked device';
+
+  @override
+  String get passwordChangeNote =>
+      'Any other session of your account will be signed out.';
+
+  @override
+  String get markRead => 'Mark as read';
+
+  @override
+  String get loadMore => 'Load more';
+
+  @override
+  String get fileTooLargeToPreview =>
+      'This file cannot be previewed in the app';
+
+  @override
+  String get noAppToOpenFile => 'No app on your device can open this file type';
+
+  @override
+  String get downloadingFile => 'Downloading file...';
+
+  @override
+  String get screenshotDetected =>
+      'Screenshot detected. This content is protected and linked to your account.';
+}

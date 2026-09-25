@@ -1,0 +1,225 @@
+{
+  "@@locale": "ar",
+  "appTitle": "المعهد التعليمي",
+  "loading": "جاري التحميل...",
+  "retry": "إعادة المحاولة",
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "close": "إغلاق",
+  "confirm": "تأكيد",
+  "errorLoading": "حدث خطأ أثناء تحميل البيانات",
+  "errorNetwork": "تعذر الاتصال بالخادم، تحقق من اتصالك بالإنترنت",
+  "errorGeneric": "حدث خطأ ما، حاول مرة أخرى",
+  "errorInvalidCredentials": "رقم الهاتف أو كلمة المرور غير صحيحة",
+  "errorSessionExpired": "انتهت الجلسة، يرجى تسجيل الدخول مجدداً",
+  "errorAccessDenied": "هذا المحتوى مقفل",
+  "errorNotFound": "المحتوى غير موجود أو لم يعد متاحاً",
+  "errorVideoNotReady": "الفيديو غير جاهز بعد",
+  "errorRateLimited": "محاولات كثيرة، يرجى الانتظار قليلاً",
+  "errorPhoneTaken": "رقم الهاتف مستخدم مسبقاً",
+  "errorRegistrationDisabled": "التسجيل غير متاح حالياً، تواصل مع إدارة المعهد",
+  "errorWeakPassword": "كلمة المرور ضعيفة: 8 أحرف على الأقل وتحتوي على حروف وأرقام",
+  "errorInvalidCurrentPassword": "كلمة المرور الحالية غير صحيحة",
+  "errorOfflineDisabled": "التحميل للمشاهدة دون إنترنت غير متاح",
+  "errorValidation": "البيانات المدخلة غير صحيحة",
+  "fieldRequired": "هذا الحقل مطلوب",
+  "invalidPhone": "رقم الهاتف غير صالح",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "passwordHint": "8 أحرف على الأقل، وتحتوي على حروف وأرقام",
+  "loginTitle": "تسجيل الدخول",
+  "loginSubtitle": "أهلاً بك في {institute}",
+  "@loginSubtitle": {
+    "placeholders": {
+      "institute": {
+        "type": "String"
+      }
+    }
+  },
+  "phone": "رقم الهاتف",
+  "password": "كلمة المرور",
+  "login": "دخول",
+  "noAccount": "ليس لديك حساب؟",
+  "createAccount": "إنشاء حساب",
+  "registerTitle": "إنشاء حساب جديد",
+  "fullName": "الاسم الكامل",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "register": "تسجيل",
+  "haveAccount": "لديك حساب؟",
+  "deviceNotice": "سيتم ربط حسابك بهذا الجهاز عند أول تسجيل دخول.",
+  "logout": "تسجيل الخروج",
+  "logoutConfirm": "هل تريد تسجيل الخروج؟",
+  "deviceErrorTitle": "الحساب مرتبط بجهاز آخر",
+  "deviceErrorBody": "لا يمكن استخدام هذا الحساب إلا على الجهاز المرتبط به. لتغيير الجهاز يرجى التواصل مع إدارة المعهد.",
+  "accountDisabledTitle": "الحساب معطّل",
+  "accountDisabledBody": "تم تعطيل حسابك. يرجى التواصل مع إدارة المعهد.",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "helloName": "مرحباً {name} 👋",
+  "@helloName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "yourSubjects": "موادك",
+  "browseGrades": "تصفح الصفوف",
+  "noSubjects": "لا توجد مواد بعد",
+  "grades": "الصفوف",
+  "noGrades": "لا توجد صفوف",
+  "subjectsCount": "{count, plural, =0{لا مواد} =1{مادة واحدة} =2{مادتان} few{{count} مواد} many{{count} مادة} other{{count} مادة}}",
+  "@subjectsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teachersCount": "{count, plural, =0{لا مدرسين} =1{مدرس واحد} =2{مدرسان} few{{count} مدرسين} many{{count} مدرساً} other{{count} مدرس}}",
+  "@teachersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "topicsCount": "{count, plural, =0{لا دروس} =1{درس واحد} =2{درسان} few{{count} دروس} many{{count} درساً} other{{count} درس}}",
+  "@topicsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionsCount": "{count, plural, =0{لا جلسات} =1{جلسة واحدة} =2{جلستان} few{{count} جلسات} many{{count} جلسة} other{{count} جلسة}}",
+  "@sessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "videosCount": "{count, plural, =0{لا فيديوهات} =1{فيديو واحد} =2{فيديوهان} few{{count} فيديوهات} many{{count} فيديو} other{{count} فيديو}}",
+  "@videosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filesCount": "{count, plural, =0{لا ملفات} =1{ملف واحد} =2{ملفان} few{{count} ملفات} many{{count} ملفاً} other{{count} ملف}}",
+  "@filesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "locked": "مقفل",
+  "open": "مفتوح",
+  "lockedTitle": "المحتوى مقفل",
+  "lockedBody": "هذا المحتوى غير متاح لك حالياً. تواصل مع إدارة المعهد لفتحه.",
+  "teachers": "المدرسون",
+  "noTeachers": "لا يوجد مدرسون في هذه المادة",
+  "subjectFiles": "ملفات المادة",
+  "teacherTitle": "الأستاذ {name}",
+  "@teacherTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lessons": "الدروس",
+  "noLessons": "لا توجد دروس بعد",
+  "teacherFiles": "ملفات المدرس",
+  "sessions": "الجلسات",
+  "noSessions": "لا توجد جلسات بعد",
+  "topicFiles": "ملفات الدرس",
+  "videos": "الفيديوهات",
+  "files": "الملفات",
+  "noSessionContent": "لا يوجد محتوى في هذه الجلسة بعد",
+  "playerError": "تعذر تشغيل الفيديو",
+  "captureBlocked": "لا يمكن عرض الفيديو أثناء تسجيل الشاشة أو مشاركتها",
+  "downloadOffline": "تحميل للمشاهدة دون إنترنت",
+  "downloadingPercent": "جاري التحميل {percent}%",
+  "@downloadingPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "downloaded": "تم التحميل",
+  "downloadFailed": "فشل التحميل",
+  "deleteDownload": "حذف التحميل",
+  "downloads": "التحميلات",
+  "noDownloads": "لا توجد تحميلات",
+  "availableUntil": "متاح حتى {date}",
+  "@availableUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadExpired": "انتهت صلاحية التحميل، اتصل بالإنترنت لتجديده",
+  "openFile": "فتح الملف",
+  "fileOpensExternally": "يُفتح هذا الملف بتطبيق خارجي على جهازك",
+  "profile": "الملف الشخصي",
+  "changePassword": "تغيير كلمة المرور",
+  "currentPassword": "كلمة المرور الحالية",
+  "newPassword": "كلمة المرور الجديدة",
+  "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+  "language": "اللغة",
+  "arabic": "العربية",
+  "english": "English",
+  "linkedDevice": "الجهاز المرتبط",
+  "linkedSince": "مرتبط منذ {date}",
+  "@linkedSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "openedContent": "المحتوى المفتوح",
+  "notifications": "الإشعارات",
+  "noNotifications": "لا توجد إشعارات",
+  "markAllRead": "تحديد الكل كمقروء",
+  "search": "بحث",
+  "searchHint": "ابحث عن درس...",
+  "searchMinChars": "اكتب حرفين على الأقل",
+  "searchNoResults": "لا توجد نتائج",
+  "searchSubjects": "المواد",
+  "searchTeachers": "المدرسون",
+  "searchLessons": "الدروس",
+  "searchSessions": "الجلسات",
+  "searchVideos": "الفيديوهات",
+  "play": "تشغيل",
+  "pause": "إيقاف مؤقت",
+  "rewind10": "رجوع 10 ثوانٍ",
+  "forward10": "تقديم 10 ثوانٍ",
+  "fullscreen": "ملء الشاشة",
+  "exitFullscreen": "الخروج من ملء الشاشة",
+  "deleteDownloadConfirm": "سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.",
+  "downloadsInProgress": "قيد التحميل",
+  "downloadsNote": "الفيديوهات المحملة مشفرة ولا تعمل إلا داخل التطبيق وعلى هذا الجهاز.",
+  "playOffline": "تشغيل",
+  "appVersion": "الإصدار {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "noLinkedDevice": "لا يوجد جهاز مرتبط",
+  "passwordChangeNote": "سيتم تسجيل الخروج من أي جلسة أخرى لحسابك.",
+  "markRead": "تحديد كمقروء",
+  "loadMore": "تحميل المزيد",
+  "fileTooLargeToPreview": "لا يمكن عرض هذا الملف داخل التطبيق",
+  "noAppToOpenFile": "لا يوجد تطبيق على جهازك يفتح هذا النوع من الملفات",
+  "downloadingFile": "جاري تحميل الملف...",
+  "screenshotDetected": "تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك."
+}
