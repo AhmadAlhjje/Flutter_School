@@ -41,9 +41,25 @@ class FakeAuthRepository implements AuthRepository {
     throw const AppFailure(FailureKind.invalidCredentials, code: 'INVALID_CREDENTIALS');
   }
 
+  /// The last registration received (tests inspect the chosen grade).
+  ({String name, String phone, String? gradeId})? registered;
+
   @override
-  Future<StudentAccount> register({required String name, required String phone, required String password}) =>
-      throw const AppFailure(FailureKind.registrationDisabled);
+  Future<List<GradeOption>> gradeOptions() async => const [
+    GradeOption(id: 'g-12', name: 'البكالوريا'),
+    GradeOption(id: 'g-9', name: 'التاسع'),
+  ];
+
+  @override
+  Future<StudentAccount> register({
+    required String name,
+    required String phone,
+    required String password,
+    String? gradeId,
+  }) async {
+    registered = (name: name, phone: phone, gradeId: gradeId);
+    return StudentAccount(id: 'student-new', name: name, phone: phone);
+  }
 
   @override
   Future<RestoredSession?> restoreSession() async => restored;

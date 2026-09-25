@@ -68,8 +68,10 @@ class AuthController extends Notifier<AuthState> {
   Future<void> login({required String phone, required String password}) =>
       _signIn(() => ref.read(authRepositoryProvider).login(phone: phone, password: password));
 
-  Future<void> register({required String name, required String phone, required String password}) =>
-      _signIn(() => ref.read(authRepositoryProvider).register(name: name, phone: phone, password: password));
+  Future<void> register({required String name, required String phone, required String password, String? gradeId}) =>
+      _signIn(
+        () => ref.read(authRepositoryProvider).register(name: name, phone: phone, password: password, gradeId: gradeId),
+      );
 
   Future<void> _signIn(Future<StudentAccount> Function() action) async {
     try {

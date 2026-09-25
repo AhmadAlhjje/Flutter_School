@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/content_tabs.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../../../shared/widgets/page_header.dart';
@@ -70,14 +71,52 @@ class TeacherTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final title = l10n.teacherTitle(teacher.name);
-    return ContentTile(
-      title: title,
-      subtitle: teacher.locked ? null : l10n.topicsCount(teacher.topicsCount),
-      locked: teacher.locked,
-      leading: TeacherAvatar(name: teacher.name, imagePath: teacher.imagePath, muted: teacher.locked),
-      onTap: () => teacher.locked
-          ? context.push(Uri(path: Routes.locked, queryParameters: {'title': title}).toString())
-          : context.push(Routes.teacher(teacher.subjectTeacherId)),
+    final locked = teacher.locked;
+    return Semantics(
+      button: true,
+      label: locked ? '$title، ${l10n.locked}' : title,
+      excludeSemantics: true,
+      child: Card(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => locked
+              ? context.push(Uri(path: Routes.locked, queryParameters: {'title': title}).toString())
+              : context.push(Routes.teacher(teacher.subjectTeacherId)),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 18, 12, 18),
+            child: Row(
+              children: [
+                TeacherAvatar(name: teacher.name, imagePath: teacher.imagePath, size: 64, muted: locked),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          color: locked ? AppColors.secondary : AppColors.text,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (locked)
+                        Text(l10n.lockedHint, style: const TextStyle(color: AppColors.secondary, fontSize: 13))
+                      else
+                        InfoPill(icon: Icons.menu_book_rounded, text: l10n.topicsCount(teacher.topicsCount)),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                if (locked) const LockBadge() else const ForwardArrow(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

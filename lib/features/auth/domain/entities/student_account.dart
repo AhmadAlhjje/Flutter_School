@@ -15,3 +15,9 @@ abstract class PublicConfig with _$PublicConfig {
   const factory PublicConfig({required String instituteName, required bool selfRegistration, String? institutePhone}) =
       _PublicConfig;
 }
+
+/// A grade the student picks when creating an account.
+@freezed
+abstract class GradeOption with _$GradeOption {
+  const factory GradeOption({required String id, required String name}) = _GradeOption;
+}

@@ -489,4 +489,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAccountButton => 'Create a new account';
+
+  @override
+  String get yourGrade => 'Your grade';
+
+  @override
+  String get chooseGrade => 'Choose your grade';
+
+  @override
+  String get gradesUnavailable => 'Could not load the grades';
+
+  @override
+  String get playbackSpeed => 'Playback speed';
+
+  @override
+  String get findSubject => 'Search subjects by name';
+
+  @override
+  String get findLesson => 'Search lessons by name';
+
+  @override
+  String get findSession => 'Search sessions by name';
+
+  @override
+  String lessonNumber(int number) {
+    return 'Lesson $number';
+  }
 }

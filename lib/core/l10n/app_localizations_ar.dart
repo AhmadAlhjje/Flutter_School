@@ -502,4 +502,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get createAccountButton => 'إنشاء حساب جديد';
+
+  @override
+  String get yourGrade => 'صفّك الدراسي';
+
+  @override
+  String get chooseGrade => 'اختر صفّك';
+
+  @override
+  String get gradesUnavailable => 'تعذّر تحميل الصفوف';
+
+  @override
+  String get playbackSpeed => 'سرعة التشغيل';
+
+  @override
+  String get findSubject => 'ابحث باسم المادة';
+
+  @override
+  String get findLesson => 'ابحث باسم الدرس';
+
+  @override
+  String get findSession => 'ابحث باسم الجلسة';
+
+  @override
+  String lessonNumber(int number) {
+    return 'الدرس $number';
+  }
 }

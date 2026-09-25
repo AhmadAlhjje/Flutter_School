@@ -135,5 +135,13 @@
   "download": "Download",
   "downloadedShort": "Saved",
   "retryShort": "Retry",
-  "createAccountButton": "Create a new account"
+  "createAccountButton": "Create a new account",
+  "yourGrade": "Your grade",
+  "chooseGrade": "Choose your grade",
+  "gradesUnavailable": "Could not load the grades",
+  "playbackSpeed": "Playback speed",
+  "findSubject": "Search subjects by name",
+  "findLesson": "Search lessons by name",
+  "findSession": "Search sessions by name",
+  "lessonNumber": "Lesson {number}"
 }

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/search.dart';
 import '../../../shared/widgets/content_tile.dart';
+import '../../../shared/widgets/search_field.dart';
 import '../../../shared/widgets/state_views.dart';
 import '../../auth/auth_providers.dart';
 import '../../auth/presentation/auth_controller.dart';
@@ -41,21 +43,35 @@ class HomePage extends ConsumerWidget {
   }
 }
 
-class _HomeContent extends StatelessWidget {
+class _HomeContent extends StatefulWidget {
   const _HomeContent({required this.summary});
 
   final HomeSummary summary;
 
   @override
+  State<_HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<_HomeContent> {
+  String _query = '';
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final open = summary.subjects.where((subject) => !subject.locked).toList();
-    final locked = summary.subjects.where((subject) => subject.locked).toList();
+    final summary = widget.summary;
+    final shown = summary.subjects.where((subject) => matchesSearch(subject.name, _query));
+    final open = shown.where((subject) => !subject.locked).toList();
+    final locked = shown.where((subject) => subject.locked).toList();
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       children: [
         _Greeting(name: summary.studentName.split(' ').first),
         if (summary.subjects.isEmpty) const _NoSubjects(),
+        if (summary.subjects.length >= minItemsForSearch) ...[
+          const SizedBox(height: 16),
+          SearchField(hint: l10n.findSubject, onChanged: (value) => setState(() => _query = value)),
+          if (open.isEmpty && locked.isEmpty) EmptyView(message: l10n.searchNoResults, icon: Icons.search_off_rounded),
+        ],
         if (open.isNotEmpty) ...[SectionTitle(l10n.mySubjects), SubjectList(subjects: open)],
         if (locked.isNotEmpty) ...[
           SectionTitle(l10n.otherSubjects),

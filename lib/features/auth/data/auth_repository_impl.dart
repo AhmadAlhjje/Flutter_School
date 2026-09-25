@@ -35,12 +35,25 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<StudentAccount> register({required String name, required String phone, required String password}) async {
+  Future<List<GradeOption>> gradeOptions() => api.get(
+    '/public/grades',
+    (data) => [
+      for (final grade in asMapList(data)) GradeOption(id: grade['id']! as String, name: grade['name']! as String),
+    ],
+  );
+
+  @override
+  Future<StudentAccount> register({
+    required String name,
+    required String phone,
+    required String password,
+    String? gradeId,
+  }) async {
     final descriptor = await device.describe();
     final session = await api.post(
       '/auth/student/register',
       (data) => AppSessionModel.fromJson(asMap(data)),
-      body: {'name': name, 'phone': phone, 'password': password, 'device': descriptor.toJson()},
+      body: {'name': name, 'phone': phone, 'password': password, 'gradeId': ?gradeId, 'device': descriptor.toJson()},
     );
     return _startSession(session);
   }

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../../core/l10n/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/search.dart';
 import 'content_tile.dart';
+import 'search_field.dart';
 import 'state_views.dart';
 
 /// One tab of a [TabbedContent] page, e.g. "الفيديوهات" with its list.
 class ContentTab {
-  const ContentTab({
+  ContentTab({
     required this.label,
     required this.items,
     required this.emptyMessage,
     this.emptyIcon = Icons.inbox_outlined,
     this.hint,
-  });
+    this.searchHint,
+    this.searchKeys,
+  }) : assert(searchKeys == null || searchKeys.length == items.length, 'one search key per item');
 
   final String label;
   final List<Widget> items;
@@ -22,8 +27,12 @@ class ContentTab {
   /// What to do in this list (e.g. "اختر الدرس"), shown above the items.
   final String? hint;
 
-  /// The rows to show: the hint first, then the items.
-  List<Widget> get rows => [if (hint != null && items.isNotEmpty) HintLine(hint!), ...items];
+  /// Search by name: the box's hint, and the text each item is matched on. The box appears
+  /// once the list is long enough to need it ([minItemsForSearch]).
+  final String? searchHint;
+  final List<String>? searchKeys;
+
+  bool get searchable => searchHint != null && searchKeys != null && items.length >= minItemsForSearch;
 }
 
 /// A page header followed by segmented tabs (e.g. Videos | Files); each tab is its own list with
@@ -37,29 +46,15 @@ class TabbedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerBlock = Padding(padding: const EdgeInsets.fromLTRB(16, 8, 16, 12), child: header);
     if (tabs.length == 1) {
-      return RefreshIndicator(
-        onRefresh: onRefresh,
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: 24),
-          children: [
-            headerBlock,
-            if (tabs.single.items.isEmpty)
-              EmptyView(message: tabs.single.emptyMessage, icon: tabs.single.emptyIcon)
-            else
-              for (final item in tabs.single.rows)
-                Padding(padding: const EdgeInsets.fromLTRB(16, 0, 16, 10), child: item),
-          ],
-        ),
-      );
+      return _TabList(tab: tabs.single, onRefresh: onRefresh, header: header);
     }
     return DefaultTabController(
       length: tabs.length,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          headerBlock,
+          Padding(padding: const EdgeInsets.fromLTRB(16, 8, 16, 12), child: header),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: _SegmentedTabBar(tabs: tabs),
@@ -67,24 +62,61 @@ class TabbedContent extends StatelessWidget {
           const SizedBox(height: 8),
           Expanded(
             child: TabBarView(
-              children: [
-                for (final tab in tabs)
-                  RefreshIndicator(
-                    onRefresh: onRefresh,
-                    child: tab.items.isEmpty
-                        ? ListView(
-                            children: [EmptyView(message: tab.emptyMessage, icon: tab.emptyIcon)],
-                          )
-                        : ListView.separated(
-                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                            itemCount: tab.rows.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 10),
-                            itemBuilder: (_, index) => tab.rows[index],
-                          ),
-                  ),
-              ],
+              children: [for (final tab in tabs) _TabList(tab: tab, onRefresh: onRefresh)],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A tab's list: optional search box, the "what to do" hint, then the items.
+class _TabList extends StatefulWidget {
+  const _TabList({required this.tab, required this.onRefresh, this.header});
+
+  final ContentTab tab;
+  final Future<void> Function() onRefresh;
+
+  /// Single-tab pages: the page header scrolls with the list.
+  final Widget? header;
+
+  @override
+  State<_TabList> createState() => _TabListState();
+}
+
+class _TabListState extends State<_TabList> {
+  String _query = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final tab = widget.tab;
+    final keys = tab.searchKeys;
+    final items = tab.searchable && _query.isNotEmpty
+        ? [
+            for (var i = 0; i < tab.items.length; i++)
+              if (matchesSearch(keys![i], _query)) tab.items[i],
+          ]
+        : tab.items;
+    final rows = <Widget>[
+      if (tab.searchable) SearchField(hint: tab.searchHint!, onChanged: (value) => setState(() => _query = value)),
+      if (tab.hint != null && items.isNotEmpty) HintLine(tab.hint!),
+      ...items,
+    ];
+    final header = widget.header;
+    return RefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        children: [
+          if (header != null) ...[header, const SizedBox(height: 12)],
+          if (tab.items.isEmpty)
+            EmptyView(message: tab.emptyMessage, icon: tab.emptyIcon)
+          else ...[
+            for (final (index, row) in rows.indexed) ...[if (index > 0) const SizedBox(height: 10), row],
+            if (items.isEmpty)
+              EmptyView(message: AppLocalizations.of(context).searchNoResults, icon: Icons.search_off_rounded),
+          ],
         ],
       ),
     );

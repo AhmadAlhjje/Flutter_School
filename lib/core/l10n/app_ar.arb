@@ -219,5 +219,20 @@
   "download": "تحميل",
   "downloadedShort": "محمّل",
   "retryShort": "إعادة",
-  "createAccountButton": "إنشاء حساب جديد"
+  "createAccountButton": "إنشاء حساب جديد",
+  "yourGrade": "صفّك الدراسي",
+  "chooseGrade": "اختر صفّك",
+  "gradesUnavailable": "تعذّر تحميل الصفوف",
+  "playbackSpeed": "سرعة التشغيل",
+  "findSubject": "ابحث باسم المادة",
+  "findLesson": "ابحث باسم الدرس",
+  "findSession": "ابحث باسم الجلسة",
+  "lessonNumber": "الدرس {number}",
+  "@lessonNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

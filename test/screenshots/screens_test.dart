@@ -280,6 +280,12 @@ void main() {
       await shot(tester, '09_account');
     });
 
+    testWidgets('create account', (tester) async {
+      final router = await pumpApp(tester, signedIn: false);
+      router.go('/register');
+      await shot(tester, '11_register');
+    });
+
     testWidgets('new account', (tester) async {
       await pumpApp(tester, empty: true);
       await shot(tester, '10_new_account');

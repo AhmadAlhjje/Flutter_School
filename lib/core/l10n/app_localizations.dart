@@ -913,6 +913,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إنشاء حساب جديد'**
   String get createAccountButton;
+
+  /// No description provided for @yourGrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفّك الدراسي'**
+  String get yourGrade;
+
+  /// No description provided for @chooseGrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صفّك'**
+  String get chooseGrade;
+
+  /// No description provided for @gradesUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل الصفوف'**
+  String get gradesUnavailable;
+
+  /// No description provided for @playbackSpeed.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرعة التشغيل'**
+  String get playbackSpeed;
+
+  /// No description provided for @findSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم المادة'**
+  String get findSubject;
+
+  /// No description provided for @findLesson.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم الدرس'**
+  String get findLesson;
+
+  /// No description provided for @findSession.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم الجلسة'**
+  String get findSession;
+
+  /// No description provided for @lessonNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدرس {number}'**
+  String lessonNumber(int number);
 }
 
 class _AppLocalizationsDelegate

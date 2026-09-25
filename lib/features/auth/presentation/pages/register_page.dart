@@ -7,10 +7,11 @@ import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/failure_message.dart';
+import '../../auth_providers.dart';
 import '../auth_controller.dart';
 import '../widgets/password_field.dart';
 
-/// Optional self-registration: name, phone, password — not tied to choosing an institute.
+/// Self-registration: name, phone, the student's grade and a password.
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -24,6 +25,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _confirm = TextEditingController();
+  String? _gradeId;
   bool _submitting = false;
   String? _error;
 
@@ -44,7 +46,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     try {
       await ref
           .read(authControllerProvider.notifier)
-          .register(name: _name.text.trim(), phone: normalizePhone(_phone.text), password: _password.text);
+          .register(
+            name: _name.text.trim(),
+            phone: normalizePhone(_phone.text),
+            password: _password.text,
+            gradeId: _gradeId,
+          );
     } catch (error) {
       if (mounted) setState(() => _error = failureMessage(AppLocalizations.of(context), error));
     } finally {
@@ -55,6 +62,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final grades = ref.watch(gradeOptionsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.registerTitle),
@@ -95,6 +103,39 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 16),
+                ...grades.when(
+                  data: (options) => [
+                    if (options.isNotEmpty) ...[
+                      DropdownButtonFormField<String>(
+                        initialValue: _gradeId,
+                        isExpanded: true,
+                        decoration: InputDecoration(
+                          labelText: l10n.yourGrade,
+                          prefixIcon: const Icon(Icons.school_outlined),
+                        ),
+                        hint: Text(l10n.chooseGrade),
+                        items: [
+                          for (final grade in options) DropdownMenuItem(value: grade.id, child: Text(grade.name)),
+                        ],
+                        onChanged: (value) => setState(() => _gradeId = value),
+                        validator: (value) => value == null ? l10n.chooseGrade : null,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ],
+                  loading: () => [const LinearProgressIndicator(), const SizedBox(height: 16)],
+                  error: (_, _) => [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(l10n.gradesUnavailable, style: const TextStyle(color: AppColors.secondary)),
+                        ),
+                        TextButton(onPressed: () => ref.invalidate(gradeOptionsProvider), child: Text(l10n.retry)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
                 PasswordField(
                   controller: _password,
                   label: l10n.password,

@@ -42,6 +42,8 @@ class TopicPage extends ConsumerWidget {
               hint: l10n.hintChooseSession,
               emptyMessage: l10n.noSessions,
               emptyIcon: Icons.event_note_outlined,
+              searchHint: l10n.findSession,
+              searchKeys: [for (final session in data.sessions) session.title],
               items: [
                 for (final (index, session) in data.sessions.indexed)
                   ContentTile(

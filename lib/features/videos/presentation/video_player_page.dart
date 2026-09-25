@@ -419,6 +419,16 @@ class _PlayerSurfaceState extends State<_PlayerSurface> {
                   ),
                 ),
                 Text(formatDuration(value.duration), style: const TextStyle(color: Colors.white, fontSize: 12)),
+                const SizedBox(width: 4),
+                SpeedButton(
+                  speed: value.playbackSpeed,
+                  onOpened: () => _hideTimer?.cancel(),
+                  onClosed: _scheduleHide,
+                  onSelected: (speed) async {
+                    await _controller.setPlaybackSpeed(speed);
+                    _scheduleHide();
+                  },
+                ),
                 IconButton(
                   tooltip: widget.fullscreen ? l10n.exitFullscreen : l10n.fullscreen,
                   color: Colors.white,
@@ -430,6 +440,57 @@ class _PlayerSurfaceState extends State<_PlayerSurface> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Playback speeds offered to students.
+const playbackSpeeds = [0.5, 1.0, 1.5, 2.0];
+
+/// "1.5x" — no trailing ".0".
+String speedLabel(double speed) => '${speed == speed.roundToDouble() ? speed.toInt() : speed}x';
+
+/// The current speed ("1x"); tapping it offers 0.5x, 1x, 1.5x and 2x.
+class SpeedButton extends StatelessWidget {
+  const SpeedButton({super.key, required this.speed, required this.onSelected, this.onOpened, this.onClosed});
+
+  final double speed;
+  final ValueChanged<double> onSelected;
+  final VoidCallback? onOpened;
+  final VoidCallback? onClosed;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<double>(
+      tooltip: AppLocalizations.of(context).playbackSpeed,
+      initialValue: speed,
+      onOpened: onOpened,
+      onCanceled: onClosed,
+      onSelected: onSelected,
+      position: PopupMenuPosition.over,
+      itemBuilder: (context) => [
+        for (final option in playbackSpeeds)
+          PopupMenuItem<double>(
+            value: option,
+            child: Row(
+              children: [
+                SizedBox(width: 24, child: option == speed ? const Icon(Icons.check_rounded, size: 18) : null),
+                Text(speedLabel(option), textDirection: TextDirection.ltr),
+              ],
+            ),
+          ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white70),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          speedLabel(speed),
+          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+        ),
+      ),
     );
   }
 }

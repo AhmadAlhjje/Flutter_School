@@ -16,3 +16,8 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 final publicConfigProvider = FutureProvider<PublicConfig>((ref) => ref.watch(authRepositoryProvider).publicConfig());
+
+/// Grades offered on the create-account screen.
+final gradeOptionsProvider = FutureProvider.autoDispose<List<GradeOption>>(
+  (ref) => ref.watch(authRepositoryProvider).gradeOptions(),
+);
