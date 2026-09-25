@@ -70,11 +70,8 @@ flutter {
     source = "../.."
 }
 
-// ─── Development: phone ↔ backend on this computer over USB ──────────────────
-// Before every debug build (`flutter run`), forwards the phone's localhost:<port> to this
-// computer with `adb reverse`, using the port of API_BASE_URL in ../../.env when it points at
-// localhost. The app then reaches the backend started with `npm run dev`. Never fails the build.
-val apiPort: Int? = run {
+// API_BASE_URL from ../../.env, the configuration file bundled into the app.
+val apiUri: URI? = run {
     val envFile = rootProject.file("../.env")
     if (!envFile.exists()) return@run null
     val url = envFile.readLines()
@@ -84,10 +81,67 @@ val apiPort: Int? = run {
         ?.trim()
         ?.trim('"', '\'')
         ?: return@run null
-    val uri = runCatching { URI(url) }.getOrNull() ?: return@run null
-    if (uri.host !in setOf("localhost", "127.0.0.1")) return@run null
-    if (uri.port > 0) uri.port else if (uri.scheme == "https") 443 else 80
+    runCatching { URI(url) }.getOrNull()?.takeIf { it.host != null }
 }
+
+// ─── Release builds: HTTPS only, except the API when .env gives an http:// address ───
+// Generates res/xml/network_security_config.xml for non-debug builds: plain HTTP is allowed only
+// to that API host (e.g. the server's IP before it has a domain with HTTPS) and to 127.0.0.1 (the
+// in-app server that feeds downloaded, still encrypted, videos to the player). With an https://
+// API only the loopback exception remains. Debug builds use src/debug/res/xml instead.
+abstract class EduNetworkSecurityConfig : DefaultTask() {
+    @get:Input
+    abstract val cleartextHosts: ListProperty<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun write() {
+        val domains = cleartextHosts.get().joinToString("\n") {
+            "        <domain includeSubdomains=\"false\">$it</domain>"
+        }
+        val file = outputDir.file("xml/network_security_config.xml").get().asFile
+        file.parentFile.mkdirs()
+        file.writeText(
+            """
+            |<?xml version="1.0" encoding="utf-8"?>
+            |<!-- Generated from API_BASE_URL in .env by android/app/build.gradle.kts. -->
+            |<network-security-config>
+            |    <base-config cleartextTrafficPermitted="false">
+            |        <trust-anchors>
+            |            <certificates src="system" />
+            |        </trust-anchors>
+            |    </base-config>
+            |    <domain-config cleartextTrafficPermitted="true">
+            |$domains
+            |    </domain-config>
+            |</network-security-config>
+            |""".trimMargin(),
+        )
+    }
+}
+
+val networkSecurityConfig = tasks.register<EduNetworkSecurityConfig>("eduNetworkSecurityConfig") {
+    cleartextHosts.set(listOfNotNull("127.0.0.1", apiUri?.takeIf { it.scheme == "http" }?.host).distinct())
+    outputDir.set(layout.buildDirectory.dir("generated/edu/network-security/res"))
+}
+
+androidComponents {
+    onVariants { variant ->
+        if (variant.buildType != "debug") {
+            variant.sources.res?.addGeneratedSourceDirectory(networkSecurityConfig, EduNetworkSecurityConfig::outputDir)
+        }
+    }
+}
+
+// ─── Development: phone ↔ backend on this computer over USB ──────────────────
+// Before every debug build (`flutter run`), forwards the phone's localhost:<port> to this
+// computer with `adb reverse` when API_BASE_URL in ../../.env points at localhost. The app then
+// reaches the backend started with `npm run dev`. Never fails the build.
+val apiPort: Int? = apiUri
+    ?.takeIf { it.host in setOf("localhost", "127.0.0.1") }
+    ?.let { uri -> if (uri.port > 0) uri.port else if (uri.scheme == "https") 443 else 80 }
 
 val adbExecutable: File? = run {
     val localProperties = Properties().apply {

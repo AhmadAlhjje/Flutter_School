@@ -8,7 +8,9 @@
     <!--
       allowBackup / dataExtractionRules: app data (session, offline videos, their keys) is never
       copied into cloud or device-to-device backups, so offline copies cannot move to another phone.
-      networkSecurityConfig: HTTPS only, except the private loopback server used for offline playback.
+      networkSecurityConfig: generated for release builds from API_BASE_URL in .env (HTTPS only,
+      except an http:// API address and the loopback server used for offline playback); debug
+      builds use src/debug/res/xml/network_security_config.xml. See android/app/build.gradle.kts.
       allowAudioPlaybackCapture=false: other apps (screen recorders) cannot capture the app's sound.
     -->
     <application

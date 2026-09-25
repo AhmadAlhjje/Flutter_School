@@ -29,10 +29,11 @@ flutter run
 
 | المتغير | المعنى |
 |---|---|
-| `API_BASE_URL` | عنوان الـ API. محلياً: `http://localhost:4000`. للإصدار: `https://api.your-domain.com` |
+| `API_BASE_URL` | عنوان الـ API. السيرفر: `http://163.245.221.210:6000` (الحالي). للتطوير المحلي: `http://localhost:4000` |
 
-الملف يُضمَّن داخل التطبيق، لذلك يوضع فيه العنوان فقط (لا أسرار). يمكن تجاوزه عند البناء بـ
-`--dart-define=API_BASE_URL=...`.
+الملف يُضمَّن داخل التطبيق، لذلك يوضع فيه العنوان فقط (لا أسرار)، وأي تغيير فيه يحتاج بناء نسخة
+جديدة. نسخة الإصدار تسمح بـ `http` (بدون تشفير) فقط لعنوان الـ API المكتوب هنا؛ عند الانتقال إلى
+دومين بـ `https` يكفي تغيير العنوان. يمكن تجاوزه عند البناء بـ `--dart-define=API_BASE_URL=...`.
 
 ## أوامر أخرى
 
@@ -42,24 +43,61 @@ flutter run
 | `flutter analyze` | الفحص |
 | `dart run build_runner build --delete-conflicting-outputs` | بعد تعديل كلاسات Freezed/JSON |
 | `flutter gen-l10n` | بعد تعديل النصوص في `lib/core/l10n/*.arb` |
-| `flutter build apk --release` | نسخة الإصدار (بعد وضع عنوان https في `.env`) |
+| `flutter build apk --release` | نسخة الإصدار لإرسالها للطلاب (القسم التالي) |
 | `flutter build appbundle --release` | لـ Google Play |
 
 الـ NDK المستخدم محدد في `android/gradle.properties` (`edu.ndkVersion`).
 
-## توقيع نسخة الإصدار (Android)
+## إصدار التطبيق وإرساله للطلاب (Android)
 
-أنشئ `android/key.properties` (لا يُرفع إلى git):
+### 1. مفتاح التوقيع — مرة واحدة فقط
 
-```properties
-storeFile=/absolute/path/upload-keystore.jks
-storePassword=...
-keyAlias=upload
-keyPassword=...
+كل نسخة تُوقَّع بمفتاح، وكل تحديث لاحق **يجب** أن يُوقَّع بنفس المفتاح وإلا لن يُثبَّت فوق النسخة
+القديمة. في PowerShell:
+
+```powershell
+mkdir C:\keys
+keytool -genkey -v -keystore C:\keys\institute-app.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
 ```
 
-`keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload`.
-بدونه تُوقَّع نسخة الإصدار بمفتاح التطوير (للتجربة فقط). معرّف التطبيق: `com.eduplatform.student_app`.
+يسأل عن كلمة مرور (احفظها) وعن اسمك ومؤسستك (أي قيم). ثم أنشئ الملف
+`android/key.properties` (لا يُرفع إلى git):
+
+```properties
+storeFile=C:/keys/institute-app.jks
+storePassword=كلمة_مرور_المفتاح
+keyAlias=upload
+keyPassword=كلمة_مرور_المفتاح
+```
+
+احتفظ بنسخة من `institute-app.jks` وكلمة مروره في مكان آمن (Google Drive مثلاً): ضياعه يعني
+أن الطلاب سيضطرون لحذف التطبيق وتثبيته من جديد عند أي تحديث.
+
+### 2. بناء النسخة
+
+1. تأكد أن `.env` فيه عنوان السيرفر: `API_BASE_URL=http://163.245.221.210:6000`.
+2. رقم الإصدار في `pubspec.yaml` (`version: 1.0.0+1`): ارفعه مع كل تحديث، مثلاً `1.0.1+2`
+   (الرقم بعد `+` يجب أن يزيد دائماً).
+3. داخل هذا المجلد:
+
+```bash
+flutter build apk --release
+```
+
+الناتج: `build\app\outputs\flutter-apk\app-release.apk` (يعمل على كل الهواتف). لملف أصغر لمعظم
+الهواتف الحديثة: `flutter build apk --release --split-per-abi` واستخدم `app-arm64-v8a-release.apk`.
+
+### 3. الإرسال والتثبيت
+
+- أرسل ملف الـ APK عبر واتساب أو تيليجرام أو رابط Google Drive (يمكن إعادة تسميته، مثلاً
+  `institute-1.0.0.apk`).
+- على هاتف الطالب: فتح الملف ← السماح بـ «تثبيت التطبيقات غير المعروفة» للتطبيق الذي فتح منه
+  الملف ← تثبيت. إن ظهر تحذير Play Protect: «مزيد من التفاصيل» ← «التثبيت على أي حال».
+- التحديث: ابنِ نسخة برقم إصدار أعلى وبنفس المفتاح وأرسلها؛ تُثبَّت فوق القديمة ويبقى الحساب
+  والتحميلات.
+
+بدون `key.properties` تُوقَّع النسخة بمفتاح التطوير — للتجربة فقط، لا ترسلها للطلاب.
+معرّف التطبيق: `com.eduplatform.student_app`. للنشر على Google Play: `flutter build appbundle --release`.
 
 ## الحماية
 

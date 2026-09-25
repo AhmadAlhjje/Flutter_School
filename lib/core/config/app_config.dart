@@ -6,9 +6,9 @@ import 'dotenv.dart';
 /// App configuration, read once at startup from the `.env` file bundled with the app
 /// (`API_BASE_URL=...`). A build-time `--dart-define=API_BASE_URL=...` takes precedence.
 ///
-/// Local development: `http://localhost:4000` — every debug build runs `adb reverse`, so a phone
-/// connected by USB (or an emulator) reaches the backend on the laptop.
-/// Release builds: an `https://` address (cleartext HTTP is refused outside debug builds).
+/// The server: `http://163.245.221.210:6000` (Android release builds allow plain HTTP only to the
+/// API host written in `.env`). Local development: `http://localhost:4000` — every debug build
+/// runs `adb reverse`, so a phone connected by USB (or an emulator) reaches the backend on the laptop.
 abstract final class AppConfig {
   static const _fromDefine = String.fromEnvironment('API_BASE_URL');
   static const _fallback = 'http://localhost:4000';
