@@ -6,7 +6,6 @@
   "cancel": "إلغاء",
   "save": "حفظ",
   "close": "إغلاق",
-  "confirm": "تأكيد",
   "errorLoading": "حدث خطأ أثناء تحميل البيانات",
   "errorNetwork": "تعذر الاتصال بالخادم، تحقق من اتصالك بالإنترنت",
   "errorGeneric": "حدث خطأ ما، حاول مرة أخرى",
@@ -39,7 +38,6 @@
   "password": "كلمة المرور",
   "login": "دخول",
   "noAccount": "ليس لديك حساب؟",
-  "createAccount": "إنشاء حساب",
   "registerTitle": "إنشاء حساب جديد",
   "fullName": "الاسم الكامل",
   "confirmPassword": "تأكيد كلمة المرور",
@@ -61,19 +59,7 @@
       }
     }
   },
-  "yourSubjects": "موادك",
-  "browseGrades": "تصفح الصفوف",
-  "noSubjects": "لا توجد مواد بعد",
   "grades": "الصفوف",
-  "noGrades": "لا توجد صفوف",
-  "subjectsCount": "{count, plural, =0{لا مواد} =1{مادة واحدة} =2{مادتان} few{{count} مواد} many{{count} مادة} other{{count} مادة}}",
-  "@subjectsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "teachersCount": "{count, plural, =0{لا مدرسين} =1{مدرس واحد} =2{مدرسان} few{{count} مدرسين} many{{count} مدرساً} other{{count} مدرس}}",
   "@teachersCount": {
     "placeholders": {
@@ -118,9 +104,8 @@
   "open": "مفتوح",
   "lockedTitle": "المحتوى مقفل",
   "lockedBody": "هذا المحتوى غير متاح لك حالياً. تواصل مع إدارة المعهد لفتحه.",
-  "teachers": "المدرسون",
+  "teachers": "المدرسين",
   "noTeachers": "لا يوجد مدرسون في هذه المادة",
-  "subjectFiles": "ملفات المادة",
   "teacherTitle": "الأستاذ {name}",
   "@teacherTitle": {
     "placeholders": {
@@ -131,15 +116,12 @@
   },
   "lessons": "الدروس",
   "noLessons": "لا توجد دروس بعد",
-  "teacherFiles": "ملفات المدرس",
   "sessions": "الجلسات",
   "noSessions": "لا توجد جلسات بعد",
-  "topicFiles": "ملفات الدرس",
   "videos": "الفيديوهات",
   "files": "الملفات",
-  "noSessionContent": "لا يوجد محتوى في هذه الجلسة بعد",
   "playerError": "تعذر تشغيل الفيديو",
-  "captureBlocked": "لا يمكن عرض الفيديو أثناء تسجيل الشاشة أو مشاركتها",
+  "captureBlocked": "لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.",
   "downloadOffline": "تحميل للمشاهدة دون إنترنت",
   "downloadingPercent": "جاري التحميل {percent}%",
   "@downloadingPercent": {
@@ -152,7 +134,6 @@
   "downloaded": "تم التحميل",
   "downloadFailed": "فشل التحميل",
   "deleteDownload": "حذف التحميل",
-  "downloads": "التحميلات",
   "noDownloads": "لا توجد تحميلات",
   "availableUntil": "متاح حتى {date}",
   "@availableUntil": {
@@ -174,16 +155,6 @@
   "language": "اللغة",
   "arabic": "العربية",
   "english": "English",
-  "linkedDevice": "الجهاز المرتبط",
-  "linkedSince": "مرتبط منذ {date}",
-  "@linkedSince": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "openedContent": "المحتوى المفتوح",
   "notifications": "الإشعارات",
   "noNotifications": "لا توجد إشعارات",
   "markAllRead": "تحديد الكل كمقروء",
@@ -192,7 +163,7 @@
   "searchMinChars": "اكتب حرفين على الأقل",
   "searchNoResults": "لا توجد نتائج",
   "searchSubjects": "المواد",
-  "searchTeachers": "المدرسون",
+  "searchTeachers": "المدرسين",
   "searchLessons": "الدروس",
   "searchSessions": "الجلسات",
   "searchVideos": "الفيديوهات",
@@ -203,9 +174,6 @@
   "fullscreen": "ملء الشاشة",
   "exitFullscreen": "الخروج من ملء الشاشة",
   "deleteDownloadConfirm": "سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.",
-  "downloadsInProgress": "قيد التحميل",
-  "downloadsNote": "الفيديوهات المحملة مشفرة ولا تعمل إلا داخل التطبيق وعلى هذا الجهاز.",
-  "playOffline": "تشغيل",
   "appVersion": "الإصدار {version}",
   "@appVersion": {
     "placeholders": {
@@ -214,12 +182,42 @@
       }
     }
   },
-  "noLinkedDevice": "لا يوجد جهاز مرتبط",
   "passwordChangeNote": "سيتم تسجيل الخروج من أي جلسة أخرى لحسابك.",
   "markRead": "تحديد كمقروء",
   "loadMore": "تحميل المزيد",
   "fileTooLargeToPreview": "لا يمكن عرض هذا الملف داخل التطبيق",
   "noAppToOpenFile": "لا يوجد تطبيق على جهازك يفتح هذا النوع من الملفات",
   "downloadingFile": "جاري تحميل الملف...",
-  "screenshotDetected": "تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك."
+  "screenshotDetected": "تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.",
+  "noVideos": "لا توجد فيديوهات بعد",
+  "noFiles": "لا توجد ملفات",
+  "downloadedOnDevice": "على الجهاز",
+  "offlineTitle": "أنت غير متصل بالإنترنت",
+  "offlineBody": "يمكنك مشاهدة الفيديوهات المحمّلة على جهازك",
+  "navHome": "الرئيسية",
+  "navAccount": "حسابي",
+  "homeSubtitle": "اختر المادة التي تريد دراستها",
+  "mySubjects": "موادي",
+  "otherSubjects": "مواد أخرى",
+  "otherSubjectsHint": "هذه المواد مقفلة حالياً، تواصل مع إدارة المعهد لفتحها",
+  "noSubjectsTitle": "حسابك جاهز! لا توجد مواد مفتوحة لك بعد",
+  "noSubjectsBody": "عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.",
+  "contactInstitute": "للتواصل مع المعهد: {phone}",
+  "@contactInstitute": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "lockedHint": "مقفل — تواصل مع إدارة المعهد لفتحه",
+  "hintChooseTeacher": "اختر المدرس لمشاهدة دروسه",
+  "hintChooseLesson": "اختر الدرس",
+  "hintChooseSession": "اختر الجلسة لمشاهدة فيديوهاتها وملفاتها",
+  "hintVideos": "اضغط على الفيديو لمشاهدته، أو على «تحميل» لمشاهدته لاحقاً بدون إنترنت",
+  "hintFiles": "اضغط على الملف لفتحه",
+  "download": "تحميل",
+  "downloadedShort": "محمّل",
+  "retryShort": "إعادة",
+  "createAccountButton": "إنشاء حساب جديد"
 }

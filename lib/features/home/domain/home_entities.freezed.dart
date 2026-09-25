@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeSummary {
 
- String get studentName; String get instituteName; int get unreadNotifications; List<SubjectCard> get subjects; List<GradeSummary> get grades;
+ String get studentName; String get instituteName; int get unreadNotifications; List<SubjectCard> get subjects;
 /// Create a copy of HomeSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +27,20 @@ $HomeSummaryCopyWith<HomeSummary> get copyWith => _$HomeSummaryCopyWithImpl<Home
 @override
 bool operator ==(Object other) {
   final _this = this as HomeSummary;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSummary&&(identical(other.studentName, _this.studentName) || other.studentName == _this.studentName)&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.unreadNotifications, _this.unreadNotifications) || other.unreadNotifications == _this.unreadNotifications)&&const DeepCollectionEquality().equals(other.subjects, _this.subjects)&&const DeepCollectionEquality().equals(other.grades, _this.grades));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSummary&&(identical(other.studentName, _this.studentName) || other.studentName == _this.studentName)&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.unreadNotifications, _this.unreadNotifications) || other.unreadNotifications == _this.unreadNotifications)&&const DeepCollectionEquality().equals(other.subjects, _this.subjects));
 }
 
 
 @override
 int get hashCode {
   final _this = this as HomeSummary;
-  return Object.hash(runtimeType,_this.studentName,_this.instituteName,_this.unreadNotifications,const DeepCollectionEquality().hash(_this.subjects),const DeepCollectionEquality().hash(_this.grades));
+  return Object.hash(runtimeType,_this.studentName,_this.instituteName,_this.unreadNotifications,const DeepCollectionEquality().hash(_this.subjects));
 }
 
 @override
 String toString() {
   final _this = this as HomeSummary;
-  return 'HomeSummary(studentName: ${_this.studentName}, instituteName: ${_this.instituteName}, unreadNotifications: ${_this.unreadNotifications}, subjects: ${_this.subjects}, grades: ${_this.grades})';
+  return 'HomeSummary(studentName: ${_this.studentName}, instituteName: ${_this.instituteName}, unreadNotifications: ${_this.unreadNotifications}, subjects: ${_this.subjects})';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $HomeSummaryCopyWith<$Res>  {
   factory $HomeSummaryCopyWith(HomeSummary value, $Res Function(HomeSummary) _then) = _$HomeSummaryCopyWithImpl;
 @useResult
 $Res call({
- String studentName, String instituteName, int unreadNotifications, List<SubjectCard> subjects, List<GradeSummary> grades
+ String studentName, String instituteName, int unreadNotifications, List<SubjectCard> subjects
 });
 
 
@@ -68,14 +68,13 @@ class _$HomeSummaryCopyWithImpl<$Res>
 
 /// Create a copy of HomeSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? studentName = null,Object? instituteName = null,Object? unreadNotifications = null,Object? subjects = null,Object? grades = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? studentName = null,Object? instituteName = null,Object? unreadNotifications = null,Object? subjects = null,}) {
   return _then(HomeSummary(
 studentName: null == studentName ? _self.studentName : studentName // ignore: cast_nullable_to_non_nullable
 as String,instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,unreadNotifications: null == unreadNotifications ? _self.unreadNotifications : unreadNotifications // ignore: cast_nullable_to_non_nullable
 as int,subjects: null == subjects ? _self.subjects : subjects // ignore: cast_nullable_to_non_nullable
-as List<SubjectCard>,grades: null == grades ? _self.grades : grades // ignore: cast_nullable_to_non_nullable
-as List<GradeSummary>,
+as List<SubjectCard>,
   ));
 }
 
@@ -160,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects,  List<GradeSummary> grades)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeSummary() when $default != null:
-return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects,_that.grades);case _:
+return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects);case _:
   return orElse();
 
 }
@@ -181,10 +180,10 @@ return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects,  List<GradeSummary> grades)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects)  $default,) {final _that = this;
 switch (_that) {
 case _HomeSummary():
-return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects,_that.grades);case _:
+return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +200,10 @@ return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects,  List<GradeSummary> grades)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String studentName,  String instituteName,  int unreadNotifications,  List<SubjectCard> subjects)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeSummary() when $default != null:
-return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects,_that.grades);case _:
+return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,_that.subjects);case _:
   return null;
 
 }
@@ -216,7 +215,7 @@ return $default(_that.studentName,_that.instituteName,_that.unreadNotifications,
 
 
 class _HomeSummary implements HomeSummary {
-  const _HomeSummary({required this.studentName, required this.instituteName, required this.unreadNotifications, required  List<SubjectCard> subjects, required  List<GradeSummary> grades}): _subjects = subjects,_grades = grades;
+  const _HomeSummary({required this.studentName, required this.instituteName, required this.unreadNotifications, required  List<SubjectCard> subjects}): _subjects = subjects;
   
 
 @override final  String studentName;
@@ -227,13 +226,6 @@ class _HomeSummary implements HomeSummary {
   if (_subjects is EqualUnmodifiableListView) return _subjects;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_subjects);
-}
-
- final  List<GradeSummary> _grades;
-@override List<GradeSummary> get grades {
-  if (_grades is EqualUnmodifiableListView) return _grades;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_grades);
 }
 
 
@@ -247,18 +239,18 @@ _$HomeSummaryCopyWith<_HomeSummary> get copyWith => __$HomeSummaryCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeSummary&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.unreadNotifications, unreadNotifications) || other.unreadNotifications == unreadNotifications)&&const DeepCollectionEquality().equals(other.subjects, _subjects)&&const DeepCollectionEquality().equals(other.grades, _grades));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeSummary&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.unreadNotifications, unreadNotifications) || other.unreadNotifications == unreadNotifications)&&const DeepCollectionEquality().equals(other.subjects, _subjects));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,studentName,instituteName,unreadNotifications,const DeepCollectionEquality().hash(_subjects),const DeepCollectionEquality().hash(_grades));
+    return Object.hash(runtimeType,studentName,instituteName,unreadNotifications,const DeepCollectionEquality().hash(_subjects));
 }
 
 @override
 String toString() {
-    return 'HomeSummary(studentName: $studentName, instituteName: $instituteName, unreadNotifications: $unreadNotifications, subjects: $subjects, grades: $grades)';
+    return 'HomeSummary(studentName: $studentName, instituteName: $instituteName, unreadNotifications: $unreadNotifications, subjects: $subjects)';
 }
 
 
@@ -269,7 +261,7 @@ abstract mixin class _$HomeSummaryCopyWith<$Res> implements $HomeSummaryCopyWith
   factory _$HomeSummaryCopyWith(_HomeSummary value, $Res Function(_HomeSummary) _then) = __$HomeSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String studentName, String instituteName, int unreadNotifications, List<SubjectCard> subjects, List<GradeSummary> grades
+ String studentName, String instituteName, int unreadNotifications, List<SubjectCard> subjects
 });
 
 
@@ -286,14 +278,13 @@ class __$HomeSummaryCopyWithImpl<$Res>
 
 /// Create a copy of HomeSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? studentName = null,Object? instituteName = null,Object? unreadNotifications = null,Object? subjects = null,Object? grades = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? studentName = null,Object? instituteName = null,Object? unreadNotifications = null,Object? subjects = null,}) {
   return _then(_HomeSummary(
 studentName: null == studentName ? _self.studentName : studentName // ignore: cast_nullable_to_non_nullable
 as String,instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,unreadNotifications: null == unreadNotifications ? _self.unreadNotifications : unreadNotifications // ignore: cast_nullable_to_non_nullable
 as int,subjects: null == subjects ? _self._subjects : subjects // ignore: cast_nullable_to_non_nullable
-as List<SubjectCard>,grades: null == grades ? _self._grades : grades // ignore: cast_nullable_to_non_nullable
-as List<GradeSummary>,
+as List<SubjectCard>,
   ));
 }
 

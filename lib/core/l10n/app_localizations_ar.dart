@@ -28,9 +28,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get close => 'إغلاق';
 
   @override
-  String get confirm => 'تأكيد';
-
-  @override
   String get errorLoading => 'حدث خطأ أثناء تحميل البيانات';
 
   @override
@@ -110,9 +107,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noAccount => 'ليس لديك حساب؟';
 
   @override
-  String get createAccount => 'إنشاء حساب';
-
-  @override
   String get registerTitle => 'إنشاء حساب جديد';
 
   @override
@@ -159,34 +153,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get yourSubjects => 'موادك';
-
-  @override
-  String get browseGrades => 'تصفح الصفوف';
-
-  @override
-  String get noSubjects => 'لا توجد مواد بعد';
-
-  @override
   String get grades => 'الصفوف';
-
-  @override
-  String get noGrades => 'لا توجد صفوف';
-
-  @override
-  String subjectsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count مادة',
-      many: '$count مادة',
-      few: '$count مواد',
-      two: 'مادتان',
-      one: 'مادة واحدة',
-      zero: 'لا مواد',
-    );
-    return '$_temp0';
-  }
 
   @override
   String teachersCount(int count) {
@@ -277,13 +244,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'هذا المحتوى غير متاح لك حالياً. تواصل مع إدارة المعهد لفتحه.';
 
   @override
-  String get teachers => 'المدرسون';
+  String get teachers => 'المدرسين';
 
   @override
   String get noTeachers => 'لا يوجد مدرسون في هذه المادة';
-
-  @override
-  String get subjectFiles => 'ملفات المادة';
 
   @override
   String teacherTitle(String name) {
@@ -297,16 +261,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noLessons => 'لا توجد دروس بعد';
 
   @override
-  String get teacherFiles => 'ملفات المدرس';
-
-  @override
   String get sessions => 'الجلسات';
 
   @override
   String get noSessions => 'لا توجد جلسات بعد';
-
-  @override
-  String get topicFiles => 'ملفات الدرس';
 
   @override
   String get videos => 'الفيديوهات';
@@ -315,14 +273,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get files => 'الملفات';
 
   @override
-  String get noSessionContent => 'لا يوجد محتوى في هذه الجلسة بعد';
-
-  @override
   String get playerError => 'تعذر تشغيل الفيديو';
 
   @override
   String get captureBlocked =>
-      'لا يمكن عرض الفيديو أثناء تسجيل الشاشة أو مشاركتها';
+      'لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.';
 
   @override
   String get downloadOffline => 'تحميل للمشاهدة دون إنترنت';
@@ -340,9 +295,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deleteDownload => 'حذف التحميل';
-
-  @override
-  String get downloads => 'التحميلات';
 
   @override
   String get noDownloads => 'لا توجد تحميلات';
@@ -389,17 +341,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get linkedDevice => 'الجهاز المرتبط';
-
-  @override
-  String linkedSince(String date) {
-    return 'مرتبط منذ $date';
-  }
-
-  @override
-  String get openedContent => 'المحتوى المفتوح';
-
-  @override
   String get notifications => 'الإشعارات';
 
   @override
@@ -424,7 +365,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchSubjects => 'المواد';
 
   @override
-  String get searchTeachers => 'المدرسون';
+  String get searchTeachers => 'المدرسين';
 
   @override
   String get searchLessons => 'الدروس';
@@ -458,22 +399,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.';
 
   @override
-  String get downloadsInProgress => 'قيد التحميل';
-
-  @override
-  String get downloadsNote =>
-      'الفيديوهات المحملة مشفرة ولا تعمل إلا داخل التطبيق وعلى هذا الجهاز.';
-
-  @override
-  String get playOffline => 'تشغيل';
-
-  @override
   String appVersion(String version) {
     return 'الإصدار $version';
   }
-
-  @override
-  String get noLinkedDevice => 'لا يوجد جهاز مرتبط';
 
   @override
   String get passwordChangeNote => 'سيتم تسجيل الخروج من أي جلسة أخرى لحسابك.';
@@ -497,4 +425,81 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get screenshotDetected =>
       'تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.';
+
+  @override
+  String get noVideos => 'لا توجد فيديوهات بعد';
+
+  @override
+  String get noFiles => 'لا توجد ملفات';
+
+  @override
+  String get downloadedOnDevice => 'على الجهاز';
+
+  @override
+  String get offlineTitle => 'أنت غير متصل بالإنترنت';
+
+  @override
+  String get offlineBody => 'يمكنك مشاهدة الفيديوهات المحمّلة على جهازك';
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navAccount => 'حسابي';
+
+  @override
+  String get homeSubtitle => 'اختر المادة التي تريد دراستها';
+
+  @override
+  String get mySubjects => 'موادي';
+
+  @override
+  String get otherSubjects => 'مواد أخرى';
+
+  @override
+  String get otherSubjectsHint =>
+      'هذه المواد مقفلة حالياً، تواصل مع إدارة المعهد لفتحها';
+
+  @override
+  String get noSubjectsTitle => 'حسابك جاهز! لا توجد مواد مفتوحة لك بعد';
+
+  @override
+  String get noSubjectsBody =>
+      'عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.';
+
+  @override
+  String contactInstitute(String phone) {
+    return 'للتواصل مع المعهد: $phone';
+  }
+
+  @override
+  String get lockedHint => 'مقفل — تواصل مع إدارة المعهد لفتحه';
+
+  @override
+  String get hintChooseTeacher => 'اختر المدرس لمشاهدة دروسه';
+
+  @override
+  String get hintChooseLesson => 'اختر الدرس';
+
+  @override
+  String get hintChooseSession => 'اختر الجلسة لمشاهدة فيديوهاتها وملفاتها';
+
+  @override
+  String get hintVideos =>
+      'اضغط على الفيديو لمشاهدته، أو على «تحميل» لمشاهدته لاحقاً بدون إنترنت';
+
+  @override
+  String get hintFiles => 'اضغط على الملف لفتحه';
+
+  @override
+  String get download => 'تحميل';
+
+  @override
+  String get downloadedShort => 'محمّل';
+
+  @override
+  String get retryShort => 'إعادة';
+
+  @override
+  String get createAccountButton => 'إنشاء حساب جديد';
 }

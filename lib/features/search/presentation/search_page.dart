@@ -99,7 +99,7 @@ class _Results extends ConsumerWidget {
               for (final subject in data.subjects) ...[
                 ContentTile(
                   title: subject.name,
-                  subtitle: subject.gradeName,
+                  subtitle: l10n.teachersCount(subject.teachersCount),
                   locked: subject.locked,
                   onTap: () => context.push(Routes.subject(subject.id)),
                 ),

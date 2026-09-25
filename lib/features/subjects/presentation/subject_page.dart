@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/router/routes.dart';
+import '../../../shared/widgets/content_tabs.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../../../shared/widgets/page_header.dart';
 import '../../../shared/widgets/state_views.dart';
@@ -13,8 +14,8 @@ import '../../learning_providers.dart';
 import '../../teachers/domain/teacher_entities.dart';
 import '../domain/subject_entities.dart';
 
-/// Subject screen (spec §72): the teachers of the subject, each open or locked, plus
-/// subject-level files when the subject is open.
+/// Subject screen: the teachers of the subject, each open or locked, and the subject files in a
+/// second tab when the subject is open and has files.
 class SubjectPage extends ConsumerWidget {
   const SubjectPage({super.key, required this.subjectId});
 
@@ -25,25 +26,35 @@ class SubjectPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final subject = ref.watch(subjectProvider(subjectId));
     return Scaffold(
-      appBar: AppBar(title: Text(subject.value?.name ?? '')),
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(subjectProvider(subjectId).future),
-        child: AsyncValueView<SubjectDetails>(
-          value: subject,
-          onRetry: () => ref.invalidate(subjectProvider(subjectId)),
-          data: (data) => ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      appBar: detailAppBar(),
+      body: AsyncValueView<SubjectDetails>(
+        value: subject,
+        onRetry: () => ref.invalidate(subjectProvider(subjectId)),
+        data: (data) => TabbedContent(
+          onRefresh: () => ref.refresh(subjectProvider(subjectId).future),
+          header: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              PageHeader(caption: data.gradeName, title: data.name, description: data.description),
+              PageHeader(title: data.name, description: data.description),
               if (data.locked) LockedBanner(message: l10n.lockedBody),
-              SectionTitle(l10n.teachers),
-              if (data.teachers.isEmpty)
-                EmptyView(message: l10n.noTeachers, icon: Icons.person_outline_rounded)
-              else
-                for (final teacher in data.teachers) ...[TeacherTile(teacher: teacher), const SizedBox(height: 10)],
-              FileSection(title: l10n.subjectFiles, files: data.files),
             ],
           ),
+          tabs: [
+            ContentTab(
+              label: l10n.teachers,
+              hint: l10n.hintChooseTeacher,
+              emptyMessage: l10n.noTeachers,
+              emptyIcon: Icons.person_outline_rounded,
+              items: [for (final teacher in data.teachers) TeacherTile(teacher: teacher)],
+            ),
+            if (data.files.isNotEmpty)
+              ContentTab(
+                label: l10n.files,
+                hint: l10n.hintFiles,
+                emptyMessage: l10n.noFiles,
+                items: [for (final file in data.files) FileTile(file: file)],
+              ),
+          ],
         ),
       ),
     );

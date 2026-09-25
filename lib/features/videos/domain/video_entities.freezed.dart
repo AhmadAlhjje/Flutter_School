@@ -288,7 +288,7 @@ as int?,
 /// @nodoc
 mixin _$PlaybackGrant {
 
- String get videoId; String get title; Uri get manifestUrl; DateTime get expiresAt; int? get durationSeconds; String? get watermarkText;
+ String get videoId; String get title; Uri get manifestUrl; DateTime get expiresAt; int? get durationSeconds;
 /// Create a copy of PlaybackGrant
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,20 +300,20 @@ $PlaybackGrantCopyWith<PlaybackGrant> get copyWith => _$PlaybackGrantCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as PlaybackGrant;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackGrant&&(identical(other.videoId, _this.videoId) || other.videoId == _this.videoId)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.manifestUrl, _this.manifestUrl) || other.manifestUrl == _this.manifestUrl)&&(identical(other.expiresAt, _this.expiresAt) || other.expiresAt == _this.expiresAt)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds)&&(identical(other.watermarkText, _this.watermarkText) || other.watermarkText == _this.watermarkText));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaybackGrant&&(identical(other.videoId, _this.videoId) || other.videoId == _this.videoId)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.manifestUrl, _this.manifestUrl) || other.manifestUrl == _this.manifestUrl)&&(identical(other.expiresAt, _this.expiresAt) || other.expiresAt == _this.expiresAt)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds));
 }
 
 
 @override
 int get hashCode {
   final _this = this as PlaybackGrant;
-  return Object.hash(runtimeType,_this.videoId,_this.title,_this.manifestUrl,_this.expiresAt,_this.durationSeconds,_this.watermarkText);
+  return Object.hash(runtimeType,_this.videoId,_this.title,_this.manifestUrl,_this.expiresAt,_this.durationSeconds);
 }
 
 @override
 String toString() {
   final _this = this as PlaybackGrant;
-  return 'PlaybackGrant(videoId: ${_this.videoId}, title: ${_this.title}, manifestUrl: ${_this.manifestUrl}, expiresAt: ${_this.expiresAt}, durationSeconds: ${_this.durationSeconds}, watermarkText: ${_this.watermarkText})';
+  return 'PlaybackGrant(videoId: ${_this.videoId}, title: ${_this.title}, manifestUrl: ${_this.manifestUrl}, expiresAt: ${_this.expiresAt}, durationSeconds: ${_this.durationSeconds})';
 }
 
 
@@ -324,7 +324,7 @@ abstract mixin class $PlaybackGrantCopyWith<$Res>  {
   factory $PlaybackGrantCopyWith(PlaybackGrant value, $Res Function(PlaybackGrant) _then) = _$PlaybackGrantCopyWithImpl;
 @useResult
 $Res call({
- String videoId, String title, Uri manifestUrl, DateTime expiresAt, int? durationSeconds, String? watermarkText
+ String videoId, String title, Uri manifestUrl, DateTime expiresAt, int? durationSeconds
 });
 
 
@@ -341,15 +341,14 @@ class _$PlaybackGrantCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackGrant
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? videoId = null,Object? title = null,Object? manifestUrl = null,Object? expiresAt = null,Object? durationSeconds = freezed,Object? watermarkText = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? videoId = null,Object? title = null,Object? manifestUrl = null,Object? expiresAt = null,Object? durationSeconds = freezed,}) {
   return _then(PlaybackGrant(
 videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,manifestUrl: null == manifestUrl ? _self.manifestUrl : manifestUrl // ignore: cast_nullable_to_non_nullable
 as Uri,expiresAt: null == expiresAt ? _self.expiresAt : expiresAt // ignore: cast_nullable_to_non_nullable
 as DateTime,durationSeconds: freezed == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
-as int?,watermarkText: freezed == watermarkText ? _self.watermarkText : watermarkText // ignore: cast_nullable_to_non_nullable
-as String?,
+as int?,
   ));
 }
 
@@ -434,10 +433,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds,  String? watermarkText)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlaybackGrant() when $default != null:
-return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds,_that.watermarkText);case _:
+return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds);case _:
   return orElse();
 
 }
@@ -455,10 +454,10 @@ return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds,  String? watermarkText)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds)  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackGrant():
-return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds,_that.watermarkText);case _:
+return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -475,10 +474,10 @@ return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds,  String? watermarkText)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String videoId,  String title,  Uri manifestUrl,  DateTime expiresAt,  int? durationSeconds)?  $default,) {final _that = this;
 switch (_that) {
 case _PlaybackGrant() when $default != null:
-return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds,_that.watermarkText);case _:
+return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_that.durationSeconds);case _:
   return null;
 
 }
@@ -490,7 +489,7 @@ return $default(_that.videoId,_that.title,_that.manifestUrl,_that.expiresAt,_tha
 
 
 class _PlaybackGrant implements PlaybackGrant {
-  const _PlaybackGrant({required this.videoId, required this.title, required this.manifestUrl, required this.expiresAt, this.durationSeconds, this.watermarkText});
+  const _PlaybackGrant({required this.videoId, required this.title, required this.manifestUrl, required this.expiresAt, this.durationSeconds});
   
 
 @override final  String videoId;
@@ -498,7 +497,6 @@ class _PlaybackGrant implements PlaybackGrant {
 @override final  Uri manifestUrl;
 @override final  DateTime expiresAt;
 @override final  int? durationSeconds;
-@override final  String? watermarkText;
 
 /// Create a copy of PlaybackGrant
 /// with the given fields replaced by the non-null parameter values.
@@ -510,18 +508,18 @@ _$PlaybackGrantCopyWith<_PlaybackGrant> get copyWith => __$PlaybackGrantCopyWith
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackGrant&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.manifestUrl, manifestUrl) || other.manifestUrl == manifestUrl)&&(identical(other.expiresAt, expiresAt) || other.expiresAt == expiresAt)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.watermarkText, watermarkText) || other.watermarkText == watermarkText));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaybackGrant&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.manifestUrl, manifestUrl) || other.manifestUrl == manifestUrl)&&(identical(other.expiresAt, expiresAt) || other.expiresAt == expiresAt)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,videoId,title,manifestUrl,expiresAt,durationSeconds,watermarkText);
+    return Object.hash(runtimeType,videoId,title,manifestUrl,expiresAt,durationSeconds);
 }
 
 @override
 String toString() {
-    return 'PlaybackGrant(videoId: $videoId, title: $title, manifestUrl: $manifestUrl, expiresAt: $expiresAt, durationSeconds: $durationSeconds, watermarkText: $watermarkText)';
+    return 'PlaybackGrant(videoId: $videoId, title: $title, manifestUrl: $manifestUrl, expiresAt: $expiresAt, durationSeconds: $durationSeconds)';
 }
 
 
@@ -532,7 +530,7 @@ abstract mixin class _$PlaybackGrantCopyWith<$Res> implements $PlaybackGrantCopy
   factory _$PlaybackGrantCopyWith(_PlaybackGrant value, $Res Function(_PlaybackGrant) _then) = __$PlaybackGrantCopyWithImpl;
 @override @useResult
 $Res call({
- String videoId, String title, Uri manifestUrl, DateTime expiresAt, int? durationSeconds, String? watermarkText
+ String videoId, String title, Uri manifestUrl, DateTime expiresAt, int? durationSeconds
 });
 
 
@@ -549,15 +547,14 @@ class __$PlaybackGrantCopyWithImpl<$Res>
 
 /// Create a copy of PlaybackGrant
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? videoId = null,Object? title = null,Object? manifestUrl = null,Object? expiresAt = null,Object? durationSeconds = freezed,Object? watermarkText = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? videoId = null,Object? title = null,Object? manifestUrl = null,Object? expiresAt = null,Object? durationSeconds = freezed,}) {
   return _then(_PlaybackGrant(
 videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,manifestUrl: null == manifestUrl ? _self.manifestUrl : manifestUrl // ignore: cast_nullable_to_non_nullable
 as Uri,expiresAt: null == expiresAt ? _self.expiresAt : expiresAt // ignore: cast_nullable_to_non_nullable
 as DateTime,durationSeconds: freezed == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
-as int?,watermarkText: freezed == watermarkText ? _self.watermarkText : watermarkText // ignore: cast_nullable_to_non_nullable
-as String?,
+as int?,
   ));
 }
 
@@ -567,7 +564,7 @@ as String?,
 /// @nodoc
 mixin _$OfflineVideo {
 
- String get licenseId; String get videoId; String get title; DateTime get expiresAt; DateTime get downloadedAt; int get sizeBytes; int? get durationSeconds;
+ String get licenseId; String get videoId; String get title; DateTime get expiresAt; DateTime get downloadedAt; int get sizeBytes; int? get durationSeconds; String? get subjectName; String? get teacherName; String? get topicTitle; String? get sessionTitle;
 /// Create a copy of OfflineVideo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -579,20 +576,20 @@ $OfflineVideoCopyWith<OfflineVideo> get copyWith => _$OfflineVideoCopyWithImpl<O
 @override
 bool operator ==(Object other) {
   final _this = this as OfflineVideo;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfflineVideo&&(identical(other.licenseId, _this.licenseId) || other.licenseId == _this.licenseId)&&(identical(other.videoId, _this.videoId) || other.videoId == _this.videoId)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.expiresAt, _this.expiresAt) || other.expiresAt == _this.expiresAt)&&(identical(other.downloadedAt, _this.downloadedAt) || other.downloadedAt == _this.downloadedAt)&&(identical(other.sizeBytes, _this.sizeBytes) || other.sizeBytes == _this.sizeBytes)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfflineVideo&&(identical(other.licenseId, _this.licenseId) || other.licenseId == _this.licenseId)&&(identical(other.videoId, _this.videoId) || other.videoId == _this.videoId)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.expiresAt, _this.expiresAt) || other.expiresAt == _this.expiresAt)&&(identical(other.downloadedAt, _this.downloadedAt) || other.downloadedAt == _this.downloadedAt)&&(identical(other.sizeBytes, _this.sizeBytes) || other.sizeBytes == _this.sizeBytes)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds)&&(identical(other.subjectName, _this.subjectName) || other.subjectName == _this.subjectName)&&(identical(other.teacherName, _this.teacherName) || other.teacherName == _this.teacherName)&&(identical(other.topicTitle, _this.topicTitle) || other.topicTitle == _this.topicTitle)&&(identical(other.sessionTitle, _this.sessionTitle) || other.sessionTitle == _this.sessionTitle));
 }
 
 
 @override
 int get hashCode {
   final _this = this as OfflineVideo;
-  return Object.hash(runtimeType,_this.licenseId,_this.videoId,_this.title,_this.expiresAt,_this.downloadedAt,_this.sizeBytes,_this.durationSeconds);
+  return Object.hash(runtimeType,_this.licenseId,_this.videoId,_this.title,_this.expiresAt,_this.downloadedAt,_this.sizeBytes,_this.durationSeconds,_this.subjectName,_this.teacherName,_this.topicTitle,_this.sessionTitle);
 }
 
 @override
 String toString() {
   final _this = this as OfflineVideo;
-  return 'OfflineVideo(licenseId: ${_this.licenseId}, videoId: ${_this.videoId}, title: ${_this.title}, expiresAt: ${_this.expiresAt}, downloadedAt: ${_this.downloadedAt}, sizeBytes: ${_this.sizeBytes}, durationSeconds: ${_this.durationSeconds})';
+  return 'OfflineVideo(licenseId: ${_this.licenseId}, videoId: ${_this.videoId}, title: ${_this.title}, expiresAt: ${_this.expiresAt}, downloadedAt: ${_this.downloadedAt}, sizeBytes: ${_this.sizeBytes}, durationSeconds: ${_this.durationSeconds}, subjectName: ${_this.subjectName}, teacherName: ${_this.teacherName}, topicTitle: ${_this.topicTitle}, sessionTitle: ${_this.sessionTitle})';
 }
 
 
@@ -603,7 +600,7 @@ abstract mixin class $OfflineVideoCopyWith<$Res>  {
   factory $OfflineVideoCopyWith(OfflineVideo value, $Res Function(OfflineVideo) _then) = _$OfflineVideoCopyWithImpl;
 @useResult
 $Res call({
- String licenseId, String videoId, String title, DateTime expiresAt, DateTime downloadedAt, int sizeBytes, int? durationSeconds
+ String licenseId, String videoId, String title, DateTime expiresAt, DateTime downloadedAt, int sizeBytes, int? durationSeconds, String? subjectName, String? teacherName, String? topicTitle, String? sessionTitle
 });
 
 
@@ -620,7 +617,7 @@ class _$OfflineVideoCopyWithImpl<$Res>
 
 /// Create a copy of OfflineVideo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? licenseId = null,Object? videoId = null,Object? title = null,Object? expiresAt = null,Object? downloadedAt = null,Object? sizeBytes = null,Object? durationSeconds = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? licenseId = null,Object? videoId = null,Object? title = null,Object? expiresAt = null,Object? downloadedAt = null,Object? sizeBytes = null,Object? durationSeconds = freezed,Object? subjectName = freezed,Object? teacherName = freezed,Object? topicTitle = freezed,Object? sessionTitle = freezed,}) {
   return _then(OfflineVideo(
 licenseId: null == licenseId ? _self.licenseId : licenseId // ignore: cast_nullable_to_non_nullable
 as String,videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
@@ -629,7 +626,11 @@ as String,expiresAt: null == expiresAt ? _self.expiresAt : expiresAt // ignore: 
 as DateTime,downloadedAt: null == downloadedAt ? _self.downloadedAt : downloadedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,sizeBytes: null == sizeBytes ? _self.sizeBytes : sizeBytes // ignore: cast_nullable_to_non_nullable
 as int,durationSeconds: freezed == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,teacherName: freezed == teacherName ? _self.teacherName : teacherName // ignore: cast_nullable_to_non_nullable
+as String?,topicTitle: freezed == topicTitle ? _self.topicTitle : topicTitle // ignore: cast_nullable_to_non_nullable
+as String?,sessionTitle: freezed == sessionTitle ? _self.sessionTitle : sessionTitle // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -714,10 +715,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds,  String? subjectName,  String? teacherName,  String? topicTitle,  String? sessionTitle)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OfflineVideo() when $default != null:
-return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds);case _:
+return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds,_that.subjectName,_that.teacherName,_that.topicTitle,_that.sessionTitle);case _:
   return orElse();
 
 }
@@ -735,10 +736,10 @@ return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds,  String? subjectName,  String? teacherName,  String? topicTitle,  String? sessionTitle)  $default,) {final _that = this;
 switch (_that) {
 case _OfflineVideo():
-return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds);case _:
+return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds,_that.subjectName,_that.teacherName,_that.topicTitle,_that.sessionTitle);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -755,10 +756,10 @@ return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String licenseId,  String videoId,  String title,  DateTime expiresAt,  DateTime downloadedAt,  int sizeBytes,  int? durationSeconds,  String? subjectName,  String? teacherName,  String? topicTitle,  String? sessionTitle)?  $default,) {final _that = this;
 switch (_that) {
 case _OfflineVideo() when $default != null:
-return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds);case _:
+return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.downloadedAt,_that.sizeBytes,_that.durationSeconds,_that.subjectName,_that.teacherName,_that.topicTitle,_that.sessionTitle);case _:
   return null;
 
 }
@@ -770,7 +771,7 @@ return $default(_that.licenseId,_that.videoId,_that.title,_that.expiresAt,_that.
 
 
 class _OfflineVideo extends OfflineVideo {
-  const _OfflineVideo({required this.licenseId, required this.videoId, required this.title, required this.expiresAt, required this.downloadedAt, required this.sizeBytes, this.durationSeconds}): super._();
+  const _OfflineVideo({required this.licenseId, required this.videoId, required this.title, required this.expiresAt, required this.downloadedAt, required this.sizeBytes, this.durationSeconds, this.subjectName, this.teacherName, this.topicTitle, this.sessionTitle}): super._();
   
 
 @override final  String licenseId;
@@ -780,6 +781,10 @@ class _OfflineVideo extends OfflineVideo {
 @override final  DateTime downloadedAt;
 @override final  int sizeBytes;
 @override final  int? durationSeconds;
+@override final  String? subjectName;
+@override final  String? teacherName;
+@override final  String? topicTitle;
+@override final  String? sessionTitle;
 
 /// Create a copy of OfflineVideo
 /// with the given fields replaced by the non-null parameter values.
@@ -791,18 +796,18 @@ _$OfflineVideoCopyWith<_OfflineVideo> get copyWith => __$OfflineVideoCopyWithImp
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfflineVideo&&(identical(other.licenseId, licenseId) || other.licenseId == licenseId)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.expiresAt, expiresAt) || other.expiresAt == expiresAt)&&(identical(other.downloadedAt, downloadedAt) || other.downloadedAt == downloadedAt)&&(identical(other.sizeBytes, sizeBytes) || other.sizeBytes == sizeBytes)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfflineVideo&&(identical(other.licenseId, licenseId) || other.licenseId == licenseId)&&(identical(other.videoId, videoId) || other.videoId == videoId)&&(identical(other.title, title) || other.title == title)&&(identical(other.expiresAt, expiresAt) || other.expiresAt == expiresAt)&&(identical(other.downloadedAt, downloadedAt) || other.downloadedAt == downloadedAt)&&(identical(other.sizeBytes, sizeBytes) || other.sizeBytes == sizeBytes)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.subjectName, subjectName) || other.subjectName == subjectName)&&(identical(other.teacherName, teacherName) || other.teacherName == teacherName)&&(identical(other.topicTitle, topicTitle) || other.topicTitle == topicTitle)&&(identical(other.sessionTitle, sessionTitle) || other.sessionTitle == sessionTitle));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,licenseId,videoId,title,expiresAt,downloadedAt,sizeBytes,durationSeconds);
+    return Object.hash(runtimeType,licenseId,videoId,title,expiresAt,downloadedAt,sizeBytes,durationSeconds,subjectName,teacherName,topicTitle,sessionTitle);
 }
 
 @override
 String toString() {
-    return 'OfflineVideo(licenseId: $licenseId, videoId: $videoId, title: $title, expiresAt: $expiresAt, downloadedAt: $downloadedAt, sizeBytes: $sizeBytes, durationSeconds: $durationSeconds)';
+    return 'OfflineVideo(licenseId: $licenseId, videoId: $videoId, title: $title, expiresAt: $expiresAt, downloadedAt: $downloadedAt, sizeBytes: $sizeBytes, durationSeconds: $durationSeconds, subjectName: $subjectName, teacherName: $teacherName, topicTitle: $topicTitle, sessionTitle: $sessionTitle)';
 }
 
 
@@ -813,7 +818,7 @@ abstract mixin class _$OfflineVideoCopyWith<$Res> implements $OfflineVideoCopyWi
   factory _$OfflineVideoCopyWith(_OfflineVideo value, $Res Function(_OfflineVideo) _then) = __$OfflineVideoCopyWithImpl;
 @override @useResult
 $Res call({
- String licenseId, String videoId, String title, DateTime expiresAt, DateTime downloadedAt, int sizeBytes, int? durationSeconds
+ String licenseId, String videoId, String title, DateTime expiresAt, DateTime downloadedAt, int sizeBytes, int? durationSeconds, String? subjectName, String? teacherName, String? topicTitle, String? sessionTitle
 });
 
 
@@ -830,7 +835,7 @@ class __$OfflineVideoCopyWithImpl<$Res>
 
 /// Create a copy of OfflineVideo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? licenseId = null,Object? videoId = null,Object? title = null,Object? expiresAt = null,Object? downloadedAt = null,Object? sizeBytes = null,Object? durationSeconds = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? licenseId = null,Object? videoId = null,Object? title = null,Object? expiresAt = null,Object? downloadedAt = null,Object? sizeBytes = null,Object? durationSeconds = freezed,Object? subjectName = freezed,Object? teacherName = freezed,Object? topicTitle = freezed,Object? sessionTitle = freezed,}) {
   return _then(_OfflineVideo(
 licenseId: null == licenseId ? _self.licenseId : licenseId // ignore: cast_nullable_to_non_nullable
 as String,videoId: null == videoId ? _self.videoId : videoId // ignore: cast_nullable_to_non_nullable
@@ -839,7 +844,11 @@ as String,expiresAt: null == expiresAt ? _self.expiresAt : expiresAt // ignore: 
 as DateTime,downloadedAt: null == downloadedAt ? _self.downloadedAt : downloadedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,sizeBytes: null == sizeBytes ? _self.sizeBytes : sizeBytes // ignore: cast_nullable_to_non_nullable
 as int,durationSeconds: freezed == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,teacherName: freezed == teacherName ? _self.teacherName : teacherName // ignore: cast_nullable_to_non_nullable
+as String?,topicTitle: freezed == topicTitle ? _self.topicTitle : topicTitle // ignore: cast_nullable_to_non_nullable
+as String?,sessionTitle: freezed == sessionTitle ? _self.sessionTitle : sessionTitle // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

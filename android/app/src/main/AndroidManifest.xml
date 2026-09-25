@@ -2,11 +2,14 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- The video player keeps the screen on while a lesson plays. -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- Android 15+: know when the app is being screen-recorded, to stop the video. -->
+    <uses-permission android:name="android.permission.DETECT_SCREEN_RECORDING"/>
 
     <!--
       allowBackup / dataExtractionRules: app data (session, offline videos, their keys) is never
       copied into cloud or device-to-device backups, so offline copies cannot move to another phone.
       networkSecurityConfig: HTTPS only, except the private loopback server used for offline playback.
+      allowAudioPlaybackCapture=false: other apps (screen recorders) cannot capture the app's sound.
     -->
     <application
         android:label="@string/app_name"
@@ -15,7 +18,8 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:allowAudioPlaybackCapture="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"

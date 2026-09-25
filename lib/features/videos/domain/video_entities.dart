@@ -17,7 +17,6 @@ abstract class PlaybackGrant with _$PlaybackGrant {
     required Uri manifestUrl,
     required DateTime expiresAt,
     int? durationSeconds,
-    String? watermarkText,
   }) = _PlaybackGrant;
 }
 
@@ -32,6 +31,12 @@ abstract class OfflineVideo with _$OfflineVideo {
     required DateTime downloadedAt,
     required int sizeBytes,
     int? durationSeconds,
+    // Where the video lives, so downloads stay organized as in the app:
+    // subject › teacher › lesson › session.
+    String? subjectName,
+    String? teacherName,
+    String? topicTitle,
+    String? sessionTitle,
   }) = _OfflineVideo;
 
   const OfflineVideo._();

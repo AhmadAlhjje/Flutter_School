@@ -288,7 +288,7 @@ as String?,
 /// @nodoc
 mixin _$PublicConfig {
 
- String get instituteName; bool get selfRegistration;
+ String get instituteName; bool get selfRegistration; String? get institutePhone;
 /// Create a copy of PublicConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,20 +300,20 @@ $PublicConfigCopyWith<PublicConfig> get copyWith => _$PublicConfigCopyWithImpl<P
 @override
 bool operator ==(Object other) {
   final _this = this as PublicConfig;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublicConfig&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.selfRegistration, _this.selfRegistration) || other.selfRegistration == _this.selfRegistration));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublicConfig&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.selfRegistration, _this.selfRegistration) || other.selfRegistration == _this.selfRegistration)&&(identical(other.institutePhone, _this.institutePhone) || other.institutePhone == _this.institutePhone));
 }
 
 
 @override
 int get hashCode {
   final _this = this as PublicConfig;
-  return Object.hash(runtimeType,_this.instituteName,_this.selfRegistration);
+  return Object.hash(runtimeType,_this.instituteName,_this.selfRegistration,_this.institutePhone);
 }
 
 @override
 String toString() {
   final _this = this as PublicConfig;
-  return 'PublicConfig(instituteName: ${_this.instituteName}, selfRegistration: ${_this.selfRegistration})';
+  return 'PublicConfig(instituteName: ${_this.instituteName}, selfRegistration: ${_this.selfRegistration}, institutePhone: ${_this.institutePhone})';
 }
 
 
@@ -324,7 +324,7 @@ abstract mixin class $PublicConfigCopyWith<$Res>  {
   factory $PublicConfigCopyWith(PublicConfig value, $Res Function(PublicConfig) _then) = _$PublicConfigCopyWithImpl;
 @useResult
 $Res call({
- String instituteName, bool selfRegistration
+ String instituteName, bool selfRegistration, String? institutePhone
 });
 
 
@@ -341,11 +341,12 @@ class _$PublicConfigCopyWithImpl<$Res>
 
 /// Create a copy of PublicConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? instituteName = null,Object? selfRegistration = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? instituteName = null,Object? selfRegistration = null,Object? institutePhone = freezed,}) {
   return _then(PublicConfig(
 instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,selfRegistration: null == selfRegistration ? _self.selfRegistration : selfRegistration // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,institutePhone: freezed == institutePhone ? _self.institutePhone : institutePhone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -430,10 +431,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String instituteName,  bool selfRegistration)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String instituteName,  bool selfRegistration,  String? institutePhone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PublicConfig() when $default != null:
-return $default(_that.instituteName,_that.selfRegistration);case _:
+return $default(_that.instituteName,_that.selfRegistration,_that.institutePhone);case _:
   return orElse();
 
 }
@@ -451,10 +452,10 @@ return $default(_that.instituteName,_that.selfRegistration);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String instituteName,  bool selfRegistration)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String instituteName,  bool selfRegistration,  String? institutePhone)  $default,) {final _that = this;
 switch (_that) {
 case _PublicConfig():
-return $default(_that.instituteName,_that.selfRegistration);case _:
+return $default(_that.instituteName,_that.selfRegistration,_that.institutePhone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -471,10 +472,10 @@ return $default(_that.instituteName,_that.selfRegistration);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String instituteName,  bool selfRegistration)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String instituteName,  bool selfRegistration,  String? institutePhone)?  $default,) {final _that = this;
 switch (_that) {
 case _PublicConfig() when $default != null:
-return $default(_that.instituteName,_that.selfRegistration);case _:
+return $default(_that.instituteName,_that.selfRegistration,_that.institutePhone);case _:
   return null;
 
 }
@@ -486,11 +487,12 @@ return $default(_that.instituteName,_that.selfRegistration);case _:
 
 
 class _PublicConfig implements PublicConfig {
-  const _PublicConfig({required this.instituteName, required this.selfRegistration});
+  const _PublicConfig({required this.instituteName, required this.selfRegistration, this.institutePhone});
   
 
 @override final  String instituteName;
 @override final  bool selfRegistration;
+@override final  String? institutePhone;
 
 /// Create a copy of PublicConfig
 /// with the given fields replaced by the non-null parameter values.
@@ -502,18 +504,18 @@ _$PublicConfigCopyWith<_PublicConfig> get copyWith => __$PublicConfigCopyWithImp
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublicConfig&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.selfRegistration, selfRegistration) || other.selfRegistration == selfRegistration));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublicConfig&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.selfRegistration, selfRegistration) || other.selfRegistration == selfRegistration)&&(identical(other.institutePhone, institutePhone) || other.institutePhone == institutePhone));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,instituteName,selfRegistration);
+    return Object.hash(runtimeType,instituteName,selfRegistration,institutePhone);
 }
 
 @override
 String toString() {
-    return 'PublicConfig(instituteName: $instituteName, selfRegistration: $selfRegistration)';
+    return 'PublicConfig(instituteName: $instituteName, selfRegistration: $selfRegistration, institutePhone: $institutePhone)';
 }
 
 
@@ -524,7 +526,7 @@ abstract mixin class _$PublicConfigCopyWith<$Res> implements $PublicConfigCopyWi
   factory _$PublicConfigCopyWith(_PublicConfig value, $Res Function(_PublicConfig) _then) = __$PublicConfigCopyWithImpl;
 @override @useResult
 $Res call({
- String instituteName, bool selfRegistration
+ String instituteName, bool selfRegistration, String? institutePhone
 });
 
 
@@ -541,11 +543,12 @@ class __$PublicConfigCopyWithImpl<$Res>
 
 /// Create a copy of PublicConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? instituteName = null,Object? selfRegistration = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? instituteName = null,Object? selfRegistration = null,Object? institutePhone = freezed,}) {
   return _then(_PublicConfig(
 instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,selfRegistration: null == selfRegistration ? _self.selfRegistration : selfRegistration // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,institutePhone: freezed == institutePhone ? _self.institutePhone : institutePhone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

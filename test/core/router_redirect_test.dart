@@ -31,7 +31,7 @@ void main() {
 
     test('a disabled account is always sent to the disabled screen', () {
       const state = AuthAccountDisabled();
-      expect(redirectFor(state, Routes.downloads), Routes.accountDisabled);
+      expect(redirectFor(state, Routes.profile), Routes.accountDisabled);
       expect(redirectFor(state, Routes.accountDisabled), isNull);
     });
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/l10n/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
 
-/// A tappable row for catalog items (subject, teacher, lesson, session...). Locked items are
-/// shown — the student can see them — but with a lock and muted styling (spec §30).
+/// A tappable row for catalog items (teacher, lesson, session, file...). Locked items stay
+/// visible, muted, with a lock and a one-line explanation of how to get access.
 class ContentTile extends StatelessWidget {
   const ContentTile({
     super.key,
@@ -26,29 +26,21 @@ class ContentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final detail = locked ? l10n.lockedHint : subtitle;
     return Semantics(
       button: onTap != null,
       label: locked ? '$title، ${l10n.locked}' : title,
       excludeSemantics: true,
       child: Card(
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            padding: const EdgeInsetsDirectional.fromSTEB(14, 14, 10, 14),
             child: Row(
               children: [
-                leading ??
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: locked ? AppColors.muted : AppColors.primarySoft,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(icon, color: locked ? AppColors.secondary : AppColors.primary),
-                    ),
-                const SizedBox(width: 12),
+                leading ?? IconBox(icon: locked ? Icons.lock_rounded : icon, muted: locked),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,26 +51,87 @@ class ContentTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 15,
+                          fontSize: 16,
                           color: locked ? AppColors.secondary : AppColors.text,
                         ),
                       ),
-                      if (subtitle != null) ...[
+                      if (detail != null) ...[
                         const SizedBox(height: 2),
-                        Text(subtitle!, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
+                        Text(detail, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
                       ],
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                if (locked)
-                  const LockBadge()
-                else
-                  const Icon(Icons.chevron_right_rounded, color: AppColors.secondary, textDirection: TextDirection.ltr),
+                if (locked) const LockBadge() else const ForwardArrow(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Rounded square with an icon, used at the start of rows.
+class IconBox extends StatelessWidget {
+  const IconBox({super.key, required this.icon, this.muted = false, this.size = 48});
+
+  final IconData icon;
+  final bool muted;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: muted ? AppColors.muted : AppColors.primarySoft,
+        borderRadius: BorderRadius.circular(size * 0.3),
+      ),
+      child: Icon(icon, color: muted ? AppColors.secondary : AppColors.primary, size: size * 0.5),
+    );
+  }
+}
+
+/// Position of a lesson or session (1, 2, 3...), so the order to follow is obvious.
+class NumberBadge extends StatelessWidget {
+  const NumberBadge(this.number, {super.key});
+
+  final int number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      height: 48,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: AppColors.primarySoft, borderRadius: BorderRadius.circular(14)),
+      child: Text(
+        '$number',
+        style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 18),
+      ),
+    );
+  }
+}
+
+/// "Open" arrow pointing forward in the reading direction (left in Arabic, right in English).
+class ForwardArrow extends StatelessWidget {
+  const ForwardArrow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: const BoxDecoration(color: AppColors.muted, shape: BoxShape.circle),
+      child: Icon(
+        rtl ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
+        textDirection: TextDirection.ltr,
+        color: AppColors.secondary,
+        size: 22,
       ),
     );
   }
@@ -125,6 +178,30 @@ class SectionTitle extends StatelessWidget {
           ?trailing,
         ],
       ),
+    );
+  }
+}
+
+/// A one-line "what to do here" hint shown above a list.
+class HintLine extends StatelessWidget {
+  const HintLine(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 2),
+          child: Icon(Icons.touch_app_outlined, size: 18, color: AppColors.primary),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(text, style: const TextStyle(color: AppColors.secondary, fontSize: 13, height: 1.5)),
+        ),
+      ],
     );
   }
 }

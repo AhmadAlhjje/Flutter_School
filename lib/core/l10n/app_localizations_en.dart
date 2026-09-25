@@ -28,9 +28,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get confirm => 'Confirm';
-
-  @override
   String get errorLoading => 'Something went wrong while loading';
 
   @override
@@ -111,9 +108,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAccount => 'No account yet?';
 
   @override
-  String get createAccount => 'Create account';
-
-  @override
   String get registerTitle => 'Create a new account';
 
   @override
@@ -161,30 +155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get yourSubjects => 'Your subjects';
-
-  @override
-  String get browseGrades => 'Browse grades';
-
-  @override
-  String get noSubjects => 'No subjects yet';
-
-  @override
   String get grades => 'Grades';
-
-  @override
-  String get noGrades => 'No grades';
-
-  @override
-  String subjectsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count subjects',
-      one: '1 subject',
-    );
-    return '$_temp0';
-  }
 
   @override
   String teachersCount(int count) {
@@ -261,9 +232,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTeachers => 'No teachers in this subject';
 
   @override
-  String get subjectFiles => 'Subject files';
-
-  @override
   String teacherTitle(String name) {
     return 'Teacher $name';
   }
@@ -275,16 +243,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noLessons => 'No lessons yet';
 
   @override
-  String get teacherFiles => 'Teacher files';
-
-  @override
   String get sessions => 'Sessions';
 
   @override
   String get noSessions => 'No sessions yet';
-
-  @override
-  String get topicFiles => 'Lesson files';
 
   @override
   String get videos => 'Videos';
@@ -293,14 +255,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get files => 'Files';
 
   @override
-  String get noSessionContent => 'No content in this session yet';
-
-  @override
   String get playerError => 'Could not play the video';
 
   @override
   String get captureBlocked =>
-      'The video cannot be shown while the screen is being recorded or shared';
+      'The video cannot play while the screen is being recorded. Stop recording to continue.';
 
   @override
   String get downloadOffline => 'Download for offline viewing';
@@ -318,9 +277,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteDownload => 'Delete download';
-
-  @override
-  String get downloads => 'Downloads';
 
   @override
   String get noDownloads => 'No downloads';
@@ -366,17 +322,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get english => 'English';
-
-  @override
-  String get linkedDevice => 'Linked device';
-
-  @override
-  String linkedSince(String date) {
-    return 'Linked since $date';
-  }
-
-  @override
-  String get openedContent => 'Unlocked content';
 
   @override
   String get notifications => 'Notifications';
@@ -437,22 +382,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'This video will be removed from your device. You can download it again later.';
 
   @override
-  String get downloadsInProgress => 'In progress';
-
-  @override
-  String get downloadsNote =>
-      'Downloaded videos are encrypted and only play inside this app on this device.';
-
-  @override
-  String get playOffline => 'Play';
-
-  @override
   String appVersion(String version) {
     return 'Version $version';
   }
-
-  @override
-  String get noLinkedDevice => 'No linked device';
 
   @override
   String get passwordChangeNote =>
@@ -477,4 +409,84 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get screenshotDetected =>
       'Screenshot detected. This content is protected and linked to your account.';
+
+  @override
+  String get noVideos => 'No videos yet';
+
+  @override
+  String get noFiles => 'No files';
+
+  @override
+  String get downloadedOnDevice => 'On this device';
+
+  @override
+  String get offlineTitle => 'You\'re offline';
+
+  @override
+  String get offlineBody =>
+      'You can watch the videos downloaded on this device';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navAccount => 'My account';
+
+  @override
+  String get homeSubtitle => 'Choose a subject to study';
+
+  @override
+  String get mySubjects => 'My subjects';
+
+  @override
+  String get otherSubjects => 'Other subjects';
+
+  @override
+  String get otherSubjectsHint =>
+      'These subjects are locked for now; contact the institute to open them';
+
+  @override
+  String get noSubjectsTitle =>
+      'Your account is ready! No subjects are open yet';
+
+  @override
+  String get noSubjectsBody =>
+      'As soon as the institute opens subjects for your account, they appear here.';
+
+  @override
+  String contactInstitute(String phone) {
+    return 'Contact the institute: $phone';
+  }
+
+  @override
+  String get lockedHint => 'Locked — contact the institute to open it';
+
+  @override
+  String get hintChooseTeacher => 'Choose a teacher to see their lessons';
+
+  @override
+  String get hintChooseLesson => 'Choose a lesson';
+
+  @override
+  String get hintChooseSession =>
+      'Choose a session to see its videos and files';
+
+  @override
+  String get hintVideos =>
+      'Tap a video to watch it, or \"Download\" to watch it later without internet';
+
+  @override
+  String get hintFiles => 'Tap a file to open it';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get downloadedShort => 'Saved';
+
+  @override
+  String get retryShort => 'Retry';
+
+  @override
+  String get createAccountButton => 'Create a new account';
 }

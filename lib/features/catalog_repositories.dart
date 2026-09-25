@@ -4,8 +4,6 @@ import '../core/network/api_client.dart';
 import '../core/network/network_providers.dart';
 import 'files/data/files_repository_impl.dart';
 import 'files/domain/file_entities.dart';
-import 'grades/data/grades_repository_impl.dart';
-import 'grades/domain/grade_entities.dart';
 import 'home/data/home_repository_impl.dart';
 import 'home/domain/home_entities.dart';
 import 'notifications/data/notifications_repository_impl.dart';
@@ -30,7 +28,6 @@ import 'videos/domain/video_entities.dart';
 ApiClient _api(Ref ref) => ref.watch(apiClientProvider);
 
 final homeRepositoryProvider = Provider<HomeRepository>((ref) => HomeRepositoryImpl(_api(ref)));
-final gradesRepositoryProvider = Provider<GradesRepository>((ref) => GradesRepositoryImpl(_api(ref)));
 final subjectsRepositoryProvider = Provider<SubjectsRepository>((ref) => SubjectsRepositoryImpl(_api(ref)));
 final teachersRepositoryProvider = Provider<TeachersRepository>((ref) => TeachersRepositoryImpl(_api(ref)));
 final topicsRepositoryProvider = Provider<TopicsRepository>((ref) => TopicsRepositoryImpl(_api(ref)));

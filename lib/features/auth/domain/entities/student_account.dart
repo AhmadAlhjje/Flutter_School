@@ -12,5 +12,6 @@ abstract class StudentAccount with _$StudentAccount {
 /// Public institute configuration shown before sign-in.
 @freezed
 abstract class PublicConfig with _$PublicConfig {
-  const factory PublicConfig({required String instituteName, required bool selfRegistration}) = _PublicConfig;
+  const factory PublicConfig({required String instituteName, required bool selfRegistration, String? institutePhone}) =
+      _PublicConfig;
 }

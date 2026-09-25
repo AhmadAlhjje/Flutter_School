@@ -8,8 +8,8 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/device/presentation/blocked_pages.dart';
 import '../../features/files/presentation/file_viewer_page.dart';
-import '../../features/grades/presentation/grades_pages.dart';
 import '../../features/home/presentation/home_page.dart';
+import '../../features/home/presentation/main_shell.dart';
 import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/profile/presentation/profile_pages.dart';
 import '../../features/search/presentation/search_page.dart';
@@ -17,7 +17,6 @@ import '../../features/sessions/presentation/session_page.dart';
 import '../../features/subjects/presentation/subject_page.dart';
 import '../../features/teachers/presentation/teacher_page.dart';
 import '../../features/topics/presentation/topic_page.dart';
-import '../../features/videos/presentation/downloads_page.dart';
 import '../../features/videos/presentation/video_player_page.dart';
 import '../../shared/widgets/locked_content.dart';
 import 'routes.dart';
@@ -54,12 +53,27 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.register, builder: (_, _) => const RegisterPage()),
       GoRoute(path: Routes.deviceError, builder: (_, _) => const DeviceErrorPage()),
       GoRoute(path: Routes.accountDisabled, builder: (_, _) => const AccountDisabledPage()),
-      GoRoute(path: Routes.home, builder: (_, _) => const HomePage()),
-      GoRoute(path: Routes.grades, builder: (_, _) => const GradesPage()),
-      GoRoute(
-        path: '/grades/:gradeId',
-        builder: (_, state) => GradeSubjectsPage(gradeId: state.pathParameters['gradeId']!),
+
+      // The four tabs of the bottom bar; each keeps its own state.
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => MainShell(shell: shell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.home, builder: (_, _) => const HomePage())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.search, builder: (_, _) => const SearchPage())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.notifications, builder: (_, _) => const NotificationsPage())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.profile, builder: (_, _) => const ProfilePage())],
+          ),
+        ],
       ),
+
+      // Screens opened from the tabs (shown above the bottom bar).
       GoRoute(
         path: '/subjects/:subjectId',
         builder: (_, state) => SubjectPage(subjectId: state.pathParameters['subjectId']!),
@@ -80,9 +94,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/player/:videoId',
         builder: (_, state) => VideoPlayerPage.online(videoId: state.pathParameters['videoId']!),
       ),
-      GoRoute(path: Routes.downloads, builder: (_, _) => const DownloadsPage()),
       GoRoute(
-        path: '/downloads/:licenseId/play',
+        path: '/offline/:licenseId',
         builder: (_, state) => VideoPlayerPage.offline(licenseId: state.pathParameters['licenseId']!),
       ),
       GoRoute(
@@ -90,10 +103,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             FileViewerPage(fileId: state.pathParameters['fileId']!, title: state.uri.queryParameters['title']),
       ),
-      GoRoute(path: Routes.profile, builder: (_, _) => const ProfilePage()),
       GoRoute(path: Routes.changePassword, builder: (_, _) => const ChangePasswordPage()),
-      GoRoute(path: Routes.notifications, builder: (_, _) => const NotificationsPage()),
-      GoRoute(path: Routes.search, builder: (_, _) => const SearchPage()),
       GoRoute(
         path: Routes.locked,
         builder: (_, state) => LockedContentPage(title: state.uri.queryParameters['title']),

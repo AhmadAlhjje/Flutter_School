@@ -134,12 +134,6 @@ abstract class AppLocalizations {
   /// **'إغلاق'**
   String get close;
 
-  /// No description provided for @confirm.
-  ///
-  /// In ar, this message translates to:
-  /// **'تأكيد'**
-  String get confirm;
-
   /// No description provided for @errorLoading.
   ///
   /// In ar, this message translates to:
@@ -290,12 +284,6 @@ abstract class AppLocalizations {
   /// **'ليس لديك حساب؟'**
   String get noAccount;
 
-  /// No description provided for @createAccount.
-  ///
-  /// In ar, this message translates to:
-  /// **'إنشاء حساب'**
-  String get createAccount;
-
   /// No description provided for @registerTitle.
   ///
   /// In ar, this message translates to:
@@ -380,41 +368,11 @@ abstract class AppLocalizations {
   /// **'مرحباً {name} 👋'**
   String helloName(String name);
 
-  /// No description provided for @yourSubjects.
-  ///
-  /// In ar, this message translates to:
-  /// **'موادك'**
-  String get yourSubjects;
-
-  /// No description provided for @browseGrades.
-  ///
-  /// In ar, this message translates to:
-  /// **'تصفح الصفوف'**
-  String get browseGrades;
-
-  /// No description provided for @noSubjects.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا توجد مواد بعد'**
-  String get noSubjects;
-
   /// No description provided for @grades.
   ///
   /// In ar, this message translates to:
   /// **'الصفوف'**
   String get grades;
-
-  /// No description provided for @noGrades.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا توجد صفوف'**
-  String get noGrades;
-
-  /// No description provided for @subjectsCount.
-  ///
-  /// In ar, this message translates to:
-  /// **'{count, plural, =0{لا مواد} =1{مادة واحدة} =2{مادتان} few{{count} مواد} many{{count} مادة} other{{count} مادة}}'**
-  String subjectsCount(int count);
 
   /// No description provided for @teachersCount.
   ///
@@ -473,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @teachers.
   ///
   /// In ar, this message translates to:
-  /// **'المدرسون'**
+  /// **'المدرسين'**
   String get teachers;
 
   /// No description provided for @noTeachers.
@@ -481,12 +439,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا يوجد مدرسون في هذه المادة'**
   String get noTeachers;
-
-  /// No description provided for @subjectFiles.
-  ///
-  /// In ar, this message translates to:
-  /// **'ملفات المادة'**
-  String get subjectFiles;
 
   /// No description provided for @teacherTitle.
   ///
@@ -506,12 +458,6 @@ abstract class AppLocalizations {
   /// **'لا توجد دروس بعد'**
   String get noLessons;
 
-  /// No description provided for @teacherFiles.
-  ///
-  /// In ar, this message translates to:
-  /// **'ملفات المدرس'**
-  String get teacherFiles;
-
   /// No description provided for @sessions.
   ///
   /// In ar, this message translates to:
@@ -523,12 +469,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد جلسات بعد'**
   String get noSessions;
-
-  /// No description provided for @topicFiles.
-  ///
-  /// In ar, this message translates to:
-  /// **'ملفات الدرس'**
-  String get topicFiles;
 
   /// No description provided for @videos.
   ///
@@ -542,12 +482,6 @@ abstract class AppLocalizations {
   /// **'الملفات'**
   String get files;
 
-  /// No description provided for @noSessionContent.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا يوجد محتوى في هذه الجلسة بعد'**
-  String get noSessionContent;
-
   /// No description provided for @playerError.
   ///
   /// In ar, this message translates to:
@@ -557,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @captureBlocked.
   ///
   /// In ar, this message translates to:
-  /// **'لا يمكن عرض الفيديو أثناء تسجيل الشاشة أو مشاركتها'**
+  /// **'لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.'**
   String get captureBlocked;
 
   /// No description provided for @downloadOffline.
@@ -589,12 +523,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف التحميل'**
   String get deleteDownload;
-
-  /// No description provided for @downloads.
-  ///
-  /// In ar, this message translates to:
-  /// **'التحميلات'**
-  String get downloads;
 
   /// No description provided for @noDownloads.
   ///
@@ -680,24 +608,6 @@ abstract class AppLocalizations {
   /// **'English'**
   String get english;
 
-  /// No description provided for @linkedDevice.
-  ///
-  /// In ar, this message translates to:
-  /// **'الجهاز المرتبط'**
-  String get linkedDevice;
-
-  /// No description provided for @linkedSince.
-  ///
-  /// In ar, this message translates to:
-  /// **'مرتبط منذ {date}'**
-  String linkedSince(String date);
-
-  /// No description provided for @openedContent.
-  ///
-  /// In ar, this message translates to:
-  /// **'المحتوى المفتوح'**
-  String get openedContent;
-
   /// No description provided for @notifications.
   ///
   /// In ar, this message translates to:
@@ -749,7 +659,7 @@ abstract class AppLocalizations {
   /// No description provided for @searchTeachers.
   ///
   /// In ar, this message translates to:
-  /// **'المدرسون'**
+  /// **'المدرسين'**
   String get searchTeachers;
 
   /// No description provided for @searchLessons.
@@ -812,35 +722,11 @@ abstract class AppLocalizations {
   /// **'سيتم حذف هذا الفيديو من جهازك. يمكنك تحميله مجدداً لاحقاً.'**
   String get deleteDownloadConfirm;
 
-  /// No description provided for @downloadsInProgress.
-  ///
-  /// In ar, this message translates to:
-  /// **'قيد التحميل'**
-  String get downloadsInProgress;
-
-  /// No description provided for @downloadsNote.
-  ///
-  /// In ar, this message translates to:
-  /// **'الفيديوهات المحملة مشفرة ولا تعمل إلا داخل التطبيق وعلى هذا الجهاز.'**
-  String get downloadsNote;
-
-  /// No description provided for @playOffline.
-  ///
-  /// In ar, this message translates to:
-  /// **'تشغيل'**
-  String get playOffline;
-
   /// No description provided for @appVersion.
   ///
   /// In ar, this message translates to:
   /// **'الإصدار {version}'**
   String appVersion(String version);
-
-  /// No description provided for @noLinkedDevice.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا يوجد جهاز مرتبط'**
-  String get noLinkedDevice;
 
   /// No description provided for @passwordChangeNote.
   ///
@@ -883,6 +769,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.'**
   String get screenshotDetected;
+
+  /// No description provided for @noVideos.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فيديوهات بعد'**
+  String get noVideos;
+
+  /// No description provided for @noFiles.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ملفات'**
+  String get noFiles;
+
+  /// No description provided for @downloadedOnDevice.
+  ///
+  /// In ar, this message translates to:
+  /// **'على الجهاز'**
+  String get downloadedOnDevice;
+
+  /// No description provided for @offlineTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت غير متصل بالإنترنت'**
+  String get offlineTitle;
+
+  /// No description provided for @offlineBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك مشاهدة الفيديوهات المحمّلة على جهازك'**
+  String get offlineBody;
+
+  /// No description provided for @navHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get navHome;
+
+  /// No description provided for @navAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get navAccount;
+
+  /// No description provided for @homeSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المادة التي تريد دراستها'**
+  String get homeSubtitle;
+
+  /// No description provided for @mySubjects.
+  ///
+  /// In ar, this message translates to:
+  /// **'موادي'**
+  String get mySubjects;
+
+  /// No description provided for @otherSubjects.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواد أخرى'**
+  String get otherSubjects;
+
+  /// No description provided for @otherSubjectsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه المواد مقفلة حالياً، تواصل مع إدارة المعهد لفتحها'**
+  String get otherSubjectsHint;
+
+  /// No description provided for @noSubjectsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابك جاهز! لا توجد مواد مفتوحة لك بعد'**
+  String get noSubjectsTitle;
+
+  /// No description provided for @noSubjectsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.'**
+  String get noSubjectsBody;
+
+  /// No description provided for @contactInstitute.
+  ///
+  /// In ar, this message translates to:
+  /// **'للتواصل مع المعهد: {phone}'**
+  String contactInstitute(String phone);
+
+  /// No description provided for @lockedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقفل — تواصل مع إدارة المعهد لفتحه'**
+  String get lockedHint;
+
+  /// No description provided for @hintChooseTeacher.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المدرس لمشاهدة دروسه'**
+  String get hintChooseTeacher;
+
+  /// No description provided for @hintChooseLesson.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الدرس'**
+  String get hintChooseLesson;
+
+  /// No description provided for @hintChooseSession.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الجلسة لمشاهدة فيديوهاتها وملفاتها'**
+  String get hintChooseSession;
+
+  /// No description provided for @hintVideos.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الفيديو لمشاهدته، أو على «تحميل» لمشاهدته لاحقاً بدون إنترنت'**
+  String get hintVideos;
+
+  /// No description provided for @hintFiles.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الملف لفتحه'**
+  String get hintFiles;
+
+  /// No description provided for @download.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل'**
+  String get download;
+
+  /// No description provided for @downloadedShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'محمّل'**
+  String get downloadedShort;
+
+  /// No description provided for @retryShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة'**
+  String get retryShort;
+
+  /// No description provided for @createAccountButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب جديد'**
+  String get createAccountButton;
 }
 
 class _AppLocalizationsDelegate

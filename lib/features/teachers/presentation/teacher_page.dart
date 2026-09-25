@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/router/routes.dart';
+import '../../../shared/widgets/content_tabs.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../../../shared/widgets/locked_content.dart';
 import '../../../shared/widgets/page_header.dart';
@@ -24,40 +25,44 @@ class TeacherPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final space = ref.watch(teacherSpaceProvider(subjectTeacherId));
-    final name = space.value?.teacherName;
     return Scaffold(
-      appBar: AppBar(title: Text(name == null ? '' : l10n.teacherTitle(name))),
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(teacherSpaceProvider(subjectTeacherId).future),
-        child: AsyncValueView<TeacherSpace>(
-          value: space,
-          onRetry: () => ref.invalidate(teacherSpaceProvider(subjectTeacherId)),
-          onLocked: () => const LockedContentView(),
-          data: (data) => ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            children: [
-              PageHeader(
-                leading: TeacherAvatar(name: data.teacherName, imagePath: data.imagePath, size: 56),
-                caption: data.subjectName,
-                title: l10n.teacherTitle(data.teacherName),
-                description: data.description,
-              ),
-              SectionTitle(l10n.lessons),
-              if (data.topics.isEmpty)
-                EmptyView(message: l10n.noLessons, icon: Icons.menu_book_outlined)
-              else
-                for (final topic in data.topics) ...[
+      appBar: detailAppBar(),
+      body: AsyncValueView<TeacherSpace>(
+        value: space,
+        onRetry: () => ref.invalidate(teacherSpaceProvider(subjectTeacherId)),
+        onLocked: () => const LockedContentView(),
+        data: (data) => TabbedContent(
+          onRefresh: () => ref.refresh(teacherSpaceProvider(subjectTeacherId).future),
+          header: PageHeader(
+            leading: TeacherAvatar(name: data.teacherName, imagePath: data.imagePath, size: 56),
+            caption: data.subjectName,
+            title: l10n.teacherTitle(data.teacherName),
+            description: data.description,
+          ),
+          tabs: [
+            ContentTab(
+              label: l10n.lessons,
+              hint: l10n.hintChooseLesson,
+              emptyMessage: l10n.noLessons,
+              emptyIcon: Icons.menu_book_outlined,
+              items: [
+                for (final (index, topic) in data.topics.indexed)
                   ContentTile(
                     title: topic.title,
                     subtitle: l10n.sessionsCount(topic.sessionsCount),
-                    icon: Icons.bookmark_outline_rounded,
+                    leading: NumberBadge(index + 1),
                     onTap: () => context.push(Routes.topic(topic.id)),
                   ),
-                  const SizedBox(height: 10),
-                ],
-              FileSection(title: l10n.teacherFiles, files: data.files),
-            ],
-          ),
+              ],
+            ),
+            if (data.files.isNotEmpty)
+              ContentTab(
+                label: l10n.files,
+                hint: l10n.hintFiles,
+                emptyMessage: l10n.noFiles,
+                items: [for (final file in data.files) FileTile(file: file)],
+              ),
+          ],
         ),
       ),
     );

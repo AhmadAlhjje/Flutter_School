@@ -20,7 +20,7 @@ import 'local_hls_server.dart';
 /// ```text
 /// offline/{accountId}/{licenseId}/index.m3u8   playlist rewritten for loopback playback
 /// offline/{accountId}/{licenseId}/seg_*.ts     segments exactly as served: AES-128 encrypted
-/// offline/{accountId}/{licenseId}/meta.json    title, expiry, size
+/// offline/{accountId}/{licenseId}/meta.json    title, expiry, size, subject › teacher › lesson › session
 /// ```
 /// The AES key is kept only in the Keychain/Keystore (`offline.key.{licenseId}`).
 /// Bound to the device (license issued to it, key in its keystore), to the account
@@ -114,6 +114,10 @@ class OfflineDownloadsImpl implements OfflineDownloads {
         downloadedAt: DateTime.now(),
         sizeBytes: size,
         durationSeconds: license.durationSeconds,
+        subjectName: license.path['subject'],
+        teacherName: license.path['teacher'],
+        topicTitle: license.path['topic'],
+        sessionTitle: license.path['session'],
       );
       await File('${dir.path}/meta.json').writeAsString(jsonEncode(_toMeta(video)));
       return video;
@@ -185,6 +189,10 @@ class OfflineDownloadsImpl implements OfflineDownloads {
     'downloadedAt': video.downloadedAt.toIso8601String(),
     'sizeBytes': video.sizeBytes,
     'durationSeconds': video.durationSeconds,
+    'subjectName': video.subjectName,
+    'teacherName': video.teacherName,
+    'topicTitle': video.topicTitle,
+    'sessionTitle': video.sessionTitle,
   };
 
   OfflineVideo _fromMeta(Map<String, dynamic> json) => OfflineVideo(
@@ -195,5 +203,9 @@ class OfflineDownloadsImpl implements OfflineDownloads {
     downloadedAt: DateTime.parse(json['downloadedAt'] as String),
     sizeBytes: (json['sizeBytes'] as num).toInt(),
     durationSeconds: (json['durationSeconds'] as num?)?.toInt(),
+    subjectName: json['subjectName'] as String?,
+    teacherName: json['teacherName'] as String?,
+    topicTitle: json['topicTitle'] as String?,
+    sessionTitle: json['sessionTitle'] as String?,
   );
 }

@@ -4,92 +4,108 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/content_tile.dart';
 import '../domain/subject_entities.dart';
 
-/// Grid of subject cards (home and grade screens).
-class SubjectGrid extends StatelessWidget {
-  const SubjectGrid({super.key, required this.subjects});
-
-  final List<SubjectCard> subjects;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: subjects.length,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 220,
-        mainAxisExtent: 128,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemBuilder: (context, index) => SubjectCardTile(subject: subjects[index]),
-    );
-  }
-}
-
-/// A subject card. Locked subjects stay visible and open their page (which lists the teachers
-/// with their own locks); the server refuses any locked content regardless.
+/// A subject as a full-width card: big icon, name, and either its teachers count (open) or how
+/// to get access (locked). Locked subjects still open, to show their teachers with locks.
 class SubjectCardTile extends StatelessWidget {
-  const SubjectCardTile({super.key, required this.subject});
+  const SubjectCardTile({super.key, required this.subject, this.showGrade = false});
 
   final SubjectCard subject;
+
+  /// Adds the grade name, only to tell apart two subjects with the same name.
+  final bool showGrade;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final locked = subject.locked;
+    final detail = [
+      if (showGrade) subject.gradeName,
+      locked ? l10n.lockedHint : l10n.teachersCount(subject.teachersCount),
+    ].join(' · ');
     return Semantics(
       button: true,
       label: locked ? '${subject.name}، ${l10n.locked}' : subject.name,
       excludeSemantics: true,
       child: Card(
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           onTap: () => context.push(Routes.subject(subject.id)),
           child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsetsDirectional.fromSTEB(14, 16, 12, 16),
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: locked ? AppColors.muted : AppColors.primarySoft,
-                      child: Icon(
-                        locked ? Icons.lock_rounded : Icons.menu_book_rounded,
-                        size: 18,
-                        color: locked ? AppColors.secondary : AppColors.primary,
-                      ),
-                    ),
-                    const Spacer(),
-                    if (!locked) const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 20),
-                  ],
-                ),
-                const Spacer(),
-                Text(
-                  subject.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: locked ? AppColors.secondary : AppColors.text,
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: locked ? AppColors.muted : AppColors.primary,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Icon(
+                    locked ? Icons.lock_rounded : Icons.menu_book_rounded,
+                    color: locked ? AppColors.secondary : Colors.white,
+                    size: 30,
                   ),
                 ),
-                Text(
-                  locked ? l10n.locked : l10n.teachersCount(subject.teachersCount),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.secondary, fontSize: 12),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        subject.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          color: locked ? AppColors.secondary : AppColors.text,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        detail,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: AppColors.secondary, fontSize: 13),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
+                const ForwardArrow(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Subjects one under the other; the grade is shown only for names that appear twice.
+class SubjectList extends StatelessWidget {
+  const SubjectList({super.key, required this.subjects});
+
+  final List<SubjectCard> subjects;
+
+  @override
+  Widget build(BuildContext context) {
+    final names = <String, int>{};
+    for (final subject in subjects) {
+      names[subject.name] = (names[subject.name] ?? 0) + 1;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final subject in subjects) ...[
+          SubjectCardTile(subject: subject, showGrade: (names[subject.name] ?? 0) > 1),
+          const SizedBox(height: 12),
+        ],
+      ],
     );
   }
 }

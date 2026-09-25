@@ -22,14 +22,12 @@ List<VideoItem> parseVideoItems(Object? data) =>
 
 /// `/student/videos/:id/playback`
 PlaybackGrant parsePlaybackGrant(Map<String, Object?> json) {
-  final watermark = json['watermark'] as Map?;
   return PlaybackGrant(
     videoId: json['videoId']! as String,
     title: json['title']! as String,
     manifestUrl: Uri.parse(json['manifestUrl']! as String),
     expiresAt: DateTime.parse(json['expiresAt']! as String),
     durationSeconds: (json['durationSeconds'] as num?)?.toInt(),
-    watermarkText: watermark?['text'] as String?,
   );
 }
 
@@ -59,6 +57,7 @@ class OfflineLicenseModel {
     required this.expiresAt,
     required this.renditions,
     this.durationSeconds,
+    this.path = const {},
   });
 
   factory OfflineLicenseModel.fromJson(Map<String, Object?> json) => OfflineLicenseModel(
@@ -68,6 +67,7 @@ class OfflineLicenseModel {
     expiresAt: DateTime.parse(json['expiresAt']! as String),
     durationSeconds: (json['durationSeconds'] as num?)?.toInt(),
     renditions: (json['renditions']! as List).map((item) => RenditionModel.fromJson((item as Map).cast())).toList(),
+    path: ((json['path'] as Map?) ?? const {}).map((key, value) => MapEntry('$key', '$value')),
   );
 
   final String licenseId;
@@ -76,4 +76,7 @@ class OfflineLicenseModel {
   final DateTime expiresAt;
   final int? durationSeconds;
   final List<RenditionModel> renditions;
+
+  /// `subject`, `teacher`, `topic`, `session` names of where the video lives.
+  final Map<String, String> path;
 }

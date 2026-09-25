@@ -35,12 +35,19 @@ abstract class AppSessionModel with _$AppSessionModel {
 
 @freezed
 abstract class PublicConfigModel with _$PublicConfigModel {
-  const factory PublicConfigModel({required String instituteName, @Default(false) bool studentSelfRegistration}) =
-      _PublicConfigModel;
+  const factory PublicConfigModel({
+    required String instituteName,
+    @Default(true) bool studentSelfRegistration,
+    String? institutePhone,
+  }) = _PublicConfigModel;
 
   const PublicConfigModel._();
 
   factory PublicConfigModel.fromJson(Map<String, Object?> json) => _$PublicConfigModelFromJson(json);
 
-  PublicConfig toEntity() => PublicConfig(instituteName: instituteName, selfRegistration: studentSelfRegistration);
+  PublicConfig toEntity() => PublicConfig(
+    instituteName: instituteName,
+    selfRegistration: studentSelfRegistration,
+    institutePhone: institutePhone,
+  );
 }

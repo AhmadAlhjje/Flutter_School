@@ -47,23 +47,3 @@ class FileTile extends StatelessWidget {
     );
   }
 }
-
-/// A titled list of files, or nothing when empty.
-class FileSection extends StatelessWidget {
-  const FileSection({super.key, required this.title, required this.files});
-
-  final String title;
-  final List<FileItem> files;
-
-  @override
-  Widget build(BuildContext context) {
-    if (files.isEmpty) return const SizedBox.shrink();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionTitle(title),
-        for (final file in files) ...[FileTile(file: file), const SizedBox(height: 10)],
-      ],
-    );
-  }
-}

@@ -5,12 +5,16 @@ import 'package:student_app/core/errors/app_failure.dart';
 import 'package:student_app/features/auth/auth_providers.dart';
 import 'package:student_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:student_app/features/catalog_repositories.dart';
-import 'package:student_app/features/grades/domain/grade_entities.dart';
+import 'package:student_app/features/files/domain/file_entities.dart';
 import 'package:student_app/features/home/domain/home_entities.dart';
 import 'package:student_app/features/home/presentation/home_page.dart';
+import 'package:student_app/features/sessions/domain/session_entities.dart';
+import 'package:student_app/features/sessions/presentation/session_page.dart';
 import 'package:student_app/features/subjects/domain/subject_entities.dart';
 import 'package:student_app/features/teachers/domain/teacher_entities.dart';
 import 'package:student_app/features/teachers/presentation/teacher_page.dart';
+import 'package:student_app/features/videos/domain/video_entities.dart';
+import 'package:student_app/features/videos/presentation/downloads_controller.dart';
 import 'package:student_app/shared/widgets/content_tile.dart';
 import 'package:student_app/shared/widgets/locked_content.dart';
 import 'package:student_app/shared/widgets/state_views.dart';
@@ -27,9 +31,50 @@ class _FakeHome implements HomeRepository {
       SubjectCard(id: 's1', name: 'الرياضيات', gradeName: 'البكالوريا', teachersCount: 2, locked: false),
       SubjectCard(id: 's2', name: 'الفيزياء', gradeName: 'البكالوريا', teachersCount: 1, locked: true),
     ],
-    grades: [GradeSummary(id: 'g1', name: 'البكالوريا', subjectsCount: 2)],
   );
 }
+
+class _EmptyHome implements HomeRepository {
+  @override
+  Future<HomeSummary> home() async =>
+      const HomeSummary(studentName: 'طالب جديد', instituteName: 'معهد النور', unreadNotifications: 0, subjects: []);
+}
+
+class _FakeSessions implements SessionsRepository {
+  @override
+  Future<SessionDetails> session(String sessionId) async => const SessionDetails(
+    id: 'sess-1',
+    title: 'الجلسة الأولى',
+    topicTitle: 'التفاضل',
+    videos: [
+      VideoItem(id: 'v1', title: 'مقدمة في التفاضل', durationSeconds: 1200),
+      VideoItem(id: 'v2', title: 'تمارين محلولة', durationSeconds: 900),
+    ],
+    files: [
+      FileItem(
+        id: 'f1',
+        title: 'أوراق العمل',
+        kind: FileKind.pdf,
+        extension: 'pdf',
+        mimeType: 'application/pdf',
+        sizeBytes: 2048,
+      ),
+    ],
+  );
+}
+
+final _downloaded = OfflineVideo(
+  licenseId: 'lic-1',
+  videoId: 'v1',
+  title: 'مقدمة في التفاضل',
+  expiresAt: DateTime.now().add(const Duration(days: 7)),
+  downloadedAt: DateTime.now(),
+  sizeBytes: 1024,
+  subjectName: 'الرياضيات',
+  teacherName: 'أحمد',
+  topicTitle: 'التفاضل',
+  sessionTitle: 'الجلسة الأولى',
+);
 
 class _LockedTeachers implements TeachersRepository {
   @override
@@ -40,7 +85,7 @@ class _LockedTeachers implements TeachersRepository {
 void main() {
   final signedIn = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account));
 
-  testWidgets('home greets the student and shows open and locked subjects', (tester) async {
+  testWidgets('home shows only subjects: open ones under "موادي", locked ones after, no grades', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -54,28 +99,55 @@ void main() {
 
     expect(find.text('معهد النور'), findsOneWidget);
     expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
+    expect(find.text('اختر المادة التي تريد دراستها'), findsOneWidget);
+    expect(find.text('موادي'), findsOneWidget);
     expect(find.text('الرياضيات'), findsOneWidget);
-    expect(find.text('الفيزياء'), findsOneWidget);
     expect(find.text('مدرسان'), findsOneWidget);
-    expect(find.text('مقفل'), findsOneWidget);
-    expect(find.text('3'), findsOneWidget);
+    expect(find.text('مواد أخرى'), findsOneWidget);
+    expect(find.text('الفيزياء'), findsOneWidget);
+    expect(find.text('مقفل — تواصل مع إدارة المعهد لفتحه'), findsOneWidget);
+    expect(find.textContaining('البكالوريا'), findsNothing);
+    // Open subjects come first.
+    expect(tester.getTopLeft(find.text('الرياضيات')).dy, lessThan(tester.getTopLeft(find.text('الفيزياء')).dy));
   });
 
-  testWidgets('started offline, retry reconnects and loads the online home', (tester) async {
-    final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
+  testWidgets('a new account with no open subjects is told what happens next', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          authRepositoryProvider.overrideWithValue(auth),
-          homeRepositoryProvider.overrideWithValue(_FakeHome()),
+          authRepositoryProvider.overrideWithValue(signedIn),
+          homeRepositoryProvider.overrideWithValue(_EmptyHome()),
         ],
         child: localizedApp(const HomePage()),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('تعذر الاتصال بالخادم، تحقق من اتصالك بالإنترنت'), findsOneWidget);
-    expect(find.text('الرياضيات'), findsNothing);
+    expect(find.text('حسابك جاهز! لا توجد مواد مفتوحة لك بعد'), findsOneWidget);
+    expect(find.text('عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.'), findsOneWidget);
+  });
+
+  testWidgets('offline, downloads are organized by subject › teacher › lesson › session; retry reconnects', (
+    tester,
+  ) async {
+    final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(auth),
+          homeRepositoryProvider.overrideWithValue(_FakeHome()),
+          offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
+        ],
+        child: localizedApp(const HomePage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('أنت غير متصل بالإنترنت'), findsOneWidget);
+    expect(find.text('الرياضيات · الأستاذ أحمد'), findsOneWidget);
+    expect(find.text('مقدمة في التفاضل'), findsOneWidget);
+    expect(find.text('التفاضل › الجلسة الأولى'), findsOneWidget);
+    expect(find.text('الفيزياء'), findsNothing);
 
     auth.restored = const RestoredSession(FakeAuthRepository.account);
     await tester.tap(find.text('إعادة المحاولة'));
@@ -83,6 +155,33 @@ void main() {
 
     expect(find.text('الرياضيات'), findsOneWidget);
     expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
+  });
+
+  testWidgets('a session shows its videos and files in two tabs', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(signedIn),
+          sessionsRepositoryProvider.overrideWithValue(_FakeSessions()),
+          offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
+        ],
+        child: localizedApp(const SessionPage(sessionId: 'sess-1')),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('الفيديوهات'), findsOneWidget);
+    expect(find.text('الملفات'), findsOneWidget);
+    expect(find.text('مقدمة في التفاضل'), findsOneWidget);
+    expect(find.text('تمارين محلولة'), findsOneWidget);
+    // The downloaded video is marked and plays from the device.
+    expect(find.text('على الجهاز'), findsOneWidget);
+    expect(find.text('أوراق العمل'), findsNothing);
+
+    await tester.tap(find.text('الملفات'));
+    await tester.pumpAndSettle();
+    expect(find.text('أوراق العمل'), findsOneWidget);
+    expect(find.text('مقدمة في التفاضل'), findsNothing);
   });
 
   testWidgets('a locked teacher space explains how to get access', (tester) async {

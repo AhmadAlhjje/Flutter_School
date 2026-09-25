@@ -190,7 +190,6 @@ class _PlayerViewState extends State<_PlayerView> {
     } else {
       video = _PlayerSurface(
         controller: _controller,
-        watermark: widget.source.watermark,
         fullscreen: widget.fullscreen,
         onToggleFullscreen: _toggleFullscreen,
         onStreamFailed: widget.onStreamFailed,
@@ -207,18 +206,16 @@ class _PlayerViewState extends State<_PlayerView> {
   }
 }
 
-/// The video itself with watermark and controls.
+/// The video itself with its controls.
 class _PlayerSurface extends StatefulWidget {
   const _PlayerSurface({
     required this.controller,
-    required this.watermark,
     required this.fullscreen,
     required this.onToggleFullscreen,
     required this.onStreamFailed,
   });
 
   final VideoPlayerController controller;
-  final String? watermark;
   final bool fullscreen;
   final VoidCallback onToggleFullscreen;
   final VoidCallback onStreamFailed;
@@ -296,7 +293,6 @@ class _PlayerSurfaceState extends State<_PlayerSurface> {
                 Center(
                   child: AspectRatio(aspectRatio: aspect, child: VideoPlayer(_controller)),
                 ),
-                if (widget.watermark != null) MovingWatermark(text: widget.watermark!),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () =>
@@ -434,58 +430,6 @@ class _PlayerSurfaceState extends State<_PlayerSurface> {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Student name + phone drifting across the video so a camera recording identifies the
-/// source (spec §38). Purely visual; it never intercepts touches.
-class MovingWatermark extends StatefulWidget {
-  const MovingWatermark({super.key, required this.text});
-
-  final String text;
-
-  @override
-  State<MovingWatermark> createState() => _MovingWatermarkState();
-}
-
-class _MovingWatermarkState extends State<MovingWatermark> {
-  final _random = Random();
-  Alignment _alignment = const Alignment(-0.6, -0.6);
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 6), (_) {
-      setState(() => _alignment = Alignment(_random.nextDouble() * 1.6 - 0.8, _random.nextDouble() * 1.6 - 0.8));
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: AnimatedAlign(
-        alignment: _alignment,
-        duration: const Duration(seconds: 3),
-        curve: Curves.easeInOut,
-        child: Text(
-          widget.text,
-          textDirection: TextDirection.rtl,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.38),
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            shadows: const [Shadow(color: Color(0x66000000), blurRadius: 2)],
-          ),
-        ),
-      ),
     );
   }
 }

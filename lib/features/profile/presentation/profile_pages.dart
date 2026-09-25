@@ -19,8 +19,7 @@ import '../domain/profile_entities.dart';
 
 final _packageInfoProvider = FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
 
-/// Profile (spec §77): account details, linked device, opened content, language, password,
-/// logout.
+/// Profile: name, phone and grade, language, change password, logout.
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
@@ -48,7 +47,7 @@ class ProfilePage extends ConsumerWidget {
     final version = ref.watch(_packageInfoProvider).value?.version;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.profile)),
+      appBar: AppBar(title: Text(l10n.navAccount)),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(profileProvider.future),
         child: ListView(
@@ -74,12 +73,6 @@ class ProfilePage extends ConsumerWidget {
               title: l10n.changePassword,
               icon: Icons.lock_reset_rounded,
               onTap: () => context.push(Routes.changePassword),
-            ),
-            const SizedBox(height: 10),
-            ContentTile(
-              title: l10n.downloads,
-              icon: Icons.download_done_rounded,
-              onTap: () => context.push(Routes.downloads),
             ),
             const SizedBox(height: 24),
             OutlinedButton.icon(
@@ -113,9 +106,6 @@ class _ProfileDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
-    final device = [profile.deviceModel, profile.devicePlatform].whereType<String>().join(' · ');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -149,56 +139,7 @@ class _ProfileDetails extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10),
-        _InfoRow(
-          icon: Icons.phone_android_rounded,
-          label: l10n.linkedDevice,
-          value: device.isEmpty ? l10n.noLinkedDevice : device,
-          caption: profile.deviceBoundAt == null ? null : l10n.linkedSince(formatDate(profile.deviceBoundAt!, locale)),
-        ),
-        const SizedBox(height: 10),
-        _InfoRow(
-          icon: Icons.lock_open_rounded,
-          label: l10n.openedContent,
-          value:
-              '${l10n.subjectsCount(profile.openSubjectsCount)} · '
-              '${l10n.teachersCount(profile.openTeachersCount)}',
-        ),
       ],
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.icon, required this.label, required this.value, this.caption});
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final String? caption;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            Icon(icon, color: AppColors.primary),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label, style: const TextStyle(color: AppColors.secondary, fontSize: 12)),
-                  Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-                  if (caption != null) Text(caption!, style: const TextStyle(color: AppColors.secondary, fontSize: 12)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

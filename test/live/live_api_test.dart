@@ -20,7 +20,6 @@ import 'package:student_app/features/auth/data/auth_repository_impl.dart';
 import 'package:student_app/features/auth/domain/entities/student_account.dart';
 import 'package:student_app/features/files/data/files_repository_impl.dart';
 import 'package:student_app/features/files/domain/file_entities.dart';
-import 'package:student_app/features/grades/data/grades_repository_impl.dart';
 import 'package:student_app/features/home/data/home_repository_impl.dart';
 import 'package:student_app/features/notifications/data/notifications_repository_impl.dart';
 import 'package:student_app/features/profile/data/profile_repository_impl.dart';
@@ -114,11 +113,6 @@ void main() {
       final home = await HomeRepositoryImpl(api).home();
       expect(home.subjects.firstWhere((s) => s.id == config['subjectId']).locked, isFalse);
 
-      final grades = await GradesRepositoryImpl(api).grades();
-      expect(grades.map((g) => g.id), contains(config['gradeId']));
-      final grade = await GradesRepositoryImpl(api).gradeSubjects(config['gradeId'] as String);
-      expect(grade.subjects.firstWhere((s) => s.id == config['subjectId']).locked, isFalse);
-
       final subject = await SubjectsRepositoryImpl(api).subject(config['subjectId'] as String);
       expect(subject.locked, isFalse);
       expect(subject.teachers.firstWhere((t) => t.subjectTeacherId == config['subjectTeacherId']).locked, isFalse);
@@ -141,7 +135,6 @@ void main() {
       final master = await api.text(grant.manifestUrl.toString());
       expect(master, startsWith('#EXTM3U'));
       expect(master, contains('token='));
-      if (grant.watermarkText != null) expect(grant.watermarkText, contains(config['phone']));
     });
 
     test('file access returns a short-lived URL and the PDF bytes', () async {
@@ -182,6 +175,12 @@ void main() {
       try {
         final video = await downloads.download(config['videoId'] as String);
         expect(video.sizeBytes, greaterThan(0));
+        // Kept in its place: subject › teacher › lesson › session.
+        expect(video.subjectName, isNotEmpty);
+        expect(video.teacherName, isNotEmpty);
+        expect(video.topicTitle, isNotEmpty);
+        expect(video.sessionTitle, isNotEmpty);
+        expect((await downloads.list()).single.sessionTitle, video.sessionTitle);
 
         final uri = await downloads.openStream(video.licenseId);
         final playlist = utf8.decode(await _getBytes(uri));

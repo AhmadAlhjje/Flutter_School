@@ -120,14 +120,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             )
                           : Text(l10n.login),
                     ),
-                    if (config?.selfRegistration ?? false) ...[
-                      const SizedBox(height: 16),
+                    // Registration is open unless the institute turned it off.
+                    if (config?.selfRegistration ?? true) ...[
+                      const SizedBox(height: 24),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(l10n.noAccount, style: const TextStyle(color: AppColors.secondary)),
-                          TextButton(onPressed: () => context.go(Routes.register), child: Text(l10n.createAccount)),
+                          const Expanded(child: Divider()),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(l10n.noAccount, style: const TextStyle(color: AppColors.secondary)),
+                          ),
+                          const Expanded(child: Divider()),
                         ],
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        onPressed: () => context.go(Routes.register),
+                        icon: const Icon(Icons.person_add_alt_1_rounded),
+                        label: Text(l10n.createAccountButton),
                       ),
                     ],
                   ],

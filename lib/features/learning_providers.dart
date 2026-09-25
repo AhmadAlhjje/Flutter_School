@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'catalog_repositories.dart';
-import 'grades/domain/grade_entities.dart';
 import 'home/domain/home_entities.dart';
 import 'notifications/domain/notification_entities.dart';
 import 'profile/domain/profile_entities.dart';
@@ -15,14 +14,6 @@ import 'videos/domain/video_entities.dart';
 /// Read models for the learning screens. Auto-disposed so leaving a screen drops its data and
 /// returning fetches fresh access state from the server (a closed teacher disappears at once).
 final homeProvider = FutureProvider.autoDispose<HomeSummary>((ref) => ref.watch(homeRepositoryProvider).home());
-
-final gradesProvider = FutureProvider.autoDispose<List<GradeSummary>>(
-  (ref) => ref.watch(gradesRepositoryProvider).grades(),
-);
-
-final gradeSubjectsProvider = FutureProvider.autoDispose.family<GradeSubjects, String>(
-  (ref, gradeId) => ref.watch(gradesRepositoryProvider).gradeSubjects(gradeId),
-);
 
 final subjectProvider = FutureProvider.autoDispose.family<SubjectDetails, String>(
   (ref, subjectId) => ref.watch(subjectsRepositoryProvider).subject(subjectId),

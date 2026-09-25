@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
-import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../../../shared/widgets/state_views.dart';
+import '../../auth/auth_providers.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../learning_providers.dart';
 import '../../subjects/presentation/subject_card_tile.dart';
+import '../../videos/presentation/offline_library.dart';
 import '../domain/home_entities.dart';
 
-/// Home (spec §70): greeting, the student's subjects with lock state, grades to browse.
+/// Home tab: a greeting, the student's open subjects, then the other (locked) subjects.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -24,22 +24,7 @@ class HomePage extends ConsumerWidget {
     final offline = auth is AuthSignedIn && auth.offline;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(home.value?.instituteName ?? l10n.appTitle),
-        actions: [
-          IconButton(
-            tooltip: l10n.search,
-            icon: const Icon(Icons.search_rounded),
-            onPressed: () => context.push(Routes.search),
-          ),
-          _NotificationsButton(count: home.value?.unreadNotifications ?? 0),
-          IconButton(
-            tooltip: l10n.profile,
-            icon: const Icon(Icons.person_outline_rounded),
-            onPressed: () => context.push(Routes.profile),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(home.value?.instituteName ?? l10n.appTitle)),
       body: RefreshIndicator(
         onRefresh: offline
             ? () => ref.read(authControllerProvider.notifier).reconnect()
@@ -64,57 +49,113 @@ class _HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final firstName = summary.studentName.split(' ').first;
+    final open = summary.subjects.where((subject) => !subject.locked).toList();
+    final locked = summary.subjects.where((subject) => subject.locked).toList();
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       children: [
-        Text(l10n.helloName(firstName), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-        SectionTitle(l10n.yourSubjects),
-        if (summary.subjects.isEmpty)
-          EmptyView(message: l10n.noSubjects, icon: Icons.menu_book_outlined)
-        else
-          SubjectGrid(subjects: summary.subjects),
-        SectionTitle(l10n.browseGrades),
-        for (final grade in summary.grades) ...[
-          ContentTile(
-            title: grade.name,
-            subtitle: l10n.subjectsCount(grade.subjectsCount),
-            icon: Icons.layers_outlined,
-            onTap: () => context.push(Routes.grade(grade.id)),
-          ),
-          const SizedBox(height: 10),
+        _Greeting(name: summary.studentName.split(' ').first),
+        if (summary.subjects.isEmpty) const _NoSubjects(),
+        if (open.isNotEmpty) ...[SectionTitle(l10n.mySubjects), SubjectList(subjects: open)],
+        if (locked.isNotEmpty) ...[
+          SectionTitle(l10n.otherSubjects),
+          Padding(padding: const EdgeInsets.only(bottom: 12), child: HintLine(l10n.otherSubjectsHint)),
+          SubjectList(subjects: locked),
         ],
-        const SizedBox(height: 8),
-        ContentTile(
-          title: l10n.downloads,
-          icon: Icons.download_done_rounded,
-          onTap: () => context.push(Routes.downloads),
-        ),
       ],
     );
   }
 }
 
-class _NotificationsButton extends StatelessWidget {
-  const _NotificationsButton({required this.count});
+class _Greeting extends StatelessWidget {
+  const _Greeting({required this.name});
 
-  final int count;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      tooltip: AppLocalizations.of(context).notifications,
-      onPressed: () => context.push(Routes.notifications),
-      icon: Badge(
-        isLabelVisible: count > 0,
-        label: Text('$count'),
-        child: const Icon(Icons.notifications_none_rounded),
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.primary, AppColors.primaryDark],
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.helloName(name),
+                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(l10n.homeSubtitle, style: const TextStyle(color: Color(0xDDFFFFFF), fontSize: 14)),
+              ],
+            ),
+          ),
+          const Icon(Icons.school_rounded, color: Color(0x66FFFFFF), size: 48),
+        ],
       ),
     );
   }
 }
 
-/// Started without network: only downloaded videos are available.
+/// A new account (e.g. just registered): nothing is open yet — say what happens next.
+class _NoSubjects extends ConsumerWidget {
+  const _NoSubjects();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final phone = ref.watch(publicConfigProvider).value?.institutePhone;
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 34,
+                backgroundColor: AppColors.primarySoft,
+                child: Icon(Icons.hourglass_top_rounded, color: AppColors.primary, size: 32),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.noSubjectsTitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                l10n.noSubjectsBody,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: AppColors.secondary, height: 1.6),
+              ),
+              if (phone != null && phone.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  l10n.contactInstitute(phone),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.primary),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Started without network: the videos downloaded on this device, organized by subject.
 class _OfflineHome extends StatelessWidget {
   const _OfflineHome({required this.onRetry});
 
@@ -124,24 +165,29 @@ class _OfflineHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
-        const SizedBox(height: 40),
-        const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.secondary),
-        const SizedBox(height: 12),
-        Text(
-          l10n.errorNetwork,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.secondary),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: AppColors.muted, borderRadius: BorderRadius.circular(14)),
+          child: Row(
+            children: [
+              const Icon(Icons.wifi_off_rounded, color: AppColors.secondary),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.offlineTitle, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    Text(l10n.offlineBody, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
+                  ],
+                ),
+              ),
+              TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+            ],
+          ),
         ),
-        const SizedBox(height: 24),
-        FilledButton.icon(
-          onPressed: () => context.push(Routes.downloads),
-          icon: const Icon(Icons.download_done_rounded),
-          label: Text(l10n.downloads),
-        ),
-        const SizedBox(height: 12),
-        OutlinedButton(onPressed: onRetry, child: Text(l10n.retry)),
+        const OfflineLibrary(),
       ],
     );
   }

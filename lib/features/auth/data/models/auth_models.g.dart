@@ -42,10 +42,12 @@ Map<String, dynamic> _$AppSessionModelToJson(_AppSessionModel instance) => <Stri
 
 _PublicConfigModel _$PublicConfigModelFromJson(Map<String, dynamic> json) => _PublicConfigModel(
   instituteName: json['instituteName'] as String,
-  studentSelfRegistration: json['studentSelfRegistration'] as bool? ?? false,
+  studentSelfRegistration: json['studentSelfRegistration'] as bool? ?? true,
+  institutePhone: json['institutePhone'] as String?,
 );
 
 Map<String, dynamic> _$PublicConfigModelToJson(_PublicConfigModel instance) => <String, dynamic>{
   'instituteName': instance.instituteName,
   'studentSelfRegistration': instance.studentSelfRegistration,
+  'institutePhone': instance.institutePhone,
 };

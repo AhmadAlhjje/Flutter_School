@@ -892,7 +892,7 @@ $AccountModelCopyWith<$Res>? get user {
 /// @nodoc
 mixin _$PublicConfigModel {
 
- String get instituteName; bool get studentSelfRegistration;
+ String get instituteName; bool get studentSelfRegistration; String? get institutePhone;
 /// Create a copy of PublicConfigModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -906,20 +906,20 @@ $PublicConfigModelCopyWith<PublicConfigModel> get copyWith => _$PublicConfigMode
 @override
 bool operator ==(Object other) {
   final _this = this as PublicConfigModel;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublicConfigModel&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.studentSelfRegistration, _this.studentSelfRegistration) || other.studentSelfRegistration == _this.studentSelfRegistration));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublicConfigModel&&(identical(other.instituteName, _this.instituteName) || other.instituteName == _this.instituteName)&&(identical(other.studentSelfRegistration, _this.studentSelfRegistration) || other.studentSelfRegistration == _this.studentSelfRegistration)&&(identical(other.institutePhone, _this.institutePhone) || other.institutePhone == _this.institutePhone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as PublicConfigModel;
-  return Object.hash(runtimeType,_this.instituteName,_this.studentSelfRegistration);
+  return Object.hash(runtimeType,_this.instituteName,_this.studentSelfRegistration,_this.institutePhone);
 }
 
 @override
 String toString() {
   final _this = this as PublicConfigModel;
-  return 'PublicConfigModel(instituteName: ${_this.instituteName}, studentSelfRegistration: ${_this.studentSelfRegistration})';
+  return 'PublicConfigModel(instituteName: ${_this.instituteName}, studentSelfRegistration: ${_this.studentSelfRegistration}, institutePhone: ${_this.institutePhone})';
 }
 
 
@@ -930,7 +930,7 @@ abstract mixin class $PublicConfigModelCopyWith<$Res>  {
   factory $PublicConfigModelCopyWith(PublicConfigModel value, $Res Function(PublicConfigModel) _then) = _$PublicConfigModelCopyWithImpl;
 @useResult
 $Res call({
- String instituteName, bool studentSelfRegistration
+ String instituteName, bool studentSelfRegistration, String? institutePhone
 });
 
 
@@ -947,11 +947,12 @@ class _$PublicConfigModelCopyWithImpl<$Res>
 
 /// Create a copy of PublicConfigModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? instituteName = null,Object? studentSelfRegistration = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? instituteName = null,Object? studentSelfRegistration = null,Object? institutePhone = freezed,}) {
   return _then(PublicConfigModel(
 instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,studentSelfRegistration: null == studentSelfRegistration ? _self.studentSelfRegistration : studentSelfRegistration // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,institutePhone: freezed == institutePhone ? _self.institutePhone : institutePhone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -1036,10 +1037,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String instituteName,  bool studentSelfRegistration)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String instituteName,  bool studentSelfRegistration,  String? institutePhone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PublicConfigModel() when $default != null:
-return $default(_that.instituteName,_that.studentSelfRegistration);case _:
+return $default(_that.instituteName,_that.studentSelfRegistration,_that.institutePhone);case _:
   return orElse();
 
 }
@@ -1057,10 +1058,10 @@ return $default(_that.instituteName,_that.studentSelfRegistration);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String instituteName,  bool studentSelfRegistration)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String instituteName,  bool studentSelfRegistration,  String? institutePhone)  $default,) {final _that = this;
 switch (_that) {
 case _PublicConfigModel():
-return $default(_that.instituteName,_that.studentSelfRegistration);case _:
+return $default(_that.instituteName,_that.studentSelfRegistration,_that.institutePhone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1077,10 +1078,10 @@ return $default(_that.instituteName,_that.studentSelfRegistration);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String instituteName,  bool studentSelfRegistration)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String instituteName,  bool studentSelfRegistration,  String? institutePhone)?  $default,) {final _that = this;
 switch (_that) {
 case _PublicConfigModel() when $default != null:
-return $default(_that.instituteName,_that.studentSelfRegistration);case _:
+return $default(_that.instituteName,_that.studentSelfRegistration,_that.institutePhone);case _:
   return null;
 
 }
@@ -1092,11 +1093,12 @@ return $default(_that.instituteName,_that.studentSelfRegistration);case _:
 @JsonSerializable()
 
 class _PublicConfigModel extends PublicConfigModel {
-  const _PublicConfigModel({required this.instituteName, this.studentSelfRegistration = false}): super._();
+  const _PublicConfigModel({required this.instituteName, this.studentSelfRegistration = true, this.institutePhone}): super._();
   factory _PublicConfigModel.fromJson(Map<String, dynamic> json) => _$PublicConfigModelFromJson(json);
 
 @override final  String instituteName;
 @override@JsonKey() final  bool studentSelfRegistration;
+@override final  String? institutePhone;
 
 /// Create a copy of PublicConfigModel
 /// with the given fields replaced by the non-null parameter values.
@@ -1111,18 +1113,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublicConfigModel&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.studentSelfRegistration, studentSelfRegistration) || other.studentSelfRegistration == studentSelfRegistration));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublicConfigModel&&(identical(other.instituteName, instituteName) || other.instituteName == instituteName)&&(identical(other.studentSelfRegistration, studentSelfRegistration) || other.studentSelfRegistration == studentSelfRegistration)&&(identical(other.institutePhone, institutePhone) || other.institutePhone == institutePhone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,instituteName,studentSelfRegistration);
+    return Object.hash(runtimeType,instituteName,studentSelfRegistration,institutePhone);
 }
 
 @override
 String toString() {
-    return 'PublicConfigModel(instituteName: $instituteName, studentSelfRegistration: $studentSelfRegistration)';
+    return 'PublicConfigModel(instituteName: $instituteName, studentSelfRegistration: $studentSelfRegistration, institutePhone: $institutePhone)';
 }
 
 
@@ -1133,7 +1135,7 @@ abstract mixin class _$PublicConfigModelCopyWith<$Res> implements $PublicConfigM
   factory _$PublicConfigModelCopyWith(_PublicConfigModel value, $Res Function(_PublicConfigModel) _then) = __$PublicConfigModelCopyWithImpl;
 @override @useResult
 $Res call({
- String instituteName, bool studentSelfRegistration
+ String instituteName, bool studentSelfRegistration, String? institutePhone
 });
 
 
@@ -1150,11 +1152,12 @@ class __$PublicConfigModelCopyWithImpl<$Res>
 
 /// Create a copy of PublicConfigModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? instituteName = null,Object? studentSelfRegistration = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? instituteName = null,Object? studentSelfRegistration = null,Object? institutePhone = freezed,}) {
   return _then(_PublicConfigModel(
 instituteName: null == instituteName ? _self.instituteName : instituteName // ignore: cast_nullable_to_non_nullable
 as String,studentSelfRegistration: null == studentSelfRegistration ? _self.studentSelfRegistration : studentSelfRegistration // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,institutePhone: freezed == institutePhone ? _self.institutePhone : institutePhone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
