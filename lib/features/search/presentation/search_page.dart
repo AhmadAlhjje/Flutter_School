@@ -71,7 +71,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
       ),
       body: query.length < 2
-          ? EmptyView(message: l10n.searchMinChars, icon: Icons.search_rounded)
+          ? Center(
+              child: EmptyView(message: l10n.searchMinChars, icon: Icons.search_rounded),
+            )
           : _Results(query: query),
     );
   }

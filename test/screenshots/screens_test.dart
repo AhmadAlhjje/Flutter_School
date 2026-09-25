@@ -5,6 +5,7 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -187,7 +188,14 @@ void main() {
       tester.view.physicalSize = const Size(1080, 2340);
       tester.view.devicePixelRatio = 2.625;
       addTearDown(tester.view.reset);
-      SharedPreferences.setMockInitialValues({});
+      final now = DateTime.now().toIso8601String();
+      SharedPreferences.setMockInitialValues({
+        'watch.history.student-1': jsonEncode([
+          {'videoId': 'v2', 'title': 'أمثلة محلولة', 'position': 754, 'duration': 1815, 'updatedAt': now},
+          {'videoId': 'v1', 'title': 'مقدمة في التفاضل', 'position': 1255, 'duration': 1260, 'updatedAt': now},
+          {'videoId': 'v3', 'title': 'تمارين إضافية', 'position': 95, 'duration': 900, 'updatedAt': now},
+        ]),
+      });
       PackageInfo.setMockInitialValues(
         appName: 'Student',
         packageName: 'app',
@@ -278,6 +286,12 @@ void main() {
       await shot(tester, '08_notifications');
       router.go('/profile');
       await shot(tester, '09_account');
+    });
+
+    testWidgets('my videos', (tester) async {
+      final router = await pumpApp(tester);
+      router.go('/history');
+      await shot(tester, '12_history');
     });
 
     testWidgets('create account', (tester) async {

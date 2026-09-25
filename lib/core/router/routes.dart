@@ -11,6 +11,7 @@ abstract final class Routes {
   static const changePassword = '/profile/password';
   static const notifications = '/notifications';
   static const search = '/search';
+  static const history = '/history';
   static const locked = '/locked';
 
   static String subject(String id) => '/subjects/$id';

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
 import 'api_error_mapper.dart';
+import 'transfer.dart';
 
 typedef JsonParser<T> = T Function(Object? data);
 
@@ -34,6 +35,19 @@ class ApiClient {
         onReceiveProgress: onProgress,
       );
       return Uint8List.fromList(response.data ?? const []);
+    } on DioException catch (error) {
+      throw toFailure(error);
+    }
+  }
+
+  /// A signed media URL downloaded over several connections at once (see [ParallelDownloader]).
+  Future<Uint8List> parallelBytes(
+    String url, {
+    void Function(TransferProgress progress)? onProgress,
+    Future<String> Function()? refreshUrl,
+  }) async {
+    try {
+      return await ParallelDownloader(_dio).download(url, onProgress: onProgress, refreshUrl: refreshUrl);
     } on DioException catch (error) {
       throw toFailure(error);
     }

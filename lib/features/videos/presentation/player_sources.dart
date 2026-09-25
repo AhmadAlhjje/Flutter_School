@@ -6,18 +6,19 @@ import '../../../core/errors/app_failure.dart';
 import '../../catalog_repositories.dart';
 import '../videos_providers.dart';
 
-/// What the player needs: an HLS playlist URL and a title.
+/// What the player needs: an HLS playlist URL, the title, and the video (to resume it later).
 class PlayerSource {
-  const PlayerSource({required this.uri, required this.title});
+  const PlayerSource({required this.uri, required this.title, required this.videoId});
 
   final Uri uri;
   final String title;
+  final String videoId;
 }
 
 /// Streaming: asks the server for a fresh, device-bound playback grant every time.
 final onlineSourceProvider = FutureProvider.autoDispose.family<PlayerSource, String>((ref, videoId) async {
   final grant = await ref.watch(videosRepositoryProvider).requestPlayback(videoId);
-  return PlayerSource(uri: grant.manifestUrl, title: grant.title);
+  return PlayerSource(uri: grant.manifestUrl, title: grant.title, videoId: videoId);
 });
 
 /// Offline: serves the encrypted local copy through the private loopback server, which is
@@ -30,5 +31,5 @@ final offlineSourceProvider = FutureProvider.autoDispose.family<PlayerSource, St
   if (video == null) throw const AppFailure(FailureKind.notFound);
   final uri = await downloads.openStream(licenseId);
   ref.onDispose(() => unawaited(downloads.closeStream()));
-  return PlayerSource(uri: uri, title: video.title);
+  return PlayerSource(uri: uri, title: video.title, videoId: video.videoId);
 });

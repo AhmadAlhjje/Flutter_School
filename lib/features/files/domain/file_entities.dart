@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/network/transfer.dart';
+
 part 'file_entities.freezed.dart';
 
 enum FileKind { pdf, document, presentation, spreadsheet, archive, image, other }
@@ -35,6 +37,6 @@ abstract interface class FilesRepository {
   /// Asks the server for a download URL; fails with access-denied for locked content.
   Future<FileGrant> requestAccess(String fileId);
 
-  /// Downloads the file into memory (never into shared storage).
-  Future<List<int>> download(FileGrant grant, {void Function(double progress)? onProgress});
+  /// Downloads the file into memory (never into shared storage), over several connections.
+  Future<List<int>> download(FileGrant grant, {void Function(TransferProgress progress)? onProgress});
 }

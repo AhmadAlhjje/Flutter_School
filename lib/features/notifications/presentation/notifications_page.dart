@@ -134,7 +134,6 @@ class _NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
     final unread = notification.unread;
     return Card(
       color: unread ? AppColors.primarySoft : null,
@@ -161,7 +160,8 @@ class _NotificationTile extends StatelessWidget {
                     Text(notification.body, style: const TextStyle(color: AppColors.secondary, height: 1.5)),
                     const SizedBox(height: 4),
                     Text(
-                      formatDateTime(notification.createdAt, locale),
+                      formatDateTimeEnglish(notification.createdAt),
+                      textDirection: TextDirection.ltr,
                       style: const TextStyle(color: AppColors.secondary, fontSize: 12),
                     ),
                   ],

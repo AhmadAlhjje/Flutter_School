@@ -91,6 +91,7 @@ void main() {
       secure: secure,
       accountId: 'student-1',
       baseDirectory: () async => base,
+      retryDelay: Duration.zero,
     );
   });
 
@@ -101,11 +102,15 @@ void main() {
 
   test('downloads the 360p rendition encrypted, keeps the key only in secure storage', () async {
     final progress = <double>[];
-    final video = await downloads.download('video-1', onProgress: progress.add);
+    final video = await downloads.download('video-1', onProgress: (p) => progress.add(p.fraction));
 
     expect(video.licenseId, 'lic-1');
     expect(video.sizeBytes, 1500);
-    expect(progress, [0.5, 1.0]);
+    // Smooth progress: never backwards, ends at 100%.
+    expect(progress.last, 1.0);
+    for (var i = 1; i < progress.length; i++) {
+      expect(progress[i], greaterThanOrEqualTo(progress[i - 1]));
+    }
     expect(adapter.requests.any((r) => r.uri.path.contains('/240p/')), isFalse);
 
     final dir = Directory('${base.path}/offline/student-1/lic-1');

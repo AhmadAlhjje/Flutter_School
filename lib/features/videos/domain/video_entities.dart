@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/network/transfer.dart';
+
 part 'video_entities.freezed.dart';
 
 @freezed
@@ -53,8 +55,8 @@ abstract interface class VideosRepository {
 abstract interface class OfflineDownloads {
   Future<List<OfflineVideo>> list();
 
-  /// Downloads the encrypted HLS stream of [videoId]; reports progress 0..1.
-  Future<OfflineVideo> download(String videoId, {void Function(double progress)? onProgress});
+  /// Downloads the encrypted HLS stream of [videoId], reporting progress as it goes.
+  Future<OfflineVideo> download(String videoId, {void Function(TransferProgress progress)? onProgress});
 
   Future<void> delete(String licenseId);
 

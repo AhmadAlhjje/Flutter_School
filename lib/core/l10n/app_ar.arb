@@ -123,7 +123,7 @@
   "playerError": "تعذر تشغيل الفيديو",
   "captureBlocked": "لا يمكن تشغيل الفيديو أثناء تسجيل الشاشة. أوقف التسجيل للمتابعة.",
   "downloadOffline": "تحميل للمشاهدة دون إنترنت",
-  "downloadingPercent": "جاري التحميل {percent}%",
+  "downloadingPercent": "جاري التحميل ⁦{percent}%⁩",
   "@downloadingPercent": {
     "placeholders": {
       "percent": {
@@ -234,5 +234,28 @@
         "type": "int"
       }
     }
-  }
+  },
+  "downloadPreparing": "جاري بدء التحميل...",
+  "navHistory": "مشاهداتي",
+  "historyHint": "اضغط على الفيديو لتكمل من حيث توقفت",
+  "historyEmpty": "لم تشاهد أي فيديو بعد.\nستظهر هنا الفيديوهات التي تشاهدها لتكمل من حيث توقفت.",
+  "watchedFully": "شاهدته كاملاً",
+  "continueFrom": "تابع من {time}",
+  "@continueFrom": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "continuedFrom": "أكملنا من حيث توقفت ({time})",
+  "@continuedFrom": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "startOver": "من البداية",
+  "removeFromHistory": "إزالة من القائمة"
 }

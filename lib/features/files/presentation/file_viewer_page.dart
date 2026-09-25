@@ -51,7 +51,8 @@ final fileLoadProvider = StreamProvider.autoDispose.family<FileLoad, String>((re
       final grant = await repository.requestAccess(fileId);
       final bytes = await repository.download(
         grant,
-        onProgress: (progress) {
+        onProgress: (transfer) {
+          final progress = transfer.fraction;
           final percent = (progress * 100).floor();
           if (percent == lastPercent) return;
           lastPercent = percent;

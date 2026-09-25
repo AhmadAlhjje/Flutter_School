@@ -62,7 +62,8 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,15 +84,19 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('ar'), Locale('en')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('en'),
+  ];
 
   /// No description provided for @appTitle.
   ///
@@ -497,7 +503,7 @@ abstract class AppLocalizations {
   /// No description provided for @downloadingPercent.
   ///
   /// In ar, this message translates to:
-  /// **'جاري التحميل {percent}%'**
+  /// **'جاري التحميل ⁦{percent}%⁩'**
   String downloadingPercent(int percent);
 
   /// No description provided for @downloaded.
@@ -955,9 +961,64 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الدرس {number}'**
   String lessonNumber(int number);
+
+  /// No description provided for @downloadPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري بدء التحميل...'**
+  String get downloadPreparing;
+
+  /// No description provided for @navHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاهداتي'**
+  String get navHistory;
+
+  /// No description provided for @historyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الفيديو لتكمل من حيث توقفت'**
+  String get historyHint;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تشاهد أي فيديو بعد.\nستظهر هنا الفيديوهات التي تشاهدها لتكمل من حيث توقفت.'**
+  String get historyEmpty;
+
+  /// No description provided for @watchedFully.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاهدته كاملاً'**
+  String get watchedFully;
+
+  /// No description provided for @continueFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'تابع من {time}'**
+  String continueFrom(String time);
+
+  /// No description provided for @continuedFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكملنا من حيث توقفت ({time})'**
+  String continuedFrom(String time);
+
+  /// No description provided for @startOver.
+  ///
+  /// In ar, this message translates to:
+  /// **'من البداية'**
+  String get startOver;
+
+  /// No description provided for @removeFromHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة من القائمة'**
+  String get removeFromHistory;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -966,7 +1027,8 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['ar', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

@@ -55,10 +55,13 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> _restore() async {
+    if (!ref.mounted) return;
     try {
       final restored = await ref.read(authRepositoryProvider).restoreSession();
+      if (!ref.mounted) return;
       state = restored == null ? const AuthSignedOut() : AuthSignedIn(restored.account, offline: restored.offline);
     } catch (error) {
+      if (!ref.mounted) return;
       state = _stateForFailure(toFailure(error)) ?? const AuthSignedOut();
     }
   }

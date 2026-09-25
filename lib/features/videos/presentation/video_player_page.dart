@@ -13,6 +13,7 @@ import '../../../core/security/screen_protection.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/failure_message.dart';
 import '../../../shared/widgets/locked_content.dart';
+import '../../history/watch_history.dart';
 import 'download_button.dart';
 import 'player_sources.dart';
 
@@ -35,11 +36,37 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
   /// Where to resume after the stream is re-requested (e.g. the signed URL expired while paused).
   Duration _resumeAt = Duration.zero;
 
+  /// "My videos": where the student stopped last time; updated while watching.
+  late final WatchHistory _history = ref.read(watchHistoryProvider.notifier);
+  PlayerSource? _watching;
+  Duration _duration = Duration.zero;
+  Duration _recordedAt = const Duration(days: -1);
+
+  void _remember(PlayerSource source, Duration position, Duration duration) {
+    _resumeAt = position;
+    _watching = source;
+    _duration = duration;
+    if ((position - _recordedAt).abs() < const Duration(seconds: 5)) return;
+    _recordedAt = position;
+    _history.record(videoId: source.videoId, title: source.title, position: position, duration: duration);
+  }
+
   FutureProvider<PlayerSource> get _source =>
       widget.licenseId != null ? offlineSourceProvider(widget.licenseId!) : onlineSourceProvider(widget.videoId!);
 
   @override
   void dispose() {
+    final source = _watching;
+    final position = _resumeAt;
+    final duration = _duration;
+    if (source != null) {
+      // After the frame: providers must not change while the widget tree is being finalized.
+      unawaited(
+        Future<void>.microtask(
+          () => _history.record(videoId: source.videoId, title: source.title, position: position, duration: duration),
+        ),
+      );
+    }
     unawaited(SystemChrome.setPreferredOrientations(const []));
     unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
     super.dispose();
@@ -56,16 +83,20 @@ class _VideoPlayerPageState extends ConsumerState<VideoPlayerPage> {
       skipLoadingOnRefresh: false,
       loading: () => const _PlayerFrame(child: CircularProgressIndicator(color: Colors.white)),
       error: (error, _) => _SourceError(error: error, onRetry: () => ref.invalidate(_source)),
-      data: (data) => _PlayerView(
-        key: ObjectKey(data),
-        source: data,
-        startAt: _resumeAt,
-        hidden: captured,
-        fullscreen: landscape,
-        onPosition: (position) => _resumeAt = position,
-        onStreamFailed: () => ref.invalidate(_source),
-        below: widget.videoId == null ? null : _VideoDetails(videoId: widget.videoId!, title: data.title),
-      ),
+      data: (data) {
+        final continueAt = _resumeAt > Duration.zero ? Duration.zero : _history.resumeAt(data.videoId);
+        return _PlayerView(
+          key: ObjectKey(data),
+          source: data,
+          startAt: _resumeAt > Duration.zero ? _resumeAt : continueAt,
+          announceContinue: continueAt > Duration.zero,
+          hidden: captured,
+          fullscreen: landscape,
+          onPosition: (position, duration) => _remember(data, position, duration),
+          onStreamFailed: () => ref.invalidate(_source),
+          below: widget.videoId == null ? null : _VideoDetails(videoId: widget.videoId!, title: data.title),
+        );
+      },
     );
 
     return Scaffold(
@@ -81,6 +112,7 @@ class _PlayerView extends StatefulWidget {
     super.key,
     required this.source,
     required this.startAt,
+    this.announceContinue = false,
     required this.hidden,
     required this.fullscreen,
     required this.onPosition,
@@ -90,9 +122,12 @@ class _PlayerView extends StatefulWidget {
 
   final PlayerSource source;
   final Duration startAt;
+
+  /// [startAt] comes from "My videos": say so, and offer to start over.
+  final bool announceContinue;
   final bool hidden;
   final bool fullscreen;
-  final ValueChanged<Duration> onPosition;
+  final void Function(Duration position, Duration duration) onPosition;
   final VoidCallback onStreamFailed;
   final Widget? below;
 
@@ -123,15 +158,27 @@ class _PlayerViewState extends State<_PlayerView> {
       if (widget.startAt > Duration.zero) await _controller.seekTo(widget.startAt);
       if (!mounted) return;
       setState(() => _ready = true);
+      if (widget.announceContinue) _announceContinue();
       if (!widget.hidden) await _controller.play();
     } catch (error) {
       if (mounted) setState(() => _initError = error);
     }
   }
 
+  void _announceContinue() {
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.continuedFrom(formatDuration(widget.startAt))),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(label: l10n.startOver, onPressed: () => unawaited(_controller.seekTo(Duration.zero))),
+      ),
+    );
+  }
+
   void _onValue() {
     final value = _controller.value;
-    if (value.isInitialized) widget.onPosition(value.position);
+    if (value.isInitialized) widget.onPosition(value.position, value.duration);
     if (value.isPlaying) {
       unawaited(WakelockPlus.enable());
     } else {

@@ -31,7 +31,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorLoading => 'Something went wrong while loading';
 
   @override
-  String get errorNetwork => 'Cannot reach the server, check your internet connection';
+  String get errorNetwork =>
+      'Cannot reach the server, check your internet connection';
 
   @override
   String get errorGeneric => 'Something went wrong, please try again';
@@ -58,10 +59,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorPhoneTaken => 'This phone number is already registered';
 
   @override
-  String get errorRegistrationDisabled => 'Registration is not available, contact the institute';
+  String get errorRegistrationDisabled =>
+      'Registration is not available, contact the institute';
 
   @override
-  String get errorWeakPassword => 'Weak password: at least 8 characters with letters and digits';
+  String get errorWeakPassword =>
+      'Weak password: at least 8 characters with letters and digits';
 
   @override
   String get errorInvalidCurrentPassword => 'Current password is incorrect';
@@ -120,7 +123,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get haveAccount => 'Already registered?';
 
   @override
-  String get deviceNotice => 'Your account will be linked to this device on first sign-in.';
+  String get deviceNotice =>
+      'Your account will be linked to this device on first sign-in.';
 
   @override
   String get logout => 'Sign out';
@@ -139,7 +143,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountDisabledTitle => 'Account disabled';
 
   @override
-  String get accountDisabledBody => 'Your account has been disabled. Please contact the institute.';
+  String get accountDisabledBody =>
+      'Your account has been disabled. Please contact the institute.';
 
   @override
   String get backToLogin => 'Back to sign in';
@@ -154,31 +159,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String teachersCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count teachers', one: '1 teacher');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count teachers',
+      one: '1 teacher',
+    );
     return '$_temp0';
   }
 
   @override
   String topicsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count lessons', one: '1 lesson');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lessons',
+      one: '1 lesson',
+    );
     return '$_temp0';
   }
 
   @override
   String sessionsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count sessions', one: '1 session');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '1 session',
+    );
     return '$_temp0';
   }
 
   @override
   String videosCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count videos', one: '1 video');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count videos',
+      one: '1 video',
+    );
     return '$_temp0';
   }
 
   @override
   String filesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count files', one: '1 file');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count files',
+      one: '1 file',
+    );
     return '$_temp0';
   }
 
@@ -192,7 +222,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lockedTitle => 'Content locked';
 
   @override
-  String get lockedBody => 'This content is not available to you yet. Contact the institute to unlock it.';
+  String get lockedBody =>
+      'This content is not available to you yet. Contact the institute to unlock it.';
 
   @override
   String get teachers => 'Teachers';
@@ -227,7 +258,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playerError => 'Could not play the video';
 
   @override
-  String get captureBlocked => 'The video cannot play while the screen is being recorded. Stop recording to continue.';
+  String get captureBlocked =>
+      'The video cannot play while the screen is being recorded. Stop recording to continue.';
 
   @override
   String get downloadOffline => 'Download for offline viewing';
@@ -261,7 +293,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openFile => 'Open file';
 
   @override
-  String get fileOpensExternally => 'This file opens in another app on your device';
+  String get fileOpensExternally =>
+      'This file opens in another app on your device';
 
   @override
   String get profile => 'Profile';
@@ -345,7 +378,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exitFullscreen => 'Exit fullscreen';
 
   @override
-  String get deleteDownloadConfirm => 'This video will be removed from your device. You can download it again later.';
+  String get deleteDownloadConfirm =>
+      'This video will be removed from your device. You can download it again later.';
 
   @override
   String appVersion(String version) {
@@ -353,7 +387,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get passwordChangeNote => 'Any other session of your account will be signed out.';
+  String get passwordChangeNote =>
+      'Any other session of your account will be signed out.';
 
   @override
   String get markRead => 'Mark as read';
@@ -362,7 +397,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loadMore => 'Load more';
 
   @override
-  String get fileTooLargeToPreview => 'This file cannot be previewed in the app';
+  String get fileTooLargeToPreview =>
+      'This file cannot be previewed in the app';
 
   @override
   String get noAppToOpenFile => 'No app on your device can open this file type';
@@ -371,7 +407,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get downloadingFile => 'Downloading file...';
 
   @override
-  String get screenshotDetected => 'Screenshot detected. This content is protected and linked to your account.';
+  String get screenshotDetected =>
+      'Screenshot detected. This content is protected and linked to your account.';
 
   @override
   String get noVideos => 'No videos yet';
@@ -386,7 +423,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offlineTitle => 'You\'re offline';
 
   @override
-  String get offlineBody => 'You can watch the videos downloaded on this device';
+  String get offlineBody =>
+      'You can watch the videos downloaded on this device';
 
   @override
   String get navHome => 'Home';
@@ -404,13 +442,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otherSubjects => 'Other subjects';
 
   @override
-  String get otherSubjectsHint => 'These subjects are locked for now; contact the institute to open them';
+  String get otherSubjectsHint =>
+      'These subjects are locked for now; contact the institute to open them';
 
   @override
-  String get noSubjectsTitle => 'Your account is ready! No subjects are open yet';
+  String get noSubjectsTitle =>
+      'Your account is ready! No subjects are open yet';
 
   @override
-  String get noSubjectsBody => 'As soon as the institute opens subjects for your account, they appear here.';
+  String get noSubjectsBody =>
+      'As soon as the institute opens subjects for your account, they appear here.';
 
   @override
   String contactInstitute(String phone) {
@@ -427,10 +468,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hintChooseLesson => 'Choose a lesson';
 
   @override
-  String get hintChooseSession => 'Choose a session to see its videos and files';
+  String get hintChooseSession =>
+      'Choose a session to see its videos and files';
 
   @override
-  String get hintVideos => 'Tap a video to watch it, or \"Download\" to watch it later without internet';
+  String get hintVideos =>
+      'Tap a video to watch it, or \"Download\" to watch it later without internet';
 
   @override
   String get hintFiles => 'Tap a file to open it';
@@ -472,4 +515,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String lessonNumber(int number) {
     return 'Lesson $number';
   }
+
+  @override
+  String get downloadPreparing => 'Starting the download...';
+
+  @override
+  String get navHistory => 'My videos';
+
+  @override
+  String get historyHint => 'Tap a video to continue where you stopped';
+
+  @override
+  String get historyEmpty =>
+      'You have not watched any video yet.\nVideos you watch appear here, to continue where you stopped.';
+
+  @override
+  String get watchedFully => 'Watched to the end';
+
+  @override
+  String continueFrom(String time) {
+    return 'Continue from $time';
+  }
+
+  @override
+  String continuedFrom(String time) {
+    return 'Continued where you stopped ($time)';
+  }
+
+  @override
+  String get startOver => 'Start over';
+
+  @override
+  String get removeFromHistory => 'Remove from the list';
 }

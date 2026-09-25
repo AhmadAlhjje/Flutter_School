@@ -18,9 +18,12 @@ sealed class DownloadStatus {
 }
 
 class DownloadRunning extends DownloadStatus {
-  const DownloadRunning(super.title, this.percent);
+  const DownloadRunning(super.title, this.percent, {this.bytes = 0});
 
   final int percent;
+
+  /// Downloaded so far.
+  final int bytes;
 }
 
 class DownloadFailed extends DownloadStatus {
@@ -48,10 +51,13 @@ class DownloadsController extends Notifier<Map<String, DownloadStatus>> {
       await downloads.download(
         videoId,
         onProgress: (progress) {
-          final percent = (progress * 100).clamp(0, 100).floor();
+          final percent = (progress.fraction * 100).clamp(0, 100).floor();
           final current = state[videoId];
-          if (current is DownloadRunning && current.percent == percent) return;
-          _set(videoId, DownloadRunning(title, percent));
+          // Repaint on every percent, or every ~256 KB when the connection is slow.
+          if (current is DownloadRunning && current.percent == percent && progress.bytes - current.bytes < 1 << 18) {
+            return;
+          }
+          _set(videoId, DownloadRunning(title, percent, bytes: progress.bytes));
         },
       );
       if (!ref.mounted) return;

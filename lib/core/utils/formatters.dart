@@ -27,6 +27,9 @@ String formatDate(DateTime date, String locale) => DateFormat.yMMMd(locale).form
 
 String formatDateTime(DateTime date, String locale) => DateFormat.yMMMd(locale).add_Hm().format(date.toLocal());
 
+/// "25 Sep 2026 · 10:30 AM" — date and time in English (Latin digits), as on the notifications.
+String formatDateTimeEnglish(DateTime date) => DateFormat('d MMM yyyy · h:mm a', 'en').format(date.toLocal());
+
 /// Arabic-Indic digits → ASCII and separators removed (mirrors the backend normalization).
 String normalizePhone(String raw) {
   var value = raw.trim().replaceAllMapped(RegExp('[٠-٩۰-۹]'), (match) {

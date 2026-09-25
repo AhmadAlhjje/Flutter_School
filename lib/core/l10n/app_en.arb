@@ -143,5 +143,14 @@
   "findSubject": "Search subjects by name",
   "findLesson": "Search lessons by name",
   "findSession": "Search sessions by name",
-  "lessonNumber": "Lesson {number}"
+  "lessonNumber": "Lesson {number}",
+  "downloadPreparing": "Starting the download...",
+  "navHistory": "My videos",
+  "historyHint": "Tap a video to continue where you stopped",
+  "historyEmpty": "You have not watched any video yet.\nVideos you watch appear here, to continue where you stopped.",
+  "watchedFully": "Watched to the end",
+  "continueFrom": "Continue from {time}",
+  "continuedFrom": "Continued where you stopped ({time})",
+  "startOver": "Start over",
+  "removeFromHistory": "Remove from the list"
 }

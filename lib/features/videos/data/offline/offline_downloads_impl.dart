@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../../../core/errors/app_failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_error_mapper.dart';
+import '../../../../core/network/transfer.dart';
 import '../../../../core/storage/secure_store.dart';
 import '../../domain/video_entities.dart';
 import '../video_models.dart';
@@ -33,8 +34,12 @@ class OfflineDownloadsImpl implements OfflineDownloads {
     required this.accountId,
     LocalHlsServer? server,
     Future<Directory> Function()? baseDirectory,
+    this.retryDelay = const Duration(seconds: 1),
   }) : _server = server ?? LocalHlsServer(),
        _baseDirectory = baseDirectory ?? getApplicationSupportDirectory;
+
+  /// Segments downloaded at the same time (several connections are much faster on long routes).
+  static const segmentConnections = 5;
 
   final ApiClient api;
   final Dio dio;
@@ -42,6 +47,7 @@ class OfflineDownloadsImpl implements OfflineDownloads {
   final String accountId;
   final LocalHlsServer _server;
   final Future<Directory> Function() _baseDirectory;
+  final Duration retryDelay;
 
   static String _keyName(String licenseId) => 'offline.key.$licenseId';
 
@@ -73,7 +79,7 @@ class OfflineDownloadsImpl implements OfflineDownloads {
   }
 
   @override
-  Future<OfflineVideo> download(String videoId, {void Function(double progress)? onProgress}) async {
+  Future<OfflineVideo> download(String videoId, {void Function(TransferProgress progress)? onProgress}) async {
     final license = await api.post(
       '/student/videos/$videoId/offline-license',
       (data) => OfflineLicenseModel.fromJson(asMap(data)),
@@ -91,18 +97,44 @@ class OfflineDownloadsImpl implements OfflineDownloads {
       final key = await api.bytes(rendition.playlistUrl.resolve(parsed.keyUri!).toString());
       if (key.length != 16) throw const AppFailure(FailureKind.server, code: 'BAD_KEY');
 
-      var size = 0;
-      for (var i = 0; i < parsed.segmentUris.length; i++) {
-        final uri = rendition.playlistUrl.resolve(parsed.segmentUris[i]);
-        final target = File('${dir.path}/${segmentFileName(parsed.segmentUris[i])}');
-        try {
-          await dio.download(uri.toString(), target.path);
-        } on DioException catch (error) {
-          throw toFailure(error);
+      // Several segments at once, each retried on network hiccups. Progress counts every segment
+      // equally and, inside a segment, by bytes — so it moves smoothly instead of in big steps.
+      final count = parsed.segmentUris.length;
+      final received = List<int>.filled(count, 0);
+      final expected = List<int>.filled(count, 0);
+      final finished = List<bool>.filled(count, false);
+      void report() {
+        var fraction = 0.0;
+        for (var i = 0; i < count; i++) {
+          fraction += finished[i] ? 1 : (expected[i] > 0 ? received[i] / expected[i] : 0);
         }
-        size += await target.length();
-        onProgress?.call((i + 1) / parsed.segmentUris.length);
+        onProgress?.call(TransferProgress(fraction / count, received.fold(0, (sum, bytes) => sum + bytes)));
       }
+
+      try {
+        await runPool(List<int>.generate(count, (i) => i), segmentConnections, (i) async {
+          final uri = rendition.playlistUrl.resolve(parsed.segmentUris[i]);
+          final target = File('${dir.path}/${segmentFileName(parsed.segmentUris[i])}');
+          await withRetry(
+            () => dio.download(
+              uri.toString(),
+              target.path,
+              onReceiveProgress: (bytes, total) {
+                received[i] = bytes;
+                expected[i] = total;
+                report();
+              },
+            ),
+            delay: retryDelay,
+          );
+          received[i] = await target.length();
+          finished[i] = true;
+          report();
+        });
+      } on DioException catch (error) {
+        throw toFailure(error);
+      }
+      final size = received.fold(0, (sum, bytes) => sum + bytes);
 
       await File('${dir.path}/index.m3u8').writeAsString(buildLocalPlaylist(playlistText));
       await secure.write(_keyName(license.licenseId), base64Encode(key));

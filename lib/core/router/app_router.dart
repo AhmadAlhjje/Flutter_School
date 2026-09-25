@@ -8,6 +8,7 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/device/presentation/blocked_pages.dart';
 import '../../features/files/presentation/file_viewer_page.dart';
+import '../../features/history/presentation/history_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/home/presentation/main_shell.dart';
 import '../../features/notifications/presentation/notifications_page.dart';
@@ -54,15 +55,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.deviceError, builder: (_, _) => const DeviceErrorPage()),
       GoRoute(path: Routes.accountDisabled, builder: (_, _) => const AccountDisabledPage()),
 
-      // The four tabs of the bottom bar; each keeps its own state.
+      // The five tabs of the bottom bar (Home in the middle); each keeps its own state.
       StatefulShellRoute.indexedStack(
         builder: (_, _, shell) => MainShell(shell: shell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: Routes.home, builder: (_, _) => const HomePage())],
+            routes: [GoRoute(path: Routes.history, builder: (_, _) => const HistoryPage())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: Routes.search, builder: (_, _) => const SearchPage())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.home, builder: (_, _) => const HomePage())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: Routes.notifications, builder: (_, _) => const NotificationsPage())],
