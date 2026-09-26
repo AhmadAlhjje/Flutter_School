@@ -66,7 +66,6 @@ class VideoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
     final copy = ref.watch(downloadedCopyProvider(video.id));
     final download = ref.watch(downloadsControllerProvider.select((map) => map[video.id]));
     final duration = video.durationSeconds;
@@ -98,29 +97,12 @@ class VideoTile extends ConsumerWidget {
                           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                         ),
                         const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            if (duration != null)
-                              Text(
-                                formatDuration(Duration(seconds: duration)),
-                                textDirection: TextDirection.ltr,
-                                style: const TextStyle(color: AppColors.secondary, fontSize: 13),
-                              ),
-                            if (copy != null) ...[
-                              if (duration != null) const SizedBox(width: 8),
-                              const Icon(Icons.offline_pin_rounded, size: 15, color: AppColors.success),
-                              const SizedBox(width: 3),
-                              Text(
-                                l10n.downloadedOnDevice,
-                                style: const TextStyle(
-                                  color: AppColors.success,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
+                        if (duration != null)
+                          Text(
+                            formatDuration(Duration(seconds: duration)),
+                            textDirection: TextDirection.ltr,
+                            style: const TextStyle(color: AppColors.secondary, fontSize: 13),
+                          ),
                       ],
                     ),
                   ),

@@ -27,7 +27,7 @@ Color fileKindColor(FileKind kind) => switch (kind) {
   _ => AppColors.primary,
 };
 
-/// A file row: kind icon, extension and size, and "on this phone" once it was opened (it opens
+/// A file row: kind icon, extension and size, and "محمّل" in green once it was opened (it opens
 /// from the phone after that, without downloading again). Opens the in-app viewer.
 class FileTile extends ConsumerWidget {
   const FileTile({super.key, required this.file});
@@ -42,7 +42,7 @@ class FileTile extends ConsumerWidget {
     return ContentTile(
       title: file.title,
       subtitle: '${file.extension.toUpperCase()} · ${formatBytes(file.sizeBytes, locale: locale)}',
-      badge: saved ? const _OnThisPhone() : null,
+      badge: saved ? const _Downloaded() : null,
       leading: Container(
         width: 44,
         height: 44,
@@ -54,19 +54,12 @@ class FileTile extends ConsumerWidget {
   }
 }
 
-class _OnThisPhone extends StatelessWidget {
-  const _OnThisPhone();
+class _Downloaded extends StatelessWidget {
+  const _Downloaded();
 
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      const Icon(Icons.offline_pin_rounded, size: 15, color: AppColors.success),
-      const SizedBox(width: 3),
-      Text(
-        AppLocalizations.of(context).downloadedOnDevice,
-        style: const TextStyle(color: AppColors.success, fontSize: 12, fontWeight: FontWeight.w600),
-      ),
-    ],
+  Widget build(BuildContext context) => Text(
+    AppLocalizations.of(context).downloadedShort,
+    style: const TextStyle(color: AppColors.success, fontSize: 13, fontWeight: FontWeight.w700),
   );
 }

@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
-import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/state_views.dart';
@@ -81,19 +79,7 @@ class NotificationsPage extends ConsumerWidget {
                         child: TextButton(onPressed: controller.loadMore, child: Text(l10n.loadMore)),
                       );
                     }
-                    final item = page.items[index];
-                    return _NotificationTile(
-                      notification: item,
-                      onTap: () {
-                        final sessionId = item.sessionId;
-                        final subjectId = item.subjectId;
-                        if (sessionId != null) {
-                          unawaited(context.push(Routes.session(sessionId)));
-                        } else if (subjectId != null) {
-                          unawaited(context.push(Routes.subject(subjectId)));
-                        }
-                      },
-                    );
+                    return _NotificationTile(notification: page.items[index]);
                   },
                 ),
         ),
@@ -110,54 +96,50 @@ IconData _kindIcon(NotificationKind kind) => switch (kind) {
   NotificationKind.system => Icons.campaign_outlined,
 };
 
+/// A message to read — tapping it opens nothing.
 class _NotificationTile extends StatelessWidget {
-  const _NotificationTile({required this.notification, required this.onTap});
+  const _NotificationTile({required this.notification});
 
   final InboxNotification notification;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final unread = notification.unread;
     return Card(
       color: unread ? AppColors.primarySoft : null,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: unread ? AppColors.surface : AppColors.muted,
-                child: Icon(_kindIcon(notification.kind), color: unread ? AppColors.primary : AppColors.secondary),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: unread ? AppColors.surface : AppColors.muted,
+              child: Icon(_kindIcon(notification.kind), color: unread ? AppColors.primary : AppColors.secondary),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(notification.title, style: TextStyle(fontWeight: unread ? FontWeight.w700 : FontWeight.w600)),
+                  const SizedBox(height: 2),
+                  Text(notification.body, style: const TextStyle(color: AppColors.secondary, height: 1.5)),
+                  const SizedBox(height: 4),
+                  Text(
+                    formatDateTimeEnglish(notification.createdAt),
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(color: AppColors.secondary, fontSize: 12),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(notification.title, style: TextStyle(fontWeight: unread ? FontWeight.w700 : FontWeight.w600)),
-                    const SizedBox(height: 2),
-                    Text(notification.body, style: const TextStyle(color: AppColors.secondary, height: 1.5)),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatDateTimeEnglish(notification.createdAt),
-                      textDirection: TextDirection.ltr,
-                      style: const TextStyle(color: AppColors.secondary, fontSize: 12),
-                    ),
-                  ],
-                ),
+            ),
+            if (unread)
+              const Padding(
+                padding: EdgeInsets.only(top: 6),
+                child: CircleAvatar(radius: 4, backgroundColor: AppColors.primary),
               ),
-              if (unread)
-                const Padding(
-                  padding: EdgeInsets.only(top: 6),
-                  child: CircleAvatar(radius: 4, backgroundColor: AppColors.primary),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );

@@ -365,7 +365,7 @@ abstract class AppLocalizations {
   /// No description provided for @helloName.
   ///
   /// In ar, this message translates to:
-  /// **'مرحباً {name} 👋'**
+  /// **'مرحباً {name}'**
   String helloName(String name);
 
   /// No description provided for @grades.
@@ -782,12 +782,6 @@ abstract class AppLocalizations {
   /// **'لا توجد ملفات'**
   String get noFiles;
 
-  /// No description provided for @downloadedOnDevice.
-  ///
-  /// In ar, this message translates to:
-  /// **'على الجهاز'**
-  String get downloadedOnDevice;
-
   /// No description provided for @offlineTitle.
   ///
   /// In ar, this message translates to:
@@ -1039,12 +1033,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى'**
   String get backOnline;
-
-  /// No description provided for @offlineSavedCopy.
-  ///
-  /// In ar, this message translates to:
-  /// **'أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'**
-  String get offlineSavedCopy;
 
   /// No description provided for @offlineDownloads.
   ///

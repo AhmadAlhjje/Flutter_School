@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:student_app/core/errors/app_failure.dart';
+import 'package:student_app/core/theme/app_colors.dart';
 import 'package:student_app/features/auth/auth_providers.dart';
 import 'package:student_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:student_app/features/catalog_repositories.dart';
 import 'package:student_app/features/files/domain/file_entities.dart';
+import 'package:student_app/features/files/files_providers.dart';
 import 'package:student_app/features/home/domain/home_entities.dart';
 import 'package:student_app/features/home/presentation/home_page.dart';
 import 'package:student_app/features/sessions/domain/session_entities.dart';
@@ -103,7 +105,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('معهد النور'), findsOneWidget);
-    expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
+    // Just the greeting — no emoji or icon after the name.
+    expect(find.text('مرحباً أحمد'), findsOneWidget);
+    expect(find.byIcon(Icons.school_rounded), findsNothing);
     expect(find.text('اختر المادة التي تريد دراستها'), findsOneWidget);
     expect(find.text('موادي'), findsOneWidget);
     expect(find.text('الرياضيات'), findsOneWidget);
@@ -132,7 +136,7 @@ void main() {
     expect(find.text('عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.'), findsOneWidget);
   });
 
-  testWidgets('offline, home opens as it was (saved copy) with an offline line and the downloads; retry reconnects', (
+  testWidgets('offline, home opens exactly as it was (saved copy, no offline message), with the downloads below', (
     tester,
   ) async {
     final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
@@ -149,22 +153,13 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget);
-    expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
+    expect(find.textContaining('غير متصل'), findsNothing);
+    expect(find.text('مرحباً أحمد'), findsOneWidget);
     expect(find.text('الرياضيات'), findsOneWidget);
     expect(find.text('الفيزياء'), findsOneWidget);
     await tester.scrollUntilVisible(find.text('التفاضل › الجلسة الأولى'), 300);
     expect(find.text('التحميلات على جهازك'), findsOneWidget);
     expect(find.text('مقدمة في التفاضل'), findsOneWidget);
-
-    auth.restored = const RestoredSession(FakeAuthRepository.account);
-    await tester.scrollUntilVisible(find.text('إعادة المحاولة'), -300);
-    await tester.tap(find.text('إعادة المحاولة'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsNothing);
-    expect(find.text('التحميلات على جهازك'), findsNothing);
-    expect(find.text('الرياضيات'), findsOneWidget);
   });
 
   testWidgets('offline, the app reconnects by itself when the network returns (nothing to press)', (tester) async {
@@ -174,22 +169,23 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(auth),
           homeRepositoryProvider.overrideWithValue(_FakeHome()),
-          offlineVideosProvider.overrideWith((ref) async => const <OfflineVideo>[]),
+          offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
         ],
         child: localizedApp(const HomePage()),
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('التحميلات على جهازك'), 300);
 
     await tester.pump(const Duration(seconds: 16));
     await tester.pumpAndSettle();
-    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget, reason: 'still offline');
+    expect(find.text('التحميلات على جهازك'), findsOneWidget, reason: 'still offline');
 
     auth.restored = const RestoredSession(FakeAuthRepository.account);
     await tester.pump(const Duration(seconds: 16));
     await tester.pumpAndSettle();
-    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsNothing);
+    expect(find.text('التحميلات على جهازك'), findsNothing, reason: 'online: the normal home');
+    expect(find.text('الرياضيات'), findsOneWidget);
   });
 
   testWidgets('offline with nothing saved yet: the downloads, organized by subject › teacher › lesson › session', (
@@ -222,6 +218,7 @@ void main() {
           authRepositoryProvider.overrideWithValue(signedIn),
           sessionsRepositoryProvider.overrideWithValue(_FakeSessions()),
           offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
+          savedFileIdsProvider.overrideWith((ref) async => {'f1'}),
         ],
         child: localizedApp(const SessionPage(sessionId: 'sess-1')),
       ),
@@ -232,14 +229,18 @@ void main() {
     expect(find.text('الملفات'), findsOneWidget);
     expect(find.text('مقدمة في التفاضل'), findsOneWidget);
     expect(find.text('تمارين محلولة'), findsOneWidget);
-    // The downloaded video is marked and plays from the device.
-    expect(find.text('على الجهاز'), findsOneWidget);
+    // The downloaded video just says "محمّل" (in green), and plays from the device.
+    expect(find.text('محمّل'), findsOneWidget);
+    expect(find.text('على الجهاز'), findsNothing);
     expect(find.text('أوراق العمل'), findsNothing);
 
     await tester.tap(find.text('الملفات'));
     await tester.pumpAndSettle();
     expect(find.text('أوراق العمل'), findsOneWidget);
     expect(find.text('مقدمة في التفاضل'), findsNothing);
+    // A file opened before is marked the same way: "محمّل", in green.
+    final mark = tester.widget<Text>(find.text('محمّل'));
+    expect(mark.style?.color, AppColors.success);
   });
 
   testWidgets('a locked teacher space explains how to get access', (tester) async {

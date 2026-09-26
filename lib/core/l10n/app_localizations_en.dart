@@ -151,7 +151,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String helloName(String name) {
-    return 'Hello $name 👋';
+    return 'Hello $name';
   }
 
   @override
@@ -417,9 +417,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noFiles => 'No files';
 
   @override
-  String get downloadedOnDevice => 'On this device';
-
-  @override
   String get offlineTitle => 'You\'re offline';
 
   @override
@@ -563,10 +560,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backOnline => 'Back online ✓ content updated';
-
-  @override
-  String get offlineSavedCopy =>
-      'You are offline — showing the last saved content';
 
   @override
   String get offlineDownloads => 'Downloads on your phone';

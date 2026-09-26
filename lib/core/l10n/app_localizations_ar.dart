@@ -149,7 +149,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String helloName(String name) {
-    return 'مرحباً $name 👋';
+    return 'مرحباً $name';
   }
 
   @override
@@ -433,9 +433,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noFiles => 'لا توجد ملفات';
 
   @override
-  String get downloadedOnDevice => 'على الجهاز';
-
-  @override
   String get offlineTitle => 'أنت غير متصل بالإنترنت';
 
   @override
@@ -576,10 +573,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backOnline => 'عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى';
-
-  @override
-  String get offlineSavedCopy =>
-      'أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ';
 
   @override
   String get offlineDownloads => 'التحميلات على جهازك';

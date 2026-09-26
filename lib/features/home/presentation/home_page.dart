@@ -16,8 +16,8 @@ import '../../videos/presentation/offline_library.dart';
 import '../domain/home_entities.dart';
 
 /// Home tab: a greeting, the student's open subjects, then the other (locked) subjects.
-/// Without network it shows the last saved copy (with a small "offline" line), or only the
-/// downloaded videos if nothing was saved yet.
+/// Without network it shows the last saved copy exactly as it was (plus the downloaded videos),
+/// or only the downloaded videos if nothing was saved yet.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -40,7 +40,7 @@ class HomePage extends ConsumerWidget {
             : AsyncValueView<HomeSummary>(
                 value: home,
                 onRetry: () => ref.invalidate(homeProvider),
-                data: (summary) => _HomeContent(summary: summary, onReconnect: offline ? reconnect : null),
+                data: (summary) => _HomeContent(summary: summary, offline: offline),
               ),
       ),
     );
@@ -48,12 +48,12 @@ class HomePage extends ConsumerWidget {
 }
 
 class _HomeContent extends StatefulWidget {
-  const _HomeContent({required this.summary, this.onReconnect});
+  const _HomeContent({required this.summary, this.offline = false});
 
   final HomeSummary summary;
 
-  /// Set while offline: the content is the saved copy.
-  final VoidCallback? onReconnect;
+  /// The content is the saved copy (no network).
+  final bool offline;
 
   @override
   State<_HomeContent> createState() => _HomeContentState();
@@ -69,11 +69,9 @@ class _HomeContentState extends State<_HomeContent> {
     final shown = summary.subjects.where((subject) => matchesSearch(subject.name, _query));
     final open = shown.where((subject) => !subject.locked).toList();
     final locked = shown.where((subject) => subject.locked).toList();
-    final onReconnect = widget.onReconnect;
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       children: [
-        if (onReconnect != null) ...[_OfflineBanner(onRetry: onReconnect), const SizedBox(height: 12)],
         _Greeting(name: summary.studentName.split(' ').first),
         if (summary.subjects.isEmpty) const _NoSubjects(),
         if (summary.subjects.length >= minItemsForSearch) ...[
@@ -87,34 +85,8 @@ class _HomeContentState extends State<_HomeContent> {
           Padding(padding: const EdgeInsets.only(bottom: 12), child: HintLine(l10n.otherSubjectsHint)),
           SubjectList(subjects: locked),
         ],
-        if (onReconnect != null) const _DownloadsOnPhone(),
+        if (widget.offline) const _DownloadsOnPhone(),
       ],
-    );
-  }
-}
-
-/// A slim line over the saved content: no network, this is the last saved copy.
-class _OfflineBanner extends StatelessWidget {
-  const _OfflineBanner({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Container(
-      padding: const EdgeInsetsDirectional.fromSTEB(14, 6, 6, 6),
-      decoration: BoxDecoration(color: AppColors.muted, borderRadius: BorderRadius.circular(14)),
-      child: Row(
-        children: [
-          const Icon(Icons.wifi_off_rounded, color: AppColors.secondary, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(l10n.offlineSavedCopy, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
-          ),
-          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
-        ],
-      ),
     );
   }
 }
@@ -152,22 +124,15 @@ class _Greeting extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.helloName(name),
-                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 4),
-                Text(l10n.homeSubtitle, style: const TextStyle(color: Color(0xDDFFFFFF), fontSize: 14)),
-              ],
-            ),
+          Text(
+            l10n.helloName(name),
+            style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
           ),
-          const Icon(Icons.school_rounded, color: Color(0x66FFFFFF), size: 48),
+          const SizedBox(height: 4),
+          Text(l10n.homeSubtitle, style: const TextStyle(color: Color(0xDDFFFFFF), fontSize: 14)),
         ],
       ),
     );

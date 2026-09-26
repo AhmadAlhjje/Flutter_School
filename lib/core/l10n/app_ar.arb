@@ -51,7 +51,7 @@
   "accountDisabledTitle": "الحساب معطّل",
   "accountDisabledBody": "تم تعطيل حسابك. يرجى التواصل مع إدارة المعهد.",
   "backToLogin": "العودة لتسجيل الدخول",
-  "helloName": "مرحباً {name} 👋",
+  "helloName": "مرحباً {name}",
   "@helloName": {
     "placeholders": {
       "name": {
@@ -191,7 +191,6 @@
   "screenshotDetected": "تم رصد لقطة شاشة. المحتوى محمي ومرتبط بحسابك.",
   "noVideos": "لا توجد فيديوهات بعد",
   "noFiles": "لا توجد ملفات",
-  "downloadedOnDevice": "على الجهاز",
   "offlineTitle": "أنت غير متصل بالإنترنت",
   "offlineBody": "يمكنك مشاهدة الفيديوهات المحمّلة على جهازك",
   "navHome": "الرئيسية",
@@ -276,6 +275,5 @@
   },
   "downloadDeleted": "تم حذف الفيديو من جهازك",
   "backOnline": "عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى",
-  "offlineSavedCopy": "أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ",
   "offlineDownloads": "التحميلات على جهازك"
 }

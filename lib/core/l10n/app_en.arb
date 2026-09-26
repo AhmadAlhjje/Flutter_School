@@ -44,7 +44,7 @@
   "accountDisabledTitle": "Account disabled",
   "accountDisabledBody": "Your account has been disabled. Please contact the institute.",
   "backToLogin": "Back to sign in",
-  "helloName": "Hello {name} 👋",
+  "helloName": "Hello {name}",
   "grades": "Grades",
   "teachersCount": "{count, plural, =1{1 teacher} other{{count} teachers}}",
   "topicsCount": "{count, plural, =1{1 lesson} other{{count} lessons}}",
@@ -114,7 +114,6 @@
   "screenshotDetected": "Screenshot detected. This content is protected and linked to your account.",
   "noVideos": "No videos yet",
   "noFiles": "No files",
-  "downloadedOnDevice": "On this device",
   "offlineTitle": "You're offline",
   "offlineBody": "You can watch the videos downloaded on this device",
   "navHome": "Home",
@@ -157,6 +156,5 @@
   "videoDownloadFailed": "Could not download “{title}”, try again",
   "downloadDeleted": "The video was removed from your phone",
   "backOnline": "Back online ✓ content updated",
-  "offlineSavedCopy": "You are offline — showing the last saved content",
   "offlineDownloads": "Downloads on your phone"
 }
