@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../domain/file_entities.dart';
+import '../files_providers.dart';
 
 IconData fileKindIcon(FileKind kind) => switch (kind) {
   FileKind.pdf => Icons.picture_as_pdf_rounded,
@@ -24,19 +27,22 @@ Color fileKindColor(FileKind kind) => switch (kind) {
   _ => AppColors.primary,
 };
 
-/// A file row: kind icon, extension and size. Opens the in-app viewer.
-class FileTile extends StatelessWidget {
+/// A file row: kind icon, extension and size, and "on this phone" once it was opened (it opens
+/// from the phone after that, without downloading again). Opens the in-app viewer.
+class FileTile extends ConsumerWidget {
   const FileTile({super.key, required this.file});
 
   final FileItem file;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final locale = Localizations.localeOf(context).languageCode;
     final color = fileKindColor(file.kind);
+    final saved = ref.watch(savedFileIdsProvider).value?.contains(file.id) ?? false;
     return ContentTile(
       title: file.title,
       subtitle: '${file.extension.toUpperCase()} · ${formatBytes(file.sizeBytes, locale: locale)}',
+      badge: saved ? const _OnThisPhone() : null,
       leading: Container(
         width: 44,
         height: 44,
@@ -46,4 +52,21 @@ class FileTile extends StatelessWidget {
       onTap: () => context.push(Uri(path: Routes.file(file.id), queryParameters: {'title': file.title}).toString()),
     );
   }
+}
+
+class _OnThisPhone extends StatelessWidget {
+  const _OnThisPhone();
+
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const Icon(Icons.offline_pin_rounded, size: 15, color: AppColors.success),
+      const SizedBox(width: 3),
+      Text(
+        AppLocalizations.of(context).downloadedOnDevice,
+        style: const TextStyle(color: AppColors.success, fontSize: 12, fontWeight: FontWeight.w600),
+      ),
+    ],
+  );
 }

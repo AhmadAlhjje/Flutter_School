@@ -31,7 +31,8 @@ class AuthSignedIn extends AuthState {
 
   final StudentAccount account;
 
-  /// Started without network: only downloaded content is available until the next sync.
+  /// Started without network: the screens show what was saved on this phone (and the downloaded
+  /// videos and files) until the server answers again.
   final bool offline;
 }
 
@@ -45,13 +46,36 @@ class AuthAccountDisabled extends AuthState {
 
 class AuthController extends Notifier<AuthState> {
   StreamSubscription<SessionEndReason>? _events;
+  Timer? _reconnectTimer;
+  Future<void>? _reconnecting;
+
+  /// While offline, the server is tried again this often (in the background, nothing to press).
+  static const reconnectEvery = Duration(seconds: 15);
 
   @override
   AuthState build() {
     _events = ref.watch(sessionEventsProvider).stream.listen(_onSessionEnded);
-    ref.onDispose(() => _events?.cancel());
+    listenSelf((previous, next) => _onChanged(next));
+    ref.onDispose(() {
+      _events?.cancel();
+      _reconnectTimer?.cancel();
+    });
     Future<void>.microtask(_restore);
     return const AuthUnknown();
+  }
+
+  void _onChanged(AuthState next) {
+    final offline = next is AuthSignedIn && next.offline;
+    ref.read(offlineModeProvider).active = offline;
+    if (offline) {
+      _reconnectTimer ??= Timer.periodic(reconnectEvery, (_) => reconnect());
+    } else {
+      _reconnectTimer?.cancel();
+      _reconnectTimer = null;
+    }
+    // Signed out (or blocked): nothing of this account stays readable on the phone, and the next
+    // account to sign in starts with nothing saved.
+    if (next is! AuthSignedIn && next is! AuthUnknown) unawaited(ref.read(responseCacheStoreProvider).clear());
   }
 
   Future<void> _restore() async {
@@ -87,15 +111,23 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
-  /// Started without network: try the server again. Stays in offline mode if it is still
-  /// unreachable; moves to the right screen if the session ended meanwhile.
-  Future<void> reconnect() async {
+  /// Offline: try the server again (every [reconnectEvery], or on pull-to-refresh). Stays offline
+  /// if it is still unreachable; moves to the right screen if the session ended meanwhile.
+  Future<void> reconnect() => _reconnecting ??= _reconnect().whenComplete(() => _reconnecting = null);
+
+  Future<void> _reconnect() async {
     final current = state;
     if (current is! AuthSignedIn || !current.offline) return;
     try {
       final restored = await ref.read(authRepositoryProvider).restoreSession();
-      state = restored == null ? const AuthSignedOut() : AuthSignedIn(restored.account, offline: restored.offline);
+      if (!ref.mounted) return;
+      if (restored == null) {
+        state = const AuthSignedOut();
+      } else if (!restored.offline) {
+        state = AuthSignedIn(restored.account);
+      }
     } catch (error) {
+      if (!ref.mounted) return;
       final next = _stateForFailure(toFailure(error));
       if (next != null) state = next;
     }

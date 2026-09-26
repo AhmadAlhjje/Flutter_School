@@ -32,6 +32,26 @@ class DownloadFailed extends DownloadStatus {
   final Object error;
 }
 
+/// How a download ended — the app shows it as a green (done) or red (failed) message, wherever
+/// the student is at that moment.
+class DownloadOutcome {
+  const DownloadOutcome(this.title, {this.error});
+
+  final String title;
+  final Object? error;
+
+  bool get succeeded => error == null;
+}
+
+class LastDownloadOutcome extends Notifier<DownloadOutcome?> {
+  @override
+  DownloadOutcome? build() => null;
+
+  void report(DownloadOutcome outcome) => state = outcome;
+}
+
+final downloadOutcomeProvider = NotifierProvider<LastDownloadOutcome, DownloadOutcome?>(LastDownloadOutcome.new);
+
 /// In-progress and failed downloads, keyed by video id. Lives for the whole signed-in session
 /// so a download keeps going while the student browses other screens.
 class DownloadsController extends Notifier<Map<String, DownloadStatus>> {
@@ -63,8 +83,11 @@ class DownloadsController extends Notifier<Map<String, DownloadStatus>> {
       if (!ref.mounted) return;
       state = {...state}..remove(videoId);
       ref.invalidate(offlineVideosProvider);
+      ref.read(downloadOutcomeProvider.notifier).report(DownloadOutcome(title));
     } catch (error) {
+      if (!ref.mounted) return;
       _set(videoId, DownloadFailed(title, error));
+      ref.read(downloadOutcomeProvider.notifier).report(DownloadOutcome(title, error: error));
     }
   }
 

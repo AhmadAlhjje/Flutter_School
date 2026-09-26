@@ -82,8 +82,9 @@ class AuthRepositoryImpl implements AuthRepository {
       await _cacheAccount(account);
       return RestoredSession(account.toEntity());
     } on AppFailure catch (failure) {
-      if (failure.kind == FailureKind.network) {
-        // Offline start: keep the session so encrypted downloads remain playable.
+      if (!_endsSession(failure.kind)) {
+        // No network, or the server is down / busy: start offline with the saved account (and the
+        // saved screens and downloads) instead of signing the student out.
         final cached = await _cachedAccount();
         return cached == null ? null : RestoredSession(cached.toEntity(), offline: true);
       }
@@ -114,6 +115,10 @@ class AuthRepositoryImpl implements AuthRepository {
     (_) {},
     body: {'currentPassword': currentPassword, 'newPassword': newPassword, 'confirmPassword': confirmPassword},
   );
+
+  /// Only the server's clear "this session is over" signs the student out.
+  static bool _endsSession(FailureKind kind) =>
+      kind == FailureKind.sessionExpired || kind == FailureKind.deviceMismatch || kind == FailureKind.accountDisabled;
 
   Future<void> _cacheAccount(AccountModel account) => secure.write(_accountKey, jsonEncode(account.toJson()));
 

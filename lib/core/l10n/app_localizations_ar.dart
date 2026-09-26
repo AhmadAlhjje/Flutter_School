@@ -560,4 +560,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get removeFromHistory => 'إزالة من القائمة';
+
+  @override
+  String videoDownloaded(String title) {
+    return 'تم تحميل «$title» ✓ يمكنك مشاهدته دون إنترنت';
+  }
+
+  @override
+  String videoDownloadFailed(String title) {
+    return 'فشل تحميل «$title»، حاول مجدداً';
+  }
+
+  @override
+  String get downloadDeleted => 'تم حذف الفيديو من جهازك';
+
+  @override
+  String get backOnline => 'عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى';
+
+  @override
+  String get offlineSavedCopy =>
+      'أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ';
+
+  @override
+  String get offlineDownloads => 'التحميلات على جهازك';
 }

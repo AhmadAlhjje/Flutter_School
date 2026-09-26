@@ -8,6 +8,7 @@ import '../storage/secure_store.dart';
 import '../storage/token_store.dart';
 import 'api_client.dart';
 import 'auth_interceptor.dart';
+import 'offline_cache.dart';
 import 'session_events.dart';
 
 /// Composition root for the network stack. Tests override the leaf providers
@@ -32,6 +33,11 @@ BaseOptions _baseOptions() => BaseOptions(
   responseType: ResponseType.json,
 );
 
+/// Last answers of the student screens, for opening the app without network.
+final responseCacheStoreProvider = Provider<ResponseCacheStore>((ref) => ResponseCacheStore());
+
+final offlineModeProvider = Provider<OfflineMode>((ref) => OfflineMode());
+
 /// Optional transport override (tests).
 final httpAdapterProvider = Provider<HttpClientAdapter?>((ref) => null);
 
@@ -52,6 +58,11 @@ final dioProvider = Provider<Dio>((ref) {
       events: ref.watch(sessionEventsProvider),
       language: () => ref.read(localeControllerProvider).languageCode,
     ),
+  );
+  // After the auth interceptor: a request that still fails (no network, server down) gets the
+  // saved copy; a real answer (including "session ended") always wins.
+  dio.interceptors.add(
+    OfflineCacheInterceptor(ref.watch(responseCacheStoreProvider), mode: ref.watch(offlineModeProvider)),
   );
   ref.onDispose(() {
     dio.close();

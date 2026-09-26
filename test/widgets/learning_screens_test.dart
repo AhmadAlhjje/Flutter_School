@@ -40,6 +40,11 @@ class _EmptyHome implements HomeRepository {
       const HomeSummary(studentName: 'طالب جديد', instituteName: 'معهد النور', unreadNotifications: 0, subjects: []);
 }
 
+class _UnreachableHome implements HomeRepository {
+  @override
+  Future<HomeSummary> home() => throw const AppFailure(FailureKind.network);
+}
+
 class _FakeSessions implements SessionsRepository {
   @override
   Future<SessionDetails> session(String sessionId) async => const SessionDetails(
@@ -127,7 +132,7 @@ void main() {
     expect(find.text('عندما تفتح إدارة المعهد المواد لحسابك ستظهر هنا مباشرة.'), findsOneWidget);
   });
 
-  testWidgets('offline, downloads are organized by subject › teacher › lesson › session; retry reconnects', (
+  testWidgets('offline, home opens as it was (saved copy) with an offline line and the downloads; retry reconnects', (
     tester,
   ) async {
     final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
@@ -135,7 +140,67 @@ void main() {
       ProviderScope(
         overrides: [
           authRepositoryProvider.overrideWithValue(auth),
+          // Offline, the network layer answers with the last saved copy.
           homeRepositoryProvider.overrideWithValue(_FakeHome()),
+          offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
+        ],
+        child: localizedApp(const HomePage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget);
+    expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
+    expect(find.text('الرياضيات'), findsOneWidget);
+    expect(find.text('الفيزياء'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('التفاضل › الجلسة الأولى'), 300);
+    expect(find.text('التحميلات على جهازك'), findsOneWidget);
+    expect(find.text('مقدمة في التفاضل'), findsOneWidget);
+
+    auth.restored = const RestoredSession(FakeAuthRepository.account);
+    await tester.scrollUntilVisible(find.text('إعادة المحاولة'), -300);
+    await tester.tap(find.text('إعادة المحاولة'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsNothing);
+    expect(find.text('التحميلات على جهازك'), findsNothing);
+    expect(find.text('الرياضيات'), findsOneWidget);
+  });
+
+  testWidgets('offline, the app reconnects by itself when the network returns (nothing to press)', (tester) async {
+    final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(auth),
+          homeRepositoryProvider.overrideWithValue(_FakeHome()),
+          offlineVideosProvider.overrideWith((ref) async => const <OfflineVideo>[]),
+        ],
+        child: localizedApp(const HomePage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 16));
+    await tester.pumpAndSettle();
+    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsOneWidget, reason: 'still offline');
+
+    auth.restored = const RestoredSession(FakeAuthRepository.account);
+    await tester.pump(const Duration(seconds: 16));
+    await tester.pumpAndSettle();
+    expect(find.text('أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'), findsNothing);
+  });
+
+  testWidgets('offline with nothing saved yet: the downloads, organized by subject › teacher › lesson › session', (
+    tester,
+  ) async {
+    final auth = FakeAuthRepository(restored: const RestoredSession(FakeAuthRepository.account, offline: true));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(auth),
+          homeRepositoryProvider.overrideWithValue(_UnreachableHome()),
           offlineVideosProvider.overrideWith((ref) async => [_downloaded]),
         ],
         child: localizedApp(const HomePage()),
@@ -148,13 +213,6 @@ void main() {
     expect(find.text('مقدمة في التفاضل'), findsOneWidget);
     expect(find.text('التفاضل › الجلسة الأولى'), findsOneWidget);
     expect(find.text('الفيزياء'), findsNothing);
-
-    auth.restored = const RestoredSession(FakeAuthRepository.account);
-    await tester.tap(find.text('إعادة المحاولة'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('الرياضيات'), findsOneWidget);
-    expect(find.textContaining('مرحباً أحمد'), findsOneWidget);
   });
 
   testWidgets('a session shows its videos and files in two tabs', (tester) async {

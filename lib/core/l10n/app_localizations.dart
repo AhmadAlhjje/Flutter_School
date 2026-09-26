@@ -1015,6 +1015,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إزالة من القائمة'**
   String get removeFromHistory;
+
+  /// No description provided for @videoDownloaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحميل «{title}» ✓ يمكنك مشاهدته دون إنترنت'**
+  String videoDownloaded(String title);
+
+  /// No description provided for @videoDownloadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل تحميل «{title}»، حاول مجدداً'**
+  String videoDownloadFailed(String title);
+
+  /// No description provided for @downloadDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف الفيديو من جهازك'**
+  String get downloadDeleted;
+
+  /// No description provided for @backOnline.
+  ///
+  /// In ar, this message translates to:
+  /// **'عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى'**
+  String get backOnline;
+
+  /// No description provided for @offlineSavedCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ'**
+  String get offlineSavedCopy;
+
+  /// No description provided for @offlineDownloads.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحميلات على جهازك'**
+  String get offlineDownloads;
 }
 
 class _AppLocalizationsDelegate

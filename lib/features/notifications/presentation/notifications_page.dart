@@ -13,10 +13,26 @@ import '../../catalog_repositories.dart';
 import '../../learning_providers.dart';
 import '../domain/notification_entities.dart';
 
-/// The student's inbox (spec §78), newest first, paged.
+/// The student's inbox (spec §78), newest first, paged. Opening it marks everything as read — no
+/// tapping needed; the new ones stay highlighted until the page is opened again.
 class NotificationsController extends AsyncNotifier<InboxPage> {
   @override
-  Future<InboxPage> build() => ref.watch(notificationsRepositoryProvider).inbox();
+  Future<InboxPage> build() async {
+    final page = await ref.watch(notificationsRepositoryProvider).inbox();
+    if (page.items.any((item) => item.unread)) unawaited(_markSeen());
+    return page;
+  }
+
+  Future<void> _markSeen() async {
+    try {
+      await ref.read(notificationsRepositoryProvider).markAllRead();
+    } on Object {
+      return; // offline: they are marked on the next visit
+    }
+    if (!ref.mounted) return;
+    ref.invalidate(homeProvider);
+    ref.invalidate(unreadCountProvider);
+  }
 
   bool get hasMore {
     final page = state.value;
@@ -28,26 +44,6 @@ class NotificationsController extends AsyncNotifier<InboxPage> {
     if (current == null || !hasMore) return;
     final next = await ref.read(notificationsRepositoryProvider).inbox(page: current.page + 1);
     state = AsyncData(next.copyWith(items: [...current.items, ...next.items]));
-  }
-
-  Future<void> markRead(InboxNotification notification) async {
-    if (!notification.unread) return;
-    await ref.read(notificationsRepositoryProvider).markRead(notification.id);
-    _replaceAll((item) => item.id == notification.id ? item.copyWith(readAt: DateTime.now()) : item);
-  }
-
-  Future<void> markAllRead() async {
-    await ref.read(notificationsRepositoryProvider).markAllRead();
-    final now = DateTime.now();
-    _replaceAll((item) => item.unread ? item.copyWith(readAt: now) : item);
-  }
-
-  void _replaceAll(InboxNotification Function(InboxNotification) update) {
-    final current = state.value;
-    if (current == null) return;
-    state = AsyncData(current.copyWith(items: current.items.map(update).toList()));
-    ref.invalidate(homeProvider);
-    ref.invalidate(unreadCountProvider);
   }
 }
 
@@ -63,20 +59,9 @@ class NotificationsPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final inbox = ref.watch(notificationsControllerProvider);
     final controller = ref.read(notificationsControllerProvider.notifier);
-    final hasUnread = inbox.value?.items.any((item) => item.unread) ?? false;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.notifications),
-        actions: [
-          if (hasUnread)
-            IconButton(
-              tooltip: l10n.markAllRead,
-              icon: const Icon(Icons.done_all_rounded),
-              onPressed: controller.markAllRead,
-            ),
-        ],
-      ),
+      appBar: AppBar(title: Text(l10n.notifications)),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(notificationsControllerProvider.future),
         child: AsyncValueView<InboxPage>(
@@ -100,7 +85,6 @@ class NotificationsPage extends ConsumerWidget {
                     return _NotificationTile(
                       notification: item,
                       onTap: () {
-                        unawaited(controller.markRead(item));
                         final sessionId = item.sessionId;
                         final subjectId = item.subjectId;
                         if (sessionId != null) {

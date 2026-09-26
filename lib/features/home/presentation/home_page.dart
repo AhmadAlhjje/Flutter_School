@@ -11,10 +11,13 @@ import '../../auth/auth_providers.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../learning_providers.dart';
 import '../../subjects/presentation/subject_card_tile.dart';
+import '../../videos/presentation/downloads_controller.dart';
 import '../../videos/presentation/offline_library.dart';
 import '../domain/home_entities.dart';
 
 /// Home tab: a greeting, the student's open subjects, then the other (locked) subjects.
+/// Without network it shows the last saved copy (with a small "offline" line), or only the
+/// downloaded videos if nothing was saved yet.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -24,6 +27,7 @@ class HomePage extends ConsumerWidget {
     final home = ref.watch(homeProvider);
     final auth = ref.watch(authControllerProvider);
     final offline = auth is AuthSignedIn && auth.offline;
+    void reconnect() => ref.read(authControllerProvider.notifier).reconnect();
 
     return Scaffold(
       appBar: AppBar(title: Text(home.value?.instituteName ?? l10n.appTitle)),
@@ -31,12 +35,12 @@ class HomePage extends ConsumerWidget {
         onRefresh: offline
             ? () => ref.read(authControllerProvider.notifier).reconnect()
             : () => ref.refresh(homeProvider.future),
-        child: offline
-            ? _OfflineHome(onRetry: () => ref.read(authControllerProvider.notifier).reconnect())
+        child: offline && home.hasError && !home.hasValue
+            ? _OfflineHome(onRetry: reconnect)
             : AsyncValueView<HomeSummary>(
                 value: home,
                 onRetry: () => ref.invalidate(homeProvider),
-                data: (summary) => _HomeContent(summary: summary),
+                data: (summary) => _HomeContent(summary: summary, onReconnect: offline ? reconnect : null),
               ),
       ),
     );
@@ -44,9 +48,12 @@ class HomePage extends ConsumerWidget {
 }
 
 class _HomeContent extends StatefulWidget {
-  const _HomeContent({required this.summary});
+  const _HomeContent({required this.summary, this.onReconnect});
 
   final HomeSummary summary;
+
+  /// Set while offline: the content is the saved copy.
+  final VoidCallback? onReconnect;
 
   @override
   State<_HomeContent> createState() => _HomeContentState();
@@ -62,9 +69,11 @@ class _HomeContentState extends State<_HomeContent> {
     final shown = summary.subjects.where((subject) => matchesSearch(subject.name, _query));
     final open = shown.where((subject) => !subject.locked).toList();
     final locked = shown.where((subject) => subject.locked).toList();
+    final onReconnect = widget.onReconnect;
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       children: [
+        if (onReconnect != null) ...[_OfflineBanner(onRetry: onReconnect), const SizedBox(height: 12)],
         _Greeting(name: summary.studentName.split(' ').first),
         if (summary.subjects.isEmpty) const _NoSubjects(),
         if (summary.subjects.length >= minItemsForSearch) ...[
@@ -78,7 +87,49 @@ class _HomeContentState extends State<_HomeContent> {
           Padding(padding: const EdgeInsets.only(bottom: 12), child: HintLine(l10n.otherSubjectsHint)),
           SubjectList(subjects: locked),
         ],
+        if (onReconnect != null) const _DownloadsOnPhone(),
       ],
+    );
+  }
+}
+
+/// A slim line over the saved content: no network, this is the last saved copy.
+class _OfflineBanner extends StatelessWidget {
+  const _OfflineBanner({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 6, 6, 6),
+      decoration: BoxDecoration(color: AppColors.muted, borderRadius: BorderRadius.circular(14)),
+      child: Row(
+        children: [
+          const Icon(Icons.wifi_off_rounded, color: AppColors.secondary, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(l10n.offlineSavedCopy, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
+          ),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
+        ],
+      ),
+    );
+  }
+}
+
+/// Offline: the downloaded videos as well, under the subjects (only when there are some).
+class _DownloadsOnPhone extends ConsumerWidget {
+  const _DownloadsOnPhone();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final any = ref.watch(offlineVideosProvider).value?.isNotEmpty ?? false;
+    if (!any) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [SectionTitle(AppLocalizations.of(context).offlineDownloads), const OfflineLibrary()],
     );
   }
 }
@@ -171,7 +222,8 @@ class _NoSubjects extends ConsumerWidget {
   }
 }
 
-/// Started without network: the videos downloaded on this device, organized by subject.
+/// Offline with nothing saved yet (e.g. first start without network): the videos downloaded on
+/// this device, organized by subject.
 class _OfflineHome extends StatelessWidget {
   const _OfflineHome({required this.onRetry});
 

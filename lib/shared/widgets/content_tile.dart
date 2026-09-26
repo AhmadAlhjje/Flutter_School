@@ -14,6 +14,7 @@ class ContentTile extends StatelessWidget {
     this.icon = Icons.menu_book_rounded,
     this.locked = false,
     this.onTap,
+    this.badge,
   });
 
   final String title;
@@ -22,6 +23,9 @@ class ContentTile extends StatelessWidget {
   final IconData icon;
   final bool locked;
   final VoidCallback? onTap;
+
+  /// A small mark after the subtitle (e.g. "on this phone").
+  final Widget? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +59,17 @@ class ContentTile extends StatelessWidget {
                           color: locked ? AppColors.secondary : AppColors.text,
                         ),
                       ),
-                      if (detail != null) ...[
+                      if (detail != null || badge != null) ...[
                         const SizedBox(height: 2),
-                        Text(detail, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
+                        Wrap(
+                          spacing: 8,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            if (detail != null)
+                              Text(detail, style: const TextStyle(color: AppColors.secondary, fontSize: 13)),
+                            if (badge != null && !locked) badge!,
+                          ],
+                        ),
                       ],
                     ],
                   ),

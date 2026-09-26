@@ -257,5 +257,25 @@
     }
   },
   "startOver": "من البداية",
-  "removeFromHistory": "إزالة من القائمة"
+  "removeFromHistory": "إزالة من القائمة",
+  "videoDownloaded": "تم تحميل «{title}» ✓ يمكنك مشاهدته دون إنترنت",
+  "@videoDownloaded": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "videoDownloadFailed": "فشل تحميل «{title}»، حاول مجدداً",
+  "@videoDownloadFailed": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadDeleted": "تم حذف الفيديو من جهازك",
+  "backOnline": "عاد الاتصال بالإنترنت ✓ تم تحديث المحتوى",
+  "offlineSavedCopy": "أنت غير متصل بالإنترنت — يُعرض آخر محتوى محفوظ",
+  "offlineDownloads": "التحميلات على جهازك"
 }

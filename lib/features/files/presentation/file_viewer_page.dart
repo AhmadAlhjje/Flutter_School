@@ -8,13 +8,17 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfrx/pdfrx.dart';
 
+import '../../../core/errors/app_failure.dart';
 import '../../../core/l10n/app_localizations.dart';
+import '../../../core/network/network_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/failure_message.dart';
 import '../../../shared/widgets/locked_content.dart';
 import '../../../shared/widgets/state_views.dart';
 import '../../catalog_repositories.dart';
+import '../data/saved_files.dart';
 import '../domain/file_entities.dart';
+import '../files_providers.dart';
 import 'file_tile.dart';
 
 sealed class FileLoad {
@@ -29,15 +33,19 @@ class FileLoading extends FileLoad {
 }
 
 class FileLoaded extends FileLoad {
-  const FileLoaded(this.grant, this.bytes);
+  const FileLoaded(this.file, this.bytes);
 
-  final FileGrant grant;
+  final FileMeta file;
   final Uint8List bytes;
 }
 
-/// Access check → short-lived URL → download into memory, with progress.
+/// Opens a file, downloading it only the first time (like videos): the copy saved on the phone is
+/// used afterwards, also without network. Online, the access check still runs each time — a file
+/// the student lost access to is removed from the phone.
 final fileLoadProvider = StreamProvider.autoDispose.family<FileLoad, String>((ref, fileId) {
   final repository = ref.watch(filesRepositoryProvider);
+  final saved = ref.watch(savedFilesProvider);
+  final offline = ref.read(offlineModeProvider).active;
   final events = StreamController<FileLoad>();
   var lastPercent = -1;
 
@@ -45,12 +53,35 @@ final fileLoadProvider = StreamProvider.autoDispose.family<FileLoad, String>((re
     if (!events.isClosed) events.add(event);
   }
 
+  void savedFilesChanged() {
+    if (ref.mounted) ref.invalidate(savedFileIdsProvider);
+  }
+
   Future<void> run() async {
     try {
       emit(const FileLoading(null));
-      final grant = await repository.requestAccess(fileId);
+      final copy = await saved?.read(fileId);
+      FileGrant? grant;
+      if (!offline || copy == null) {
+        try {
+          grant = await repository.requestAccess(fileId);
+        } on AppFailure catch (failure) {
+          if (failure.kind == FailureKind.accessDenied || failure.kind == FailureKind.notFound) {
+            if (copy != null) {
+              await saved?.remove(fileId);
+              savedFilesChanged();
+            }
+            rethrow;
+          }
+          if (copy == null) rethrow; // no network and never downloaded
+        }
+      }
+      if (copy != null) {
+        emit(FileLoaded(grant == null ? copy.meta : FileMeta.of(grant), copy.bytes));
+        return;
+      }
       final bytes = await repository.download(
-        grant,
+        grant!,
         onProgress: (transfer) {
           final progress = transfer.fraction;
           final percent = (progress * 100).floor();
@@ -59,7 +90,10 @@ final fileLoadProvider = StreamProvider.autoDispose.family<FileLoad, String>((re
           emit(FileLoading(progress));
         },
       );
-      emit(FileLoaded(grant, Uint8List.fromList(bytes)));
+      final file = FileMeta.of(grant);
+      emit(FileLoaded(file, Uint8List.fromList(bytes)));
+      await saved?.save(file, bytes);
+      savedFilesChanged();
     } catch (error, stack) {
       if (!events.isClosed) events.addError(error, stack);
     } finally {
@@ -85,7 +119,7 @@ class FileViewerPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final load = ref.watch(fileLoadProvider(fileId));
     final loadedTitle = switch (load.value) {
-      FileLoaded(:final grant) => grant.title,
+      FileLoaded(:final file) => file.title,
       _ => null,
     };
     return Scaffold(
@@ -96,10 +130,10 @@ class FileViewerPage extends ConsumerWidget {
         onLocked: () => LockedContentView(title: title),
         data: (state) => switch (state) {
           FileLoading(:final progress) => _Progress(progress: progress),
-          FileLoaded(:final grant, :final bytes) => switch (grant.kind) {
+          FileLoaded(:final file, :final bytes) => switch (file.kind) {
             FileKind.pdf => PdfViewer.data(
               bytes,
-              sourceName: 'file-${grant.fileId}.pdf',
+              sourceName: 'file-${file.fileId}.pdf',
               params: const PdfViewerParams(backgroundColor: AppColors.muted),
             ),
             FileKind.image => InteractiveViewer(
@@ -108,7 +142,7 @@ class FileViewerPage extends ConsumerWidget {
                 child: Image.memory(bytes, errorBuilder: (_, _, _) => EmptyView(message: l10n.fileTooLargeToPreview)),
               ),
             ),
-            _ => _ExternalFile(grant: grant, bytes: bytes),
+            _ => _ExternalFile(file: file, bytes: bytes),
           },
         },
       ),
@@ -144,9 +178,9 @@ class _Progress extends StatelessWidget {
 /// Word, PowerPoint, Excel, archives...: written to the app's private cache and opened with
 /// an installed viewer. Only the most recent such file is kept in the cache.
 class _ExternalFile extends StatefulWidget {
-  const _ExternalFile({required this.grant, required this.bytes});
+  const _ExternalFile({required this.file, required this.bytes});
 
-  final FileGrant grant;
+  final FileMeta file;
   final Uint8List bytes;
 
   @override
@@ -167,10 +201,10 @@ class _ExternalFileState extends State<_ExternalFile> {
       final cache = Directory('${(await getTemporaryDirectory()).path}/opened_files');
       if (await cache.exists()) await cache.delete(recursive: true);
       await cache.create(recursive: true);
-      final safeName = widget.grant.title.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
-      final file = File('${cache.path}/$safeName.${widget.grant.extension}');
+      final safeName = widget.file.title.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
+      final file = File('${cache.path}/$safeName.${widget.file.extension}');
       await file.writeAsBytes(widget.bytes, flush: true);
-      final result = await OpenFilex.open(file.path, type: widget.grant.mimeType);
+      final result = await OpenFilex.open(file.path, type: widget.file.mimeType);
       if (result.type == ResultType.noAppToOpen) {
         if (mounted) setState(() => _error = l10n.noAppToOpenFile);
       } else if (result.type != ResultType.done) {
@@ -186,7 +220,7 @@ class _ExternalFileState extends State<_ExternalFile> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final color = fileKindColor(widget.grant.kind);
+    final color = fileKindColor(widget.file.kind);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -196,15 +230,15 @@ class _ExternalFileState extends State<_ExternalFile> {
             CircleAvatar(
               radius: 40,
               backgroundColor: color.withValues(alpha: 0.1),
-              child: Icon(fileKindIcon(widget.grant.kind), size: 38, color: color),
+              child: Icon(fileKindIcon(widget.file.kind), size: 38, color: color),
             ),
             const SizedBox(height: 16),
             Text(
-              widget.grant.title,
+              widget.file.title,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
-            Text(widget.grant.extension.toUpperCase(), style: const TextStyle(color: AppColors.secondary)),
+            Text(widget.file.extension.toUpperCase(), style: const TextStyle(color: AppColors.secondary)),
             const SizedBox(height: 12),
             Text(
               l10n.fileOpensExternally,

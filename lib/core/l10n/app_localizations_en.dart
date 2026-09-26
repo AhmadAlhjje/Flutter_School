@@ -547,4 +547,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get removeFromHistory => 'Remove from the list';
+
+  @override
+  String videoDownloaded(String title) {
+    return '“$title” downloaded ✓ you can watch it offline';
+  }
+
+  @override
+  String videoDownloadFailed(String title) {
+    return 'Could not download “$title”, try again';
+  }
+
+  @override
+  String get downloadDeleted => 'The video was removed from your phone';
+
+  @override
+  String get backOnline => 'Back online ✓ content updated';
+
+  @override
+  String get offlineSavedCopy =>
+      'You are offline — showing the last saved content';
+
+  @override
+  String get offlineDownloads => 'Downloads on your phone';
 }

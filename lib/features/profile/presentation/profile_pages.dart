@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/content_tile.dart';
 import '../../../shared/widgets/failure_message.dart';
+import '../../../shared/widgets/feedback.dart';
 import '../../../shared/widgets/state_views.dart';
 import '../../auth/auth_providers.dart';
 import '../../auth/presentation/auth_controller.dart';
@@ -182,7 +183,7 @@ class _ChangePasswordPageState extends ConsumerState<ChangePasswordPage> {
       await ref
           .read(authRepositoryProvider)
           .changePassword(currentPassword: _current.text, newPassword: _next.text, confirmPassword: _confirm.text);
-      messenger.showSnackBar(SnackBar(content: Text(l10n.passwordChanged)));
+      showFeedback(messenger, l10n.passwordChanged);
       if (mounted) context.pop();
     } catch (error) {
       if (mounted) setState(() => _error = failureMessage(l10n, error));

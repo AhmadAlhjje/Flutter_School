@@ -12,6 +12,7 @@ import '../../../core/l10n/app_localizations.dart';
 import '../../../core/security/screen_protection.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/failure_message.dart';
+import '../../../shared/widgets/feedback.dart';
 import '../../../shared/widgets/locked_content.dart';
 import '../../history/watch_history.dart';
 import 'download_button.dart';
@@ -167,12 +168,12 @@ class _PlayerViewState extends State<_PlayerView> {
 
   void _announceContinue() {
     final l10n = AppLocalizations.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.continuedFrom(formatDuration(widget.startAt))),
-        duration: const Duration(seconds: 5),
-        action: SnackBarAction(label: l10n.startOver, onPressed: () => unawaited(_controller.seekTo(Duration.zero))),
-      ),
+    showFeedback(
+      ScaffoldMessenger.of(context),
+      l10n.continuedFrom(formatDuration(widget.startAt)),
+      tone: FeedbackTone.info,
+      duration: const Duration(seconds: 5),
+      action: SnackBarAction(label: l10n.startOver, onPressed: () => unawaited(_controller.seekTo(Duration.zero))),
     );
   }
 

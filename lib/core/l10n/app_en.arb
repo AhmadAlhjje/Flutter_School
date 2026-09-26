@@ -152,5 +152,11 @@
   "continueFrom": "Continue from {time}",
   "continuedFrom": "Continued where you stopped ({time})",
   "startOver": "Start over",
-  "removeFromHistory": "Remove from the list"
+  "removeFromHistory": "Remove from the list",
+  "videoDownloaded": "“{title}” downloaded ✓ you can watch it offline",
+  "videoDownloadFailed": "Could not download “{title}”, try again",
+  "downloadDeleted": "The video was removed from your phone",
+  "backOnline": "Back online ✓ content updated",
+  "offlineSavedCopy": "You are offline — showing the last saved content",
+  "offlineDownloads": "Downloads on your phone"
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/failure_message.dart';
+import '../../../shared/widgets/feedback.dart';
 import '../domain/video_entities.dart';
 import '../videos_providers.dart';
 import 'downloads_controller.dart';
@@ -39,9 +40,11 @@ class DownloadButton extends ConsumerWidget {
         ],
       ),
     );
-    if (confirmed != true) return;
+    if (confirmed != true || !context.mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
     await ref.read(offlineDownloadsProvider)?.delete(copy.licenseId);
     ref.invalidate(offlineVideosProvider);
+    showFeedback(messenger, l10n.downloadDeleted);
   }
 
   @override

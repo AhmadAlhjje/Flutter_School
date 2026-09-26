@@ -90,7 +90,9 @@ class AuthInterceptor extends Interceptor {
       return access;
     } on DioException catch (error) {
       final code = errorCodeOf(error);
-      if (code == null && error.response == null) return null; // offline: keep the session
+      final status = error.response?.statusCode;
+      // Offline, server down or busy: keep the session and try again later.
+      if (status == null || status >= 500 || status == 429) return null;
       await tokens.clear();
       if (!_publish(code)) events.emit(SessionEndReason.expired);
       return null;

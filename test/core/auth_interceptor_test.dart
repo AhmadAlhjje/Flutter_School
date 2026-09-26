@@ -110,6 +110,22 @@ void main() {
     expect(harness.published, isEmpty);
   });
 
+  test('keeps the session when the server is down or busy during the refresh', () async {
+    for (final status in [502, 503, 429]) {
+      final harness = _Harness((options) {
+        if (options.path == '/auth/refresh') return apiError('SERVICE_UNAVAILABLE', status);
+        return apiError('TOKEN_EXPIRED', 401);
+      });
+      await harness.tokens.save(accessToken: 'access-1', refreshToken: 'refresh-1');
+
+      await expectLater(harness.dio.get<Object?>('/student/home'), throwsA(isA<DioException>()));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(await harness.tokens.refreshToken(), 'refresh-1', reason: 'HTTP $status');
+      expect(harness.published, isEmpty, reason: 'HTTP $status');
+    }
+  });
+
   test('publishes device mismatch and disabled account so the app can leave the session', () async {
     var code = 'DEVICE_MISMATCH';
     final harness = _Harness((_) => apiError(code, 403));
